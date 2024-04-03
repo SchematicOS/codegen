@@ -1,0 +1,18 @@
+{
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "types": "turbo types",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "generate": "turbo generate",
+    "clean": "turbo clean"
+  },
+  "packageManager": "yarn@4.1.1",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "turbo": "1.13.2"
+  }
+}

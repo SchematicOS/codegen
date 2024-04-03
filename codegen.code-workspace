@@ -1,0 +1,56 @@
+{
+  "folders": [
+    {
+      "name": "project-root",
+      "path": "./"
+    },
+    {
+      "name": "ui",
+      "path": "apps/ui",
+    },
+    {
+      "name": "marketing",
+      "path": "apps/marketing"
+    },
+    {
+      "name": "server",
+      "path": "apps/server"
+    },
+    {
+      "name": "core",
+      "path": "packages/core"
+    },
+    {
+      "name": "renderer",
+      "path": "packages/renderer"
+    },
+    {
+      "name": "generate",
+      "path": "packages/generate"
+    },
+    {
+      "name": "types",
+      "path": "packages/types"
+    },
+    {
+      "name": "mui-joy-forms",
+      "path": "packages/mui-joy-forms"
+    },
+    {
+      "name": "rtk-query",
+      "path": "packages/rtk-query"
+    },
+    {
+      "name": "zod",
+      "path": "packages/zod"
+    }
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#c0fff2",
+      "titleBar.inactiveBackground": "#c0fff2",
+      "titleBar.activeForeground": "#000000",
+      "titleBar.inactiveForeground": "#000000"
+    }
+  }
+}
