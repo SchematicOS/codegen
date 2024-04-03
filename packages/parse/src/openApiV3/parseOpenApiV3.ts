@@ -25,10 +25,7 @@ import { ParseContextType, RefReturn } from '@/types.ts'
 import { toResponsesV3 } from '@/openApiV3/toResponseV3.ts'
 import { toHeadersV3 } from '@/openApiV3/toHeaderV3.ts'
 import { toSchemaV3, toSchemasV3 } from '@/openApiV3/toSchemaV3.ts'
-import {
-  toParameterListV3,
-  toParametersV3
-} from '@/openApiV3/toParameterV3.ts'
+import { toParameterListV3, toParametersV3 } from '@/openApiV3/toParameterV3.ts'
 
 const toRequestBodiesV3 = (
   requestBodies: Record<

@@ -1,6 +1,6 @@
 {
-  "name": "@schematicos/core",
-  "version": "1.0.0",
+  "name": "@schematicos/parse",
+  "version": "0.0.1",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
@@ -17,7 +17,6 @@
   "dependencies": {
     "@redocly/openapi-core": "^1.5.0",
     "@schematicos/generate": "workspace:^",
-    "@schematicos/renderer": "workspace:^",
     "@schematicos/types": "workspace:^",
     "dequal": "^2.0.3",
     "lodash": "^4.17.21",

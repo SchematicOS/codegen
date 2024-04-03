@@ -19,14 +19,7 @@
     "noEmit": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"],
-      "@/zod/*": ["zod/*"],
-      "@/data/*": ["data/*"],
-      "@/generate/*": ["generate/*"],
-      "@/lib/*": ["lib/*"],
-      "@/openApi/*": ["openApi/*"],
-      "@/rtkQuery/*": ["rtkQuery/*"],
-      "@/util/*": ["util/*"]
+      "@/*": ["*"]
     },
     "types": ["node", "vitest/globals"],
     "jsx": "react-jsx",

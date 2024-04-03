@@ -21,10 +21,6 @@
       "path": "packages/core"
     },
     {
-      "name": "renderer",
-      "path": "packages/renderer"
-    },
-    {
       "name": "generate",
       "path": "packages/generate"
     },

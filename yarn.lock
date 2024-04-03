@@ -482,38 +482,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@schematicos/core@workspace:packages/core":
-  version: 0.0.0-use.local
-  resolution: "@schematicos/core@workspace:packages/core"
-  dependencies:
-    "@redocly/openapi-core": "npm:^1.5.0"
-    "@schematicos/eslint-config": "npm:0.0.1"
-    "@schematicos/generate": "workspace:^"
-    "@schematicos/renderer": "workspace:^"
-    "@schematicos/types": "workspace:^"
-    "@types/eslint": "npm:8"
-    "@types/lodash": "npm:4.14.201"
-    "@types/node": "npm:20.9.0"
-    "@typescript-eslint/eslint-plugin": "npm:^7.4.0"
-    "@typescript-eslint/parser": "npm:^7.4.0"
-    dequal: "npm:^2.0.3"
-    eslint: "npm:^8.57.0"
-    eslint-config-prettier: "npm:9.0.0"
-    eslint-plugin-import: "npm:2.29.0"
-    eslint-plugin-prettier: "npm:5.0.1"
-    eslint-plugin-vitest: "npm:^0.3.26"
-    lodash: "npm:^4.17.21"
-    openapi-types: "npm:12.1.3"
-    prettier: "npm:^3.2.4"
-    react: "npm:^18.2.0"
-    tiny-invariant: "npm:^1.3.1"
-    ts-pattern: "npm:^5.0.8"
-    tsup: "npm:^8.0.2"
-    typescript: "npm:^5.4.3"
-    vitest: "npm:^1.4.0"
-  languageName: unknown
-  linkType: soft
-
 "@schematicos/eslint-config@npm:0.0.1, @schematicos/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@schematicos/eslint-config@workspace:packages/eslint-config"
@@ -529,7 +497,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@schematicos/generate@npm:0.0.13, @schematicos/generate@workspace:^, @schematicos/generate@workspace:packages/generate":
+"@schematicos/generate@workspace:^, @schematicos/generate@workspace:packages/generate":
   version: 0.0.0-use.local
   resolution: "@schematicos/generate@workspace:packages/generate"
   dependencies:
@@ -547,6 +515,7 @@ __metadata:
     eslint-plugin-vitest: "npm:^0.3.26"
     lodash: "npm:^4.17.21"
     react: "npm:^18.2.0"
+    react-reconciler: "npm:^0.29.0"
     tiny-invariant: "npm:^1.3.3"
     ts-pattern: "npm:^5.0.8"
     tsup: "npm:^8.0.2"
@@ -584,27 +553,30 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@schematicos/renderer@workspace:^, @schematicos/renderer@workspace:packages/renderer":
+"@schematicos/parse@workspace:packages/parse":
   version: 0.0.0-use.local
-  resolution: "@schematicos/renderer@workspace:packages/renderer"
+  resolution: "@schematicos/parse@workspace:packages/parse"
   dependencies:
+    "@redocly/openapi-core": "npm:^1.5.0"
     "@schematicos/eslint-config": "npm:0.0.1"
-    "@schematicos/generate": "npm:0.0.13"
-    "@schematicos/types": "npm:^0.0.29"
-    "@types/react-reconciler": "npm:^0.28.8"
+    "@schematicos/generate": "workspace:^"
+    "@schematicos/types": "workspace:^"
+    "@types/eslint": "npm:8"
+    "@types/lodash": "npm:4.14.201"
+    "@types/node": "npm:20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^7.4.0"
     "@typescript-eslint/parser": "npm:^7.4.0"
+    dequal: "npm:^2.0.3"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:9.0.0"
     eslint-plugin-import: "npm:2.29.0"
     eslint-plugin-prettier: "npm:5.0.1"
-    eslint-plugin-react-hooks: "npm:^4.6.0"
-    eslint-plugin-react-refresh: "npm:^0.4.5"
     eslint-plugin-vitest: "npm:^0.3.26"
-    prettier: "npm:^3.2.5"
+    lodash: "npm:^4.17.21"
+    openapi-types: "npm:12.1.3"
+    prettier: "npm:^3.2.4"
     react: "npm:^18.2.0"
-    react-reconciler: "npm:^0.29.0"
-    tiny-invariant: "npm:^1.3.3"
+    tiny-invariant: "npm:^1.3.1"
     ts-pattern: "npm:^5.0.8"
     tsup: "npm:^8.0.2"
     typescript: "npm:^5.4.3"
@@ -3787,15 +3759,6 @@ __metadata:
   bin:
     prettier: bin/prettier.cjs
   checksum: 10/e2b735d0552501b3a7ac8bd3ba3b6de2920bb35bd4cd02d08cb9057ebe3e96d83b9a7e4b903d987b7530a50223b12c74d107c154337236ae2c68156ba1e65cd2
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^3.2.5":
-  version: 3.2.5
-  resolution: "prettier@npm:3.2.5"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 10/d509f9da0b70e8cacc561a1911c0d99ec75117faed27b95cc8534cb2349667dee6351b0ca83fa9d5703f14127faa52b798de40f5705f02d843da133fc3aa416a
   languageName: node
   linkType: hard
 

@@ -1,7 +1,5 @@
-// @deno-types="npm:@types/react-reconciler@^0.28.8"
 import Reconciler, { HostConfig } from 'react-reconciler'
 import type { ReactNode } from 'react'
-// @deno-types="npm:@types/react-reconciler@^0.28.8/constants.d.ts"
 import { DefaultEventPriority } from 'react-reconciler/constants.js'
 import {
   HostContext,
