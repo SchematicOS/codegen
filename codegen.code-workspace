@@ -5,20 +5,16 @@
       "path": "./"
     },
     {
-      "name": "ui",
-      "path": "apps/ui",
+      "name": "parse",
+      "path": "packages/parse"
     },
     {
-      "name": "marketing",
-      "path": "apps/marketing"
+      "name": "cli",
+      "path": "packages/cli"
     },
     {
-      "name": "server",
-      "path": "apps/server"
-    },
-    {
-      "name": "core",
-      "path": "packages/core"
+      "name": "eslint-config",
+      "path": "packages/eslint-config"
     },
     {
       "name": "generate",

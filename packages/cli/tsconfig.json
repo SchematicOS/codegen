@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths": {
+      "generate/*": ["./generate/*"],
+      "lib/*": ["./lib/*"],
+      "setup/*": ["./setup/*"],
+      "util/*": ["./util/*"],
+      "zod/*": ["./zod/*"]
+    },
+    "types": ["node", "vitest/globals"],
+    "declarationMap": true,
+    "declaration": true
+  },
+  "include": ["src", "vitest.config.ts", "tsup.config.ts"],
+  "exclude": ["node_modules"]
+}
