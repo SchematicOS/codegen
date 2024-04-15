@@ -3,7 +3,7 @@ import { toParamsArgs } from './toParamsArgs.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/lib/constants.ts'
-import { KeyValue } from 'generate/elements/KeyValue.ts'
+import { KeyValues } from '../../generate/elements/KeyValues.ts'
 import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
 
 type QueryCallProps = {
@@ -15,6 +15,7 @@ type QueryCallProps = {
 export class QueryCall extends SchematicBase implements Stringable {
   operation: OasOperation
   queryArg: string
+  properties: KeyValues
 
   private constructor({ operation, context, queryArg }: QueryCallProps) {
     super({ context })
@@ -22,29 +23,33 @@ export class QueryCall extends SchematicBase implements Stringable {
     this.queryArg = queryArg
     this.operation = operation
 
-    this.children = toChidren({ operation, queryArg, context })
+    this.properties = toProperties({
+      operation,
+      queryArg,
+      context
+    })
   }
 
-  static create(args: QueryCallProps):QueryCall {
+  static create(args: QueryCallProps): QueryCall {
     return new QueryCall(args)
   }
 
-  toString():string {
-    return `(${this.queryArg}) => ({${this.renderChildren(',\n')}})`
+  toString(): string {
+    return `(${this.queryArg}) => ({${this.properties}})`
   }
 }
 
-type ToChildrenArgs = {
+type ToPropertiesArgs = {
   operation: OasOperation
   queryArg: string
   context: GenerateContext
 }
 
-const toChidren = ({
+const toProperties = ({
   operation,
   queryArg,
   context
-}: ToChildrenArgs): Stringable[] => {
+}: ToPropertiesArgs): KeyValues => {
   const { parameters = [], requestBody } = operation
 
   const path = toPathTemplate({
@@ -72,22 +77,13 @@ const toChidren = ({
     parentPath: queryArg
   })
 
-  return [
-    KeyValue.create('path', path),
-    KeyValue.create('method', method),
-    KeyValue.create('params', params),
-    KeyValue.create('headers', headers),
-    KeyValue.create('body', requestBody ? 'body' : EMPTY)
-  ]
-
-  // Is this a better api?
-  // KeyValues.create({
-  //   path,
-  //   method,
-  //   params,
-  //   headers,
-  //   body: requestBody ? 'body' : EMPTY
-  // })
+  return KeyValues.create({
+    path,
+    method,
+    params,
+    headers,
+    body: requestBody ? `${queryArg}.body` : EMPTY
+  })
 }
 
 type ToPathTemplateArgs = {

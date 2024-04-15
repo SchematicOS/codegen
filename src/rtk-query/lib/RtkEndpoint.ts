@@ -52,7 +52,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
     this.register()
   }
 
-  static create(args: RtkEndpointArgs):RtkEndpoint {
+  static create(args: RtkEndpointArgs): RtkEndpoint {
     return new RtkEndpoint(args)
   }
 
@@ -64,12 +64,14 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
     context.registerModel(endpointArg)
   }
 
-  toString():string {
+  toString(): string {
     const { queryCall, operation } = this
 
-    return `${toEndpointName(operation)}: build.${toEndpointType(operation)}<${
-      this.endpointResponse.identifier.name
-    },${this.endpointArg.identifier.name}>
+    const endpointResponseType = this.endpointResponse.identifier.toType()
+
+    return `${toEndpointName(operation)}: build.${toEndpointType(
+      operation
+    )}<${endpointResponseType},${this.endpointArg.identifier.name}>
     ({query: ${queryCall}})`
   }
 }

@@ -1,4 +1,3 @@
-import { category, tag, pet, apiResponse, order, user } from './src/index.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { default as FormLabel } from '@mui/joy/FormLabel'
 import { default as Input } from '@mui/joy/Input'
@@ -133,6 +132,21 @@ export const putApiUserUsernameArgs = z
 export const deleteApiUserUsernameResponse = z.void().optional()
 export const deleteApiUserUsernameArgs = z
   .object({ username: z.string().optional() })
+  .optional()
+export const address = z
+  .object({
+    street: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zip: z.string().optional()
+  })
+  .optional()
+export const customer = z
+  .object({
+    id: z.number().int().optional(),
+    username: z.string().optional(),
+    address: z.array(address.optional()).optional()
+  })
   .optional()
 
 export const CreatePet = () => {
@@ -778,26 +792,14 @@ export const UpdateUserUsername = () => {
 
 export const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
-    postApiPet: build.mutation<postApiPetResponse, postApiPetArgs>({
-      query: queryArg => ({
-        path: `/pet`,
-        method: POST,
-        __EMPTY__,
-        __EMPTY__,
-        body: body
-      })
+    postApiPet: build.mutation<PostApiPetResponse, postApiPetArgs>({
+      query: queryArg => ({ path: `/pet`, method: POST, body: queryArg.body })
     }),
-    putApiPet: build.mutation<putApiPetResponse, putApiPetArgs>({
-      query: queryArg => ({
-        path: `/pet`,
-        method: PUT,
-        __EMPTY__,
-        __EMPTY__,
-        body: body
-      })
+    putApiPet: build.mutation<PutApiPetResponse, putApiPetArgs>({
+      query: queryArg => ({ path: `/pet`, method: PUT, body: queryArg.body })
     }),
     getApiPetFindByStatus: build.query<
-      getApiPetFindByStatusResponse,
+      GetApiPetFindByStatusResponse,
       getApiPetFindByStatusArgs
     >({
       query: queryArg => ({
@@ -805,13 +807,11 @@ export const injectedRtkApi = api.injectEndpoints({
         method: GET,
         params: {
           status: queryArg.status
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
     getApiPetFindByTags: build.query<
-      getApiPetFindByTagsResponse,
+      GetApiPetFindByTagsResponse,
       getApiPetFindByTagsArgs
     >({
       query: queryArg => ({
@@ -819,24 +819,20 @@ export const injectedRtkApi = api.injectEndpoints({
         method: GET,
         params: {
           tags: queryArg.tags
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
-    getApiPetPetId: build.query<getApiPetPetIdResponse, getApiPetPetIdArgs>({
+    getApiPetPetId: build.query<GetApiPetPetIdResponse, getApiPetPetIdArgs>({
       query: queryArg => ({
         path: `/pet/${queryArg.petId}`,
         method: GET,
         params: {
           petId: queryArg.petId
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
     postApiPetPetId: build.mutation<
-      postApiPetPetIdResponse,
+      PostApiPetPetIdResponse,
       postApiPetPetIdArgs
     >({
       query: queryArg => ({
@@ -846,13 +842,11 @@ export const injectedRtkApi = api.injectEndpoints({
           petId: queryArg.petId,
           name: queryArg.name,
           status: queryArg.status
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
     deleteApiPetPetId: build.mutation<
-      deleteApiPetPetIdResponse,
+      DeleteApiPetPetIdResponse,
       deleteApiPetPetIdArgs
     >({
       query: queryArg => ({
@@ -863,12 +857,11 @@ export const injectedRtkApi = api.injectEndpoints({
         },
         headers: {
           api_key: queryArg.api_key
-        },
-        __EMPTY__
+        }
       })
     }),
     postApiPetPetIdUploadImage: build.mutation<
-      postApiPetPetIdUploadImageResponse,
+      PostApiPetPetIdUploadImageResponse,
       postApiPetPetIdUploadImageArgs
     >({
       query: queryArg => ({
@@ -878,36 +871,25 @@ export const injectedRtkApi = api.injectEndpoints({
           petId: queryArg.petId,
           additionalMetadata: queryArg.additionalMetadata
         },
-        __EMPTY__,
-        body: body
+        body: queryArg.body
       })
     }),
     getApiStoreInventory: build.query<
-      getApiStoreInventoryResponse,
+      GetApiStoreInventoryResponse,
       getApiStoreInventoryArgs
-    >({
-      query: queryArg => ({
-        path: `/store/inventory`,
-        method: GET,
-        __EMPTY__,
-        __EMPTY__,
-        __EMPTY__
-      })
-    }),
+    >({ query: queryArg => ({ path: `/store/inventory`, method: GET }) }),
     postApiStoreOrder: build.mutation<
-      postApiStoreOrderResponse,
+      PostApiStoreOrderResponse,
       postApiStoreOrderArgs
     >({
       query: queryArg => ({
         path: `/store/order`,
         method: POST,
-        __EMPTY__,
-        __EMPTY__,
-        body: body
+        body: queryArg.body
       })
     }),
     getApiStoreOrderOrderId: build.query<
-      getApiStoreOrderOrderIdResponse,
+      GetApiStoreOrderOrderIdResponse,
       getApiStoreOrderOrderIdArgs
     >({
       query: queryArg => ({
@@ -915,13 +897,11 @@ export const injectedRtkApi = api.injectEndpoints({
         method: GET,
         params: {
           orderId: queryArg.orderId
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
     deleteApiStoreOrderOrderId: build.mutation<
-      deleteApiStoreOrderOrderIdResponse,
+      DeleteApiStoreOrderOrderIdResponse,
       deleteApiStoreOrderOrderIdArgs
     >({
       query: queryArg => ({
@@ -929,58 +909,38 @@ export const injectedRtkApi = api.injectEndpoints({
         method: DELETE,
         params: {
           orderId: queryArg.orderId
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
-    postApiUser: build.mutation<postApiUserResponse, postApiUserArgs>({
-      query: queryArg => ({
-        path: `/user`,
-        method: POST,
-        __EMPTY__,
-        __EMPTY__,
-        body: body
-      })
+    postApiUser: build.mutation<PostApiUserResponse, postApiUserArgs>({
+      query: queryArg => ({ path: `/user`, method: POST, body: queryArg.body })
     }),
     postApiUserCreateWithList: build.mutation<
-      postApiUserCreateWithListResponse,
+      PostApiUserCreateWithListResponse,
       postApiUserCreateWithListArgs
     >({
       query: queryArg => ({
         path: `/user/createWithList`,
         method: POST,
-        __EMPTY__,
-        __EMPTY__,
-        body: body
+        body: queryArg.body
       })
     }),
-    getApiUserLogin: build.query<getApiUserLoginResponse, getApiUserLoginArgs>({
+    getApiUserLogin: build.query<GetApiUserLoginResponse, getApiUserLoginArgs>({
       query: queryArg => ({
         path: `/user/login`,
         method: GET,
         params: {
           username: queryArg.username,
           password: queryArg.password
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
     getApiUserLogout: build.query<
-      getApiUserLogoutResponse,
+      GetApiUserLogoutResponse,
       getApiUserLogoutArgs
-    >({
-      query: queryArg => ({
-        path: `/user/logout`,
-        method: GET,
-        __EMPTY__,
-        __EMPTY__,
-        __EMPTY__
-      })
-    }),
+    >({ query: queryArg => ({ path: `/user/logout`, method: GET }) }),
     getApiUserUsername: build.query<
-      getApiUserUsernameResponse,
+      GetApiUserUsernameResponse,
       getApiUserUsernameArgs
     >({
       query: queryArg => ({
@@ -988,13 +948,11 @@ export const injectedRtkApi = api.injectEndpoints({
         method: GET,
         params: {
           username: queryArg.username
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     }),
     putApiUserUsername: build.mutation<
-      putApiUserUsernameResponse,
+      PutApiUserUsernameResponse,
       putApiUserUsernameArgs
     >({
       query: queryArg => ({
@@ -1003,12 +961,11 @@ export const injectedRtkApi = api.injectEndpoints({
         params: {
           username: queryArg.username
         },
-        __EMPTY__,
-        body: body
+        body: queryArg.body
       })
     }),
     deleteApiUserUsername: build.mutation<
-      deleteApiUserUsernameResponse,
+      DeleteApiUserUsernameResponse,
       deleteApiUserUsernameArgs
     >({
       query: queryArg => ({
@@ -1016,9 +973,7 @@ export const injectedRtkApi = api.injectEndpoints({
         method: DELETE,
         params: {
           username: queryArg.username
-        },
-        __EMPTY__,
-        __EMPTY__
+        }
       })
     })
   }),

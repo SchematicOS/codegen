@@ -1,13 +1,20 @@
 import { isRef, toRefName } from '../helpers/ref.ts'
 import type { TypeSystemArgs, RefToResolved, TypeSystem } from '../types.ts'
-import type { Method, OasRef, OasRoot, OasSchemaRef, Stringable } from '@schematicos/types'
+import type {
+  Method,
+  OasRef,
+  OasRoot,
+  OasSchemaRef,
+  Stringable
+} from '@schematicos/types'
 import { match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
 import { Import } from '../elements/Import.ts'
 import { Model } from '../elements/Model.ts'
 import { normalize } from 'path'
-import type { Settings } from "./Settings.ts";
+import type { Settings } from './Settings.ts'
+import { Definition } from 'generate/elements/Definition.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -81,20 +88,22 @@ export class GenerateContext {
             return Import.create(module, Array.from(importNamesSet))
           }
         )
-  
+
         const fileContents = [
           imports,
           Array.from(file.models.values()),
           file.content
         ]
-          .filter((section): section is Stringable[] => Boolean(section?.length))
+          .filter((section): section is Stringable[] =>
+            Boolean(section?.length)
+          )
           .map(section => section.join('\n'))
           .join('\n\n')
-  
+
         return [destination, fileContents]
       }
     )
-  
+
     return Object.fromEntries(fileEntries)
   }
 
@@ -110,7 +119,7 @@ export class GenerateContext {
     return currentFile
   }
 
-  mutationEnabled():boolean {
+  mutationEnabled(): boolean {
     return !this.contextData.rendering
   }
 
@@ -147,6 +156,26 @@ export class GenerateContext {
     const { identifier } = model
 
     currentFile.models.set(identifier.toString(), model)
+  }
+
+  registerDefinition(definition: Definition) {
+    const { destinationPath } = definition
+
+    console.log('Registering definition file', destinationPath)
+
+    const currentFile = this.getFile(destinationPath)
+
+    const { identifier } = definition
+
+    console.log(
+      'Registering definition',
+      identifier.toString(),
+      definition.toString()
+    )
+
+    currentFile.models.set(identifier.toString(), definition)
+
+    console.log('Continue here tomorrow')
   }
 
   private registerRef({ ref, destinationPath }: RegisterRefArgs) {
@@ -251,7 +280,7 @@ export class GenerateContext {
     value,
     required,
     destinationPath
-  }: Omit<TypeSystemArgs, 'context'>):Stringable {
+  }: Omit<TypeSystemArgs, 'context'>): Stringable {
     if (isRef(value)) {
       this.registerRef({
         ref: value,
@@ -283,13 +312,13 @@ export class GenerateContext {
     return this.contextData.settings
   }
 
-  get typeSystemInfo(): Omit<TypeSystem, 'create'>{
-    const { create:_create, ...rest } = this.contextData.typeSystem
+  get typeSystemInfo(): Omit<TypeSystem, 'create'> {
+    const { create: _create, ...rest } = this.contextData.typeSystem
 
     return rest
   }
 
-  get files():Map<string, FileContents> {
+  get files(): Map<string, FileContents> {
     return this.contextData.files
   }
 }

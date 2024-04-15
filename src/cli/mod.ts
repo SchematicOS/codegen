@@ -1,6 +1,6 @@
 import { parseArgs } from "cli/parse-args";
 import { generate } from './lib/generate.ts'
-import { join } from 'path'
+import { resolve } from 'path'
 import { readFile } from "./lib/readFile.ts";
 import type { PrettierConfigType, SettingsConfigType } from "@schematicos/types";
 
@@ -16,10 +16,10 @@ const parseArguments = (args: string[]) => {
       directory: 'd'
     },
     default: {
-      schema: './schema.json',
-      settings: './settings.json',
-      prettier: './prettier.json',
-      directory: './.schematic'
+      schema: 'schema.json',
+      settings: 'settings.json',
+      prettier: 'prettier.json',
+      directory: '.schematic'
     },
     stopEarly: false,
     "--": true,
@@ -49,30 +49,30 @@ const main = (inputArgs: string[]) => {
 
   const schemaFormat = schema.endsWith('.json') ? 'json' : 'yaml'
 
-  const schemaPath = join(directory, schema)
+  const schemaPath = resolve(directory, schema)
 
   const schemaContent = readFile<string>(schemaPath)
 
   if (!schemaContent) {
-    console.error(`Could not read schema from "${schema}"`)
+    console.error(`Could not read schema from "${schemaPath}"`)
     return
   }
 
-  const settingsPath = join(directory, settings)
+  const settingsPath = resolve(directory, settings)
 
   const settingsConfig = readFile<SettingsConfigType>(settingsPath)
 
   if (!settingsConfig) {
-    console.error(`Could not read settings from "${settings}"`)
+    console.error(`Could not read settings from "${settingsPath}"`)
     return
   }
 
-  const prettierPath = join(directory, prettier)
+  const prettierPath = resolve(directory, prettier)
 
   const prettierConfig = readFile<PrettierConfigType>(prettierPath)
 
   if (!prettierConfig) {
-    console.error(`Could not read prettier config from "${prettier}"`)
+    console.error(`Could not read prettier config from "${prettierPath}"`)
     return
   }
 

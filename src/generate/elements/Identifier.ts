@@ -4,6 +4,9 @@ import { Import } from './Import.ts'
 import { normalize } from 'path'
 import type { ModelSettings } from '../lib/ModelSettings.ts'
 import type { Stringable } from '@schematicos/types'
+import { capitalize } from 'generate/helpers/strings.ts'
+import { Definition } from 'generate/elements/Definition.ts'
+import { ZodInferType } from 'zod/lib/ZodInferType.ts'
 
 export type IdentifierType = 'value' | 'type'
 
@@ -48,7 +51,7 @@ export class Identifier implements Stringable {
     modelSettings,
     type,
     context
-  }: IdentifierArgs):Identifier {
+  }: IdentifierArgs): Identifier {
     return new Identifier({
       name,
       source,
@@ -58,7 +61,7 @@ export class Identifier implements Stringable {
     })
   }
 
-  static from$Ref({ $ref, context }: From$RefArgs):Identifier {
+  static from$Ref({ $ref, context }: From$RefArgs): Identifier {
     const { type, formatIdentifier } = context.typeSystemInfo
     const modelSettings = context.settings.getModelSettings($ref)
 
@@ -74,16 +77,40 @@ export class Identifier implements Stringable {
     })
   }
 
-  toImport():Import {
+  toImport(): Import {
     return Import.create(this.source, this.name)
   }
 
-  isImported(destination: string):boolean {
+  isImported(destination: string): boolean {
     // Normalize paths to ensure comparison is accurate
     return normalize(this.source) !== normalize(destination)
   }
 
-  toString():string {
+  toType() {
+    const typeIdentifier = Identifier.create({
+      name: capitalize(this.name),
+      source: this.source,
+      modelSettings: this.modelSettings,
+      type: 'type',
+      context: this.context
+    })
+
+    const typeDefinition = Definition.create({
+      identifier: typeIdentifier,
+      value: ZodInferType.create({
+        context: this.context,
+        value: this
+      }),
+      destinationPath: this.source,
+      context: this.context
+    })
+
+    this.context.registerDefinition(typeDefinition)
+
+    return typeIdentifier
+  }
+
+  toString(): string {
     return this.name
   }
 }
