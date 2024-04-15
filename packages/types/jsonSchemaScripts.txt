@@ -1,1 +1,0 @@
-npx ts-json-schema-generator --path 'src/models/workflow/types.ts' --tsconfig './tsconfig.json' --no-top-ref --type 'WorkflowContent' --out './src/api/server/pgSchemas/workflow.generated.json'

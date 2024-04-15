@@ -1,139 +1,185 @@
-import {
-  SettingsConfigType,
-  OasRoot,
-  PrettierConfigType,
-  OasRef,
-  Stringable,
-  LoadedTransformer,
-  LoadedTypeSystem,
-  ImportName
-} from '@schematicos/types'
-import { match } from 'ts-pattern'
-import {
-  DefinitionType,
-  Identifier,
-  RefToResolved,
-  toRefName
-} from '@schematicos/generate'
+import { isRef, toRefName } from '../helpers/ref.ts'
+import type { TypeSystemArgs, RefToResolved, TypeSystem } from '../types.ts'
+import type { Method, OasRef, OasRoot, OasSchemaRef, Stringable } from 'npm:@schematicos/types@0.0.34'
+import { match } from 'npm:ts-pattern@5.1.1'
+import type { ContextData } from './ContextData.ts'
+import invariant from 'npm:tiny-invariant@1.3.3'
+import { Import } from '../elements/Import.ts'
+import { Model } from '../elements/Model.ts'
+import { normalize } from 'jsr:@std/path@0.222.1'
+import type { Settings } from "./Settings.ts";
 
-export type RegisterImportArgs = {
-  destination: string
-  identifier: Identifier
-}
-
-export type RegisterImportsArgs = {
-  imports: Record<string, ImportName[]>
-  destination: string
-}
-
-export type RegisterDefinitionArgs = {
-  destination: string
-  definition: DefinitionType
-}
-
-export type RegisterContentArgs = {
-  destination: string
-  content: Stringable
-}
+const MAX_LOOKUPS = 10
 
 export type FileContents = {
-  imports: Map<string, Identifier>
-  definitions: Map<string, DefinitionType>
+  imports: Map<string, Set<string>>
+  models: Map<string, Stringable>
   content: Stringable[]
 }
 
+export type ContentFn = (context: GenerateContext) => Stringable | undefined
+
 type ConstructorArgs = {
-  schemaModel: OasRoot
-  settingsConfig: SettingsConfigType
-  prettierConfig?: PrettierConfigType
-  transformers: LoadedTransformer[]
-  typeSystem: LoadedTypeSystem
+  data: ContextData
+  filePath?: string
 }
 
-export class GenerateContext {
-  files: Map<string, FileContents>
-  schemaModel: OasRoot
-  settingsConfig: SettingsConfigType
-  prettierConfig?: PrettierConfigType
-  transformers: LoadedTransformer[]
-  typeSystem: LoadedTypeSystem
+type RegisterImportArgs = {
+  importItem: Import
+  destinationPath: string
+}
 
-  constructor({
-    schemaModel,
-    settingsConfig,
-    prettierConfig,
-    transformers,
-    typeSystem
-  }: ConstructorArgs) {
-    this.files = new Map()
-    this.schemaModel = schemaModel
-    this.transformers = transformers
-    this.typeSystem = typeSystem
-    this.settingsConfig = settingsConfig
-    this.prettierConfig = prettierConfig
+type RegisterImportsArgs = {
+  importItems: Import[]
+  destinationPath: string
+}
+
+type RegisterRefArgs = {
+  ref: OasSchemaRef
+  destinationPath: string
+}
+
+type RegisterContentArgs = {
+  content: Stringable
+  destinationPath: string
+}
+
+type ReportArgs = {
+  message: string
+} & (
+  | {
+      location: 'operation'
+      method: Method
+      path: string
+    }
+  | {
+      location: 'schema'
+      ref: string
+    }
+)
+
+export class GenerateContext {
+  private contextData: ContextData
+
+  constructor({ data }: ConstructorArgs) {
+    this.contextData = data
   }
 
-  registerImport({ identifier, destination }: RegisterImportArgs) {
-    if (!this.files.has(destination)) {
-      this.files.set(destination, {
-        imports: new Map<string, Identifier>(),
-        definitions: new Map<string, DefinitionType>(),
-        content: []
-      })
+  render(): Record<string, string> {
+    console.log('Start rendering')
+
+    if (this.contextData.rendering) {
+      throw new Error('Render already in progress')
     }
 
-    this.files
-      .get(destination)
-      ?.imports?.set(identifier.toImportName(), identifier)
+    this.contextData.rendering = true
+
+    const fileEntries = Array.from(this.files.entries()).map(
+      ([destination, file]): [string, string] => {
+        const imports = Array.from(file.imports.entries()).map(
+          ([module, importNamesSet]) => {
+            return Import.create(module, Array.from(importNamesSet))
+          }
+        )
+  
+        const fileContents = [
+          imports,
+          Array.from(file.models.values()),
+          file.content
+        ]
+          .filter((section): section is Stringable[] => Boolean(section?.length))
+          .map(section => section.join('\n'))
+          .join('\n\n')
+  
+        return [destination, fileContents]
+      }
+    )
+  
+    return Object.fromEntries(fileEntries)
   }
 
-  registerImports({ imports, destination }: RegisterImportsArgs) {
-    Object.entries(imports).forEach(([importModule, importNames]) => {
-      importNames.forEach(importName => {
-        this.registerImport({
-          destination,
-          identifier: Identifier.fromStatic({
-            name: importName,
-            module: importModule,
-            ctx: this
-          })
-        })
-      })
+  getFile(filePath: string): FileContents {
+    const normalisedPath = normalize(filePath)
+
+    const currentFile = this.contextData.files.get(normalisedPath)
+
+    if (!currentFile) {
+      return this.addFile(normalisedPath)
+    }
+
+    return currentFile
+  }
+
+  mutationEnabled():boolean {
+    return !this.contextData.rendering
+  }
+
+  registerImport({ importItem, destinationPath }: RegisterImportArgs) {
+    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
+
+    const currentFile = this.getFile(destinationPath)
+
+    const module = currentFile.imports.get(importItem.module)
+
+    if (!module) {
+      currentFile.imports.set(
+        importItem.module,
+        new Set(importItem.importNames.map(n => `${n}`))
+      )
+    } else {
+      importItem.importNames.forEach(n => module.add(`${n}`))
+    }
+  }
+
+  registerImports({ importItems, destinationPath }: RegisterImportsArgs) {
+    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
+
+    importItems.forEach(importItem => {
+      this.registerImport({ importItem, destinationPath })
     })
   }
 
-  registerDefinition({ destination, definition }: RegisterDefinitionArgs) {
-    if (!this.files.has(destination)) {
-      this.files.set(destination, {
-        imports: new Map<string, Identifier>(),
-        definitions: new Map<string, DefinitionType>(),
-        content: []
+  registerModel(model: Model) {
+    const { destinationPath } = model
+
+    const currentFile = this.getFile(destinationPath)
+
+    const { identifier } = model
+
+    currentFile.models.set(identifier.toString(), model)
+  }
+
+  private registerRef({ ref, destinationPath }: RegisterRefArgs) {
+    const model = Model.fromRef({
+      context: this,
+      ref,
+      destinationPath
+    })
+
+    if (model.isImported()) {
+      this.registerImport({
+        importItem: model.identifier.toImport(),
+        destinationPath
       })
     }
 
-    this.files
-      .get(destination)
-      ?.definitions?.set(definition.identifier.toImportName(), definition)
+    this.registerModel(model)
   }
 
-  registerContent({ destination, content }: RegisterContentArgs) {
-    if (!this.files.has(destination)) {
-      this.files.set(destination, {
-        imports: new Map<string, Identifier>(),
-        definitions: new Map<string, DefinitionType>(),
-        content: []
-      })
-    }
+  registerContent({ content, destinationPath }: RegisterContentArgs) {
+    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
 
-    this.files.get(destination)?.content.push(content)
+    const currentFile = this.getFile(destinationPath)
+
+    currentFile.content.push(content)
   }
 
-  resolveRef<T extends OasRef>(arg: T): RefToResolved<T> {
-    const c = this.schemaModel.components
+  resolveRefSingle<T extends OasRef>(arg: T): RefToResolved<T> | T {
+    const c = this.contextData.schemaModel.components
 
     const refName = toRefName(arg.$ref)
 
-    const item = match(arg.refType)
+    const resolved = match(arg.refType)
       .with('schema', () => c?.models?.[refName])
       .with('pathItem', () => c?.pathItems?.[refName])
       .with('requestBody', () => c?.requestBodies?.[refName])
@@ -143,18 +189,107 @@ export class GenerateContext {
       .with('header', () => c?.headers?.[refName])
       .exhaustive()
 
-    if (!item || item.schematicType === 'ref') {
-      console.log('ITEM IS NOT VALUE')
-      console.log(arg)
-      console.log(item)
-
-      throw new Error('Not value')
+    if (!resolved) {
+      throw new Error(`Ref "${arg.$ref}" not found`)
     }
 
-    return item as RefToResolved<T>
+    // Ensure that the ref type matches the expected type
+    // Eg, 'response' refs should resolve to a 'response' object
+    if (isRef(resolved)) {
+      if (resolved.refType !== arg.refType) {
+        throw new Error(
+          `Ref type mismatch for "${arg.$ref}". Expected "${arg.refType}" but got "${resolved.refType}"`
+        )
+      }
+    } else {
+      if (resolved.schematicType !== arg.refType) {
+        throw new Error(
+          `Type mismatch for "${arg.$ref}". Expected "${arg.refType}" but got "${resolved.schematicType}"`
+        )
+      }
+    }
+
+    return resolved as RefToResolved<T> | T
+  }
+
+  resolveRef<T extends OasRef>(
+    arg: T,
+    lookupsPerformed: number = 0
+  ): RefToResolved<T> {
+    if (lookupsPerformed >= MAX_LOOKUPS) {
+      throw new Error('Max lookups reached')
+    }
+
+    const resolved = this.resolveRefSingle(arg)
+
+    if (isRef(resolved)) {
+      return this.resolveRef<T>(resolved as T, lookupsPerformed + 1)
+    }
+
+    return resolved as RefToResolved<T>
+  }
+
+  private addFile(normalisedPath: string) {
+    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
+
+    if (this.contextData.files.has(normalisedPath)) {
+      throw new Error(`File already exists: ${normalisedPath}`)
+    }
+
+    const newFile: FileContents = {
+      imports: new Map(),
+      models: new Map(),
+      content: []
+    }
+
+    this.contextData.files.set(normalisedPath, newFile)
+
+    return newFile
+  }
+
+  toTypeSystem({
+    value,
+    required,
+    destinationPath
+  }: Omit<TypeSystemArgs, 'context'>):Stringable {
+    if (isRef(value)) {
+      this.registerRef({
+        ref: value,
+        destinationPath
+      })
+    }
+
+    return this.contextData.typeSystem.create({
+      value,
+      required,
+      destinationPath,
+      context: this
+    })
   }
 
   unexpectedValue(message: string) {
     console.log(message)
+  }
+
+  report(args: ReportArgs): void {
+    console.log(args)
+  }
+
+  get schemaModel(): OasRoot {
+    return this.contextData.schemaModel
+  }
+
+  get settings(): Settings {
+    return this.contextData.settings
+  }
+
+  get typeSystemInfo(): Omit<TypeSystem, 'create'>{
+    const { create:_create, ...rest } = this.contextData.typeSystem
+
+    return rest
+  }
+
+  get files():Map<string, FileContents> {
+    return this.contextData.files
   }
 }

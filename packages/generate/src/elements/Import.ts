@@ -1,48 +1,37 @@
-import { BaseNode } from '@/elements/BaseNode.ts'
-import { Container } from '@/elements/Container.ts'
-import { TextInstance } from '@/elements/TextInstance.ts'
-import { Instance } from '@/elements/createInstance.ts'
-import { ImportName } from '@schematicos/types'
+import { ImportName } from './ImportName.ts'
+import type { ImportNameArg } from './ImportName.ts'
+import type { Stringable } from 'npm:@schematicos/types@0.0.34'
 
-export type ImportProps = {
-  names: ImportName[]
-  from: string
+
+type ConstructorArgs = {
+  module: string
+  importNames: ImportName[]
 }
 
-export class Import extends BaseNode<ImportProps> {
-  type: 'import'
+export class Import implements Stringable {
+  module: string
+  importNames: ImportName[]
 
-  constructor(props: ImportProps, root: Container) {
-    super(props, root)
-
-    this.type = 'import'
+  private constructor({ module, importNames }: ConstructorArgs) {
+    this.module = module
+    this.importNames = importNames
   }
 
-  appendChild(child: Instance | TextInstance) {
-    this.children.push(child)
+  static create(
+    module: string,
+    importNamesArg: ImportNameArg | ImportNameArg[]
+  ):Import {
+    const importNames = Array.isArray(importNamesArg)
+      ? importNamesArg.map(importName => ImportName.create(importName))
+      : [ImportName.create(importNamesArg)]
+
+    return new Import({
+      module,
+      importNames
+    })
   }
 
-  removeChild(child: Instance | TextInstance) {
-    const index = this.children.indexOf(child)
-
-    this.children.splice(index, 1)
-  }
-
-  toString(): string {
-    return ''
-    // const { separator, wrapper } = this.props
-
-    // const mapped = this.children.map(child => {
-    //   return `${child}`
-    // })
-
-    // const joined = mapped.join(separator ?? '')
-
-    // const out = match(wrapper)
-    //   .with('object', () => `{${joined}}`)
-    //   .with('array', () => `[${joined}]`)
-    //   .otherwise(() => `${joined}`)
-
-    // return out
+  toString():string {
+    return `import { ${this.importNames.join(', ')} } from '${this.module}'`
   }
 }

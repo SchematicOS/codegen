@@ -1,0 +1,5 @@
+{
+  "name": "@schematicos/zod",
+  "version": "0.0.3",
+  "exports": "./mod.ts"
+}

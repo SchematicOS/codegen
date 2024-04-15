@@ -1,0 +1,12 @@
+{
+  "deno.enable": true,
+  "editor.inlayHints.enabled": "on",
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "eslint.alwaysShowStatus": "explicit"
+  },
+  "deno.lint": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabCompletion": "on"
+}
