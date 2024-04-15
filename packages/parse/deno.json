@@ -1,8 +1,0 @@
-{
-  "name": "@schematicos/parse",
-  "version": "0.0.2",
-  "exports": {
-    "./parseContent": "./src/lib/parseContent.ts",
-    "./readFile": "./src/util/readFile.ts"
-  }
-}
