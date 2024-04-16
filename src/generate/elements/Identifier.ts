@@ -85,30 +85,6 @@ export class Identifier implements Stringable {
     return normalize(this.source) !== normalize(destination)
   }
 
-  // TODO This is only relevant to TS + Zod
-  // Think about breaking this out into a language-specific extension
-  toTypeDefinition(): Definition {
-    const typeIdentifier = Identifier.create({
-      name: capitalize(this.name),
-      source: this.source,
-      modelSettings: this.modelSettings,
-      type: EntityType.create('type'),
-      context: this.context
-    })
-
-    const inferred = ZodInferType.create({
-      context: this.context,
-      value: this
-    })
-
-    return Definition.create({
-      identifier: typeIdentifier,
-      children: inferred,
-      destinationPath: this.source,
-      context: this.context
-    })
-  }
-
   toString(): string {
     return this.name
   }

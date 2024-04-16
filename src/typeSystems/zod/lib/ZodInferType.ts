@@ -1,15 +1,14 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { Identifier } from 'generate/elements/Identifier.ts'
-import type { OasSchema, OasSchemaRef, OasVoid } from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 
 type ZodInferTypeArgs = {
   context: GenerateContext
-  value: Identifier | OasSchema | OasSchemaRef | OasVoid
+  value: Stringable
 }
 
 export class ZodInferType extends SchematicBase {
-  value: Identifier | OasSchema | OasSchemaRef | OasVoid
+  value: Stringable
 
   private constructor({ context, value }: ZodInferTypeArgs) {
     super({ context })

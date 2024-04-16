@@ -14,6 +14,7 @@ import { Import } from '../elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
+import { Identifier } from 'generate/elements/Identifier.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -273,6 +274,13 @@ export class GenerateContext {
       value,
       required,
       destinationPath,
+      context: this
+    })
+  }
+
+  toInferType(value: Stringable) {
+    return this.contextData.typeSystem.inferType({
+      value,
       context: this
     })
   }

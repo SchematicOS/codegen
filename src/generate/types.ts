@@ -24,9 +24,17 @@ export type TypeSystemFn = ({
   context
 }: TypeSystemArgs) => Stringable
 
+export type InferTypeArgs = {
+  context: GenerateContext
+  value: Stringable
+}
+
+export type InferTypeFn = ({ value, context }: InferTypeArgs) => Stringable
+
 export type TypeSystem = {
   id: string
   create: TypeSystemFn
+  inferType: InferTypeFn
   formatIdentifier: (name: string) => string
   type: EntityType
 }

@@ -7,6 +7,7 @@ import type { Definition } from 'generate/elements/Definition.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { OasOperation, Stringable } from '@schematicos/types'
+import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
 
 export type RtkEndpointArgs = {
   context: GenerateContext
@@ -42,10 +43,11 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
       operation
     })
 
-    this.endpointResponseType =
-      this.endpointResponse.identifier.toTypeDefinition()
+    this.endpointResponseType = toTypeDefinition(
+      this.endpointResponse.identifier
+    )
 
-    this.endpointArgType = this.endpointResponse.identifier.toTypeDefinition()
+    this.endpointArgType = toTypeDefinition(this.endpointResponse.identifier)
 
     this.endpointArg = toEndpointArg({
       context,
@@ -67,14 +69,10 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
   }
 
   register() {
-    const { endpointResponse, endpointResponseType } = this
-    const { endpointArg, endpointArgType, context } = this
+    const { endpointResponse, endpointArg, context } = this
 
     context.registerDefinition(endpointResponse)
-    context.registerDefinition(endpointResponseType)
-
     context.registerDefinition(endpointArg)
-    context.registerDefinition(endpointArgType)
   }
 
   toString(): string {
