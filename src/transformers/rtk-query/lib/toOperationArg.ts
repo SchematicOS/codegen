@@ -29,7 +29,7 @@ export const toEndpointArg = ({
   const identifier = Identifier.create({
     name: toArgsName(operation),
     modelSettings,
-    source: modelSettings.getExportPath(),
+    sourcePath: modelSettings.getExportPath(),
     type: context.typeSystemInfo.type,
     context
   })

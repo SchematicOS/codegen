@@ -4,11 +4,11 @@ import { capitalize } from 'generate/helpers/strings.ts'
 import { EntityType } from 'typescript/EntityType.ts'
 
 export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
-  const { context, source, modelSettings } = valueIdentifier
+  const { context, sourcePath, modelSettings } = valueIdentifier
 
   const typeIdentifier = Identifier.create({
     name: capitalize(valueIdentifier.name),
-    source,
+    sourcePath,
     modelSettings,
     type: EntityType.create('type'),
     context
@@ -19,7 +19,7 @@ export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
   const inferredTypeDefinition = Definition.create({
     identifier: typeIdentifier,
     children: inferred,
-    destinationPath: source,
+    destinationPath: sourcePath,
     context
   })
 

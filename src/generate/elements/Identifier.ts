@@ -4,14 +4,11 @@ import { Import } from './Import.ts'
 import { normalize } from 'path'
 import type { ModelSettings } from '../settings/ModelSettings.ts'
 import type { Stringable } from '@schematicos/types'
-import { capitalize } from 'generate/helpers/strings.ts'
-import { Definition } from 'generate/elements/Definition.ts'
-import { ZodInferType } from 'zod/lib/ZodInferType.ts'
-import { EntityType } from 'typescript/EntityType.ts'
+import type { EntityType } from 'typescript/EntityType.ts'
 
 type IdentifierArgs = {
   name: string
-  source: string
+  sourcePath: string
   modelSettings: ModelSettings
   type: EntityType
   context: GenerateContext
@@ -25,20 +22,20 @@ type From$RefArgs = {
 export class Identifier implements Stringable {
   name: string
   /** source is where Identifier is defined */
-  source: string
+  sourcePath: string
   modelSettings: ModelSettings
   type: EntityType
   context: GenerateContext
 
   private constructor({
     name,
-    source,
+    sourcePath,
     modelSettings,
     type,
     context
   }: IdentifierArgs) {
     this.name = name
-    this.source = source
+    this.sourcePath = sourcePath
     this.modelSettings = modelSettings
     this.type = type
     this.context = context
@@ -46,14 +43,14 @@ export class Identifier implements Stringable {
 
   static create({
     name,
-    source,
+    sourcePath,
     modelSettings,
     type,
     context
   }: IdentifierArgs): Identifier {
     return new Identifier({
       name,
-      source,
+      sourcePath,
       modelSettings,
       type,
       context
@@ -65,11 +62,11 @@ export class Identifier implements Stringable {
     const modelSettings = context.settings.getModelSettings($ref)
 
     const name = modelSettings.getRenameTo() || toRefName($ref)
-    const source = modelSettings.getExportPath()
+    const sourcePath = modelSettings.getExportPath()
 
     return Identifier.create({
       name: formatIdentifier(name),
-      source,
+      sourcePath,
       modelSettings,
       type,
       context
@@ -77,12 +74,12 @@ export class Identifier implements Stringable {
   }
 
   toImport(): Import {
-    return Import.create(this.source, this.name)
+    return Import.create(this.sourcePath, this.name)
   }
 
   isImported(destination: string): boolean {
     // Normalize paths to ensure comparison is accurate
-    return normalize(this.source) !== normalize(destination)
+    return normalize(this.sourcePath) !== normalize(destination)
   }
 
   toString(): string {
