@@ -1,4 +1,4 @@
-import type { EntityType } from 'typescript/EntityType.ts'
+import type { EntityType } from '../languages/typescript/EntityType.ts'
 import type { GenerateContext } from './context/GenerateContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
 import type {
