@@ -7,7 +7,7 @@ import type {
   OasSchemaRef,
   Stringable
 } from '@schematicos/types'
-import { match } from 'ts-pattern'
+import { P, match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
 import { Import } from '../elements/Import.ts'
@@ -31,25 +31,19 @@ type ConstructorArgs = {
   filePath?: string
 }
 
-type RegisterImportArgs = {
-  importItem: Import
-  destinationPath: string
-}
-
-type RegisterImportsArgs = {
-  importItems: Import[]
-  destinationPath: string
-}
-
-type RegisterRefArgs = {
-  ref: OasSchemaRef
-  destinationPath: string
-}
-
-type RegisterContentArgs = {
-  content: Stringable
-  destinationPath: string
-}
+type RegisterArgs =
+  | {
+      imports: Import[]
+      destinationPath: string
+    }
+  | {
+      definition: Definition
+      destinationPath: string
+    }
+  | {
+      content: Stringable
+      destinationPath: string
+    }
 
 type ReportArgs = {
   message: string
@@ -123,66 +117,35 @@ export class GenerateContext {
     return !this.contextData.rendering
   }
 
-  registerImport({ importItem, destinationPath }: RegisterImportArgs) {
+  register({ destinationPath, ...args }: RegisterArgs) {
     invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
 
     const currentFile = this.getFile(destinationPath)
 
-    const module = currentFile.imports.get(importItem.module)
+    match(args)
+      .with({ imports: P.nonNullable }, ({ imports }) => {
+        imports.forEach(importItem => {
+          const module = currentFile.imports.get(importItem.module)
 
-    if (!module) {
-      currentFile.imports.set(
-        importItem.module,
-        new Set(importItem.importNames.map(n => `${n}`))
-      )
-    } else {
-      importItem.importNames.forEach(n => module.add(`${n}`))
-    }
-  }
-
-  registerImports({ importItems, destinationPath }: RegisterImportsArgs) {
-    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
-
-    importItems.forEach(importItem => {
-      this.registerImport({ importItem, destinationPath })
-    })
-  }
-
-  registerDefinition(definition: Definition) {
-    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
-
-    const { destinationPath } = definition
-
-    const currentFile = this.getFile(destinationPath)
-
-    const { identifier } = definition
-
-    currentFile.definitions.set(identifier.toString(), definition)
-  }
-
-  private registerRef({ ref, destinationPath }: RegisterRefArgs) {
-    const definition = Definition.fromRef({
-      context: this,
-      ref,
-      destinationPath
-    })
-
-    if (definition.isImported()) {
-      this.registerImport({
-        importItem: definition.identifier.toImport(),
-        destinationPath
+          if (!module) {
+            currentFile.imports.set(
+              importItem.module,
+              new Set(importItem.importNames.map(n => `${n}`))
+            )
+          } else {
+            importItem.importNames.forEach(n => module.add(`${n}`))
+          }
+        })
       })
-    }
+      .with({ definition: P.nonNullable }, ({ definition }) => {
+        const { identifier } = definition
 
-    this.registerDefinition(definition)
-  }
-
-  registerContent({ content, destinationPath }: RegisterContentArgs) {
-    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
-
-    const currentFile = this.getFile(destinationPath)
-
-    currentFile.content.push(content)
+        currentFile.definitions.set(identifier.toString(), definition)
+      })
+      .with({ content: P.nonNullable }, ({ content }) => {
+        currentFile.content.push(content)
+      })
+      .exhaustive()
   }
 
   resolveRefSingle<T extends OasRef>(arg: T): RefToResolved<T> | T {
@@ -264,10 +227,20 @@ export class GenerateContext {
     destinationPath
   }: Omit<TypeSystemArgs, 'context'>): Stringable {
     if (isRef(value)) {
-      this.registerRef({
+      const definition = Definition.fromRef({
+        context: this,
         ref: value,
         destinationPath
       })
+
+      if (definition.isImported()) {
+        this.register({
+          imports: [definition.identifier.toImport()],
+          destinationPath
+        })
+      }
+
+      this.register({ definition, destinationPath })
     }
 
     return this.contextData.typeSystem.create({

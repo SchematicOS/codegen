@@ -31,14 +31,14 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
   }
 
   register() {
-    const destinationPath = this.transformerSettings.getExportPath()
-
-    this.context.registerImport({
-      importItem: Import.create('@reduxjs/toolkit/query/react', [
-        'createApi',
-        'fetchBaseQuery'
-      ]),
-      destinationPath
+    this.context.register({
+      imports: [
+        Import.create('@reduxjs/toolkit/query/react', [
+          'createApi',
+          'fetchBaseQuery'
+        ])
+      ],
+      destinationPath: this.transformerSettings.getExportPath()
     })
   }
 

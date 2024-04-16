@@ -32,17 +32,15 @@ export class FormField extends SchematicBase implements Stringable {
   }
 
   register() {
-    const destinationPath = this.operationSettings.getExportPath()
-
-    this.context.registerImports({
-      importItems: [
+    this.context.register({
+      imports: [
         Import.create('react-hook-form', 'Controller'),
         Import.create('@mui/joy/FormLabel', { default: 'FormLabel' }),
         Import.create('@mui/joy/Input', { default: 'Input' }),
         Import.create('@mui/joy/FormControl', { default: 'FormControl' }),
         Import.create('@mui/joy/FormHelperText', { default: 'FormHelperText' })
       ],
-      destinationPath
+      destinationPath: this.operationSettings.getExportPath()
     })
   }
 

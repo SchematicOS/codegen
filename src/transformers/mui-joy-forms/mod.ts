@@ -33,15 +33,16 @@ export const transform = ({
         operation
       })
     })
-    .filter((formContainer): formContainer is FormContainer => Boolean( formContainer ))
+    .filter((formContainer): formContainer is FormContainer =>
+      Boolean(formContainer)
+    )
     .forEach(formContainer => {
-      context.registerContent({
+      context.register({
         content: formContainer,
         destinationPath: formContainer.operationSettings.getExportPath()
       })
     })
 }
-
 
 const zodTypeSystem: Transformer = {
   id: '@schematicos/mui-joy-forms',

@@ -71,8 +71,15 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
   register() {
     const { endpointResponse, endpointArg, context } = this
 
-    context.registerDefinition(endpointResponse)
-    context.registerDefinition(endpointArg)
+    context.register({
+      definition: endpointResponse,
+      destinationPath: endpointResponse.destinationPath
+    })
+
+    context.register({
+      definition: endpointArg,
+      destinationPath: endpointArg.destinationPath
+    })
   }
 
   toString(): string {

@@ -2,7 +2,6 @@ import type { TransformerArgs, Transformer } from 'generate/types.ts'
 import { RtkEndpoint } from './lib/RtkEndpoint.ts'
 import { RtkQueryContainer } from './lib/RtkQueryContainer.ts'
 
-
 export const transform = ({
   context,
   transformerSettings
@@ -34,13 +33,11 @@ export const transform = ({
     operations
   })
 
-  context.registerContent({
+  context.register({
     content: rtkContainer,
     destinationPath: transformerSettings.getExportPath()
   })
 }
-
-
 
 const transformer: Transformer = {
   id: '@schematicos/rtk-query',

@@ -65,7 +65,10 @@ export const generate = async ({
         destinationPath: identifier.modelSettings.getExportPath()
       })
 
-      context.registerDefinition(definition)
+      context.register({
+        definition,
+        destinationPath: definition.destinationPath
+      })
     })
 
   const artifactsMap = context.render()

@@ -43,8 +43,8 @@ export class Zod extends SchematicBase implements Stringable {
   }
 
   register() {
-    this.context.registerImport({
-      importItem: Import.create('zod', 'z'),
+    this.context.register({
+      imports: [Import.create('zod', 'z')],
       destinationPath: this.destinationPath
     })
   }
