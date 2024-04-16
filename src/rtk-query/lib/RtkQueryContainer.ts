@@ -1,9 +1,9 @@
 import type { RtkEndpoint } from './RtkEndpoint.ts'
 import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
-import { Import } from 'generate/elements/Import.ts'
 import type { TransformerSettings } from 'generate/lib/Settings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
+import { Import } from 'generate/elements/Import.ts'
 
 type RtkQueryContainerProps = {
   context: GenerateContext
@@ -26,7 +26,7 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
     this.register()
   }
 
-  static create(args: RtkQueryContainerProps):RtkQueryContainer {
+  static create(args: RtkQueryContainerProps): RtkQueryContainer {
     return new RtkQueryContainer(args)
   }
 
@@ -34,13 +34,17 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
     const destinationPath = this.transformerSettings.getExportPath()
 
     this.context.registerImport({
-      importItem: Import.create('features/api/baseApi', { baseApi: 'api' }),
+      importItem: Import.create('@reduxjs/toolkit/query/react', [
+        'createApi',
+        'fetchBaseQuery'
+      ]),
       destinationPath
     })
   }
 
-  toString():string {
-    return `export const injectedRtkApi = api.injectEndpoints({
+  toString(): string {
+    return `export const injectedRtkApi = createApi({
+      baseQuery: fetchBaseQuery({ baseUrl: '/' }),
       endpoints: (build) => ({${this.renderChildren(',\n')}}),
       overrideExisting: false
     })`

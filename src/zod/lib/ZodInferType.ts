@@ -22,6 +22,6 @@ export class ZodInferType extends SchematicBase {
   }
 
   toString(): string {
-    return `z.infer<typeof ${this.value.toString()}>`
+    return `z.infer<typeof ${this.value}>`
   }
 }

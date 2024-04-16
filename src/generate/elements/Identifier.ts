@@ -86,7 +86,7 @@ export class Identifier implements Stringable {
     return normalize(this.source) !== normalize(destination)
   }
 
-  toType() {
+  toTypeDefinition(): Definition {
     const typeIdentifier = Identifier.create({
       name: capitalize(this.name),
       source: this.source,
@@ -95,19 +95,17 @@ export class Identifier implements Stringable {
       context: this.context
     })
 
-    const typeDefinition = Definition.create({
+    const inferred = ZodInferType.create({
+      context: this.context,
+      value: this
+    })
+
+    return Definition.create({
       identifier: typeIdentifier,
-      value: ZodInferType.create({
-        context: this.context,
-        value: this
-      }),
+      children: inferred,
       destinationPath: this.source,
       context: this.context
     })
-
-    this.context.registerDefinition(typeDefinition)
-
-    return typeIdentifier
   }
 
   toString(): string {

@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { default as Box } from '@mui/joy/Box'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { default as Button } from '@mui/joy/Button'
-import { baseApi as api } from 'features/api/baseApi'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const category = z
   .object({ id: z.number().int().optional(), name: z.string().optional() })
@@ -27,22 +27,32 @@ export const pet = z
   })
   .optional()
 export const postApiPetResponse = pet.optional()
+export type PostApiPetResponse = z.infer<typeof postApiPetResponse>
 export const postApiPetArgs = z.object({ body: pet.optional() }).optional()
 export const putApiPetResponse = pet.optional()
+export type PutApiPetResponse = z.infer<typeof putApiPetResponse>
 export const putApiPetArgs = z.object({ body: pet.optional() }).optional()
 export const getApiPetFindByStatusResponse = z.array(pet.optional()).optional()
+export type GetApiPetFindByStatusResponse = z.infer<
+  typeof getApiPetFindByStatusResponse
+>
 export const getApiPetFindByStatusArgs = z
   .object({ status: z.enum(['available', 'pending', 'sold']).optional() })
   .optional()
 export const getApiPetFindByTagsResponse = z.array(pet.optional()).optional()
+export type GetApiPetFindByTagsResponse = z.infer<
+  typeof getApiPetFindByTagsResponse
+>
 export const getApiPetFindByTagsArgs = z
   .object({ tags: z.array(z.string().optional()).optional() })
   .optional()
 export const getApiPetPetIdResponse = pet.optional()
+export type GetApiPetPetIdResponse = z.infer<typeof getApiPetPetIdResponse>
 export const getApiPetPetIdArgs = z
   .object({ petId: z.number().int().optional() })
   .optional()
 export const postApiPetPetIdResponse = z.void().optional()
+export type PostApiPetPetIdResponse = z.infer<typeof postApiPetPetIdResponse>
 export const postApiPetPetIdArgs = z
   .object({
     petId: z.number().int().optional(),
@@ -51,6 +61,9 @@ export const postApiPetPetIdArgs = z
   })
   .optional()
 export const deleteApiPetPetIdResponse = z.void().optional()
+export type DeleteApiPetPetIdResponse = z.infer<
+  typeof deleteApiPetPetIdResponse
+>
 export const deleteApiPetPetIdArgs = z
   .object({
     api_key: z.string().optional(),
@@ -65,6 +78,9 @@ export const apiResponse = z
   })
   .optional()
 export const postApiPetPetIdUploadImageResponse = apiResponse.optional()
+export type PostApiPetPetIdUploadImageResponse = z.infer<
+  typeof postApiPetPetIdUploadImageResponse
+>
 export const postApiPetPetIdUploadImageArgs = z
   .object({
     petId: z.number().int().optional(),
@@ -74,7 +90,10 @@ export const postApiPetPetIdUploadImageArgs = z
 export const getApiStoreInventoryResponse = z
   .record(z.string(), z.number().int().optional())
   .optional()
-export const getApiStoreInventoryArgs = z.object({}).optional()
+export type GetApiStoreInventoryResponse = z.infer<
+  typeof getApiStoreInventoryResponse
+>
+export const getApiStoreInventoryArgs = z.void().optional()
 export const order = z
   .object({
     id: z.number().int().optional(),
@@ -86,14 +105,23 @@ export const order = z
   })
   .optional()
 export const postApiStoreOrderResponse = order.optional()
+export type PostApiStoreOrderResponse = z.infer<
+  typeof postApiStoreOrderResponse
+>
 export const postApiStoreOrderArgs = z
   .object({ body: order.optional() })
   .optional()
 export const getApiStoreOrderOrderIdResponse = order.optional()
+export type GetApiStoreOrderOrderIdResponse = z.infer<
+  typeof getApiStoreOrderOrderIdResponse
+>
 export const getApiStoreOrderOrderIdArgs = z
   .object({ orderId: z.number().int().optional() })
   .optional()
 export const deleteApiStoreOrderOrderIdResponse = z.void().optional()
+export type DeleteApiStoreOrderOrderIdResponse = z.infer<
+  typeof deleteApiStoreOrderOrderIdResponse
+>
 export const deleteApiStoreOrderOrderIdArgs = z
   .object({ orderId: z.number().int().optional() })
   .optional()
@@ -110,26 +138,41 @@ export const user = z
   })
   .optional()
 export const postApiUserResponse = user.optional()
+export type PostApiUserResponse = z.infer<typeof postApiUserResponse>
 export const postApiUserArgs = z.object({ body: user.optional() }).optional()
 export const postApiUserCreateWithListResponse = user.optional()
+export type PostApiUserCreateWithListResponse = z.infer<
+  typeof postApiUserCreateWithListResponse
+>
 export const postApiUserCreateWithListArgs = z
   .object({ body: z.array(user.optional()).optional() })
   .optional()
 export const getApiUserLoginResponse = z.string().optional()
+export type GetApiUserLoginResponse = z.infer<typeof getApiUserLoginResponse>
 export const getApiUserLoginArgs = z
   .object({ username: z.string().optional(), password: z.string().optional() })
   .optional()
 export const getApiUserLogoutResponse = z.void().optional()
-export const getApiUserLogoutArgs = z.object({}).optional()
+export type GetApiUserLogoutResponse = z.infer<typeof getApiUserLogoutResponse>
+export const getApiUserLogoutArgs = z.void().optional()
 export const getApiUserUsernameResponse = user.optional()
+export type GetApiUserUsernameResponse = z.infer<
+  typeof getApiUserUsernameResponse
+>
 export const getApiUserUsernameArgs = z
   .object({ username: z.string().optional() })
   .optional()
 export const putApiUserUsernameResponse = z.void().optional()
+export type PutApiUserUsernameResponse = z.infer<
+  typeof putApiUserUsernameResponse
+>
 export const putApiUserUsernameArgs = z
   .object({ username: z.string().optional(), body: user.optional() })
   .optional()
 export const deleteApiUserUsernameResponse = z.void().optional()
+export type DeleteApiUserUsernameResponse = z.infer<
+  typeof deleteApiUserUsernameResponse
+>
 export const deleteApiUserUsernameArgs = z
   .object({ username: z.string().optional() })
   .optional()
@@ -790,17 +833,18 @@ export const UpdateUserUsername = () => {
   )
 }
 
-export const injectedRtkApi = api.injectEndpoints({
+export const injectedRtkApi = createApi({
+  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   endpoints: build => ({
-    postApiPet: build.mutation<PostApiPetResponse, postApiPetArgs>({
+    postApiPet: build.mutation<PostApiPetResponse, PostApiPetResponse>({
       query: queryArg => ({ path: `/pet`, method: POST, body: queryArg.body })
     }),
-    putApiPet: build.mutation<PutApiPetResponse, putApiPetArgs>({
+    putApiPet: build.mutation<PutApiPetResponse, PutApiPetResponse>({
       query: queryArg => ({ path: `/pet`, method: PUT, body: queryArg.body })
     }),
     getApiPetFindByStatus: build.query<
       GetApiPetFindByStatusResponse,
-      getApiPetFindByStatusArgs
+      GetApiPetFindByStatusResponse
     >({
       query: queryArg => ({
         path: `/pet/findByStatus`,
@@ -812,7 +856,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     getApiPetFindByTags: build.query<
       GetApiPetFindByTagsResponse,
-      getApiPetFindByTagsArgs
+      GetApiPetFindByTagsResponse
     >({
       query: queryArg => ({
         path: `/pet/findByTags`,
@@ -822,18 +866,20 @@ export const injectedRtkApi = api.injectEndpoints({
         }
       })
     }),
-    getApiPetPetId: build.query<GetApiPetPetIdResponse, getApiPetPetIdArgs>({
-      query: queryArg => ({
-        path: `/pet/${queryArg.petId}`,
-        method: GET,
-        params: {
-          petId: queryArg.petId
-        }
-      })
-    }),
+    getApiPetPetId: build.query<GetApiPetPetIdResponse, GetApiPetPetIdResponse>(
+      {
+        query: queryArg => ({
+          path: `/pet/${queryArg.petId}`,
+          method: GET,
+          params: {
+            petId: queryArg.petId
+          }
+        })
+      }
+    ),
     postApiPetPetId: build.mutation<
       PostApiPetPetIdResponse,
-      postApiPetPetIdArgs
+      PostApiPetPetIdResponse
     >({
       query: queryArg => ({
         path: `/pet/${queryArg.petId}`,
@@ -847,7 +893,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     deleteApiPetPetId: build.mutation<
       DeleteApiPetPetIdResponse,
-      deleteApiPetPetIdArgs
+      DeleteApiPetPetIdResponse
     >({
       query: queryArg => ({
         path: `/pet/${queryArg.petId}`,
@@ -862,7 +908,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     postApiPetPetIdUploadImage: build.mutation<
       PostApiPetPetIdUploadImageResponse,
-      postApiPetPetIdUploadImageArgs
+      PostApiPetPetIdUploadImageResponse
     >({
       query: queryArg => ({
         path: `/pet/${queryArg.petId}/uploadImage`,
@@ -876,11 +922,11 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     getApiStoreInventory: build.query<
       GetApiStoreInventoryResponse,
-      getApiStoreInventoryArgs
+      GetApiStoreInventoryResponse
     >({ query: queryArg => ({ path: `/store/inventory`, method: GET }) }),
     postApiStoreOrder: build.mutation<
       PostApiStoreOrderResponse,
-      postApiStoreOrderArgs
+      PostApiStoreOrderResponse
     >({
       query: queryArg => ({
         path: `/store/order`,
@@ -890,7 +936,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     getApiStoreOrderOrderId: build.query<
       GetApiStoreOrderOrderIdResponse,
-      getApiStoreOrderOrderIdArgs
+      GetApiStoreOrderOrderIdResponse
     >({
       query: queryArg => ({
         path: `/store/order/${queryArg.orderId}`,
@@ -902,7 +948,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     deleteApiStoreOrderOrderId: build.mutation<
       DeleteApiStoreOrderOrderIdResponse,
-      deleteApiStoreOrderOrderIdArgs
+      DeleteApiStoreOrderOrderIdResponse
     >({
       query: queryArg => ({
         path: `/store/order/${queryArg.orderId}`,
@@ -912,12 +958,12 @@ export const injectedRtkApi = api.injectEndpoints({
         }
       })
     }),
-    postApiUser: build.mutation<PostApiUserResponse, postApiUserArgs>({
+    postApiUser: build.mutation<PostApiUserResponse, PostApiUserResponse>({
       query: queryArg => ({ path: `/user`, method: POST, body: queryArg.body })
     }),
     postApiUserCreateWithList: build.mutation<
       PostApiUserCreateWithListResponse,
-      postApiUserCreateWithListArgs
+      PostApiUserCreateWithListResponse
     >({
       query: queryArg => ({
         path: `/user/createWithList`,
@@ -925,7 +971,10 @@ export const injectedRtkApi = api.injectEndpoints({
         body: queryArg.body
       })
     }),
-    getApiUserLogin: build.query<GetApiUserLoginResponse, getApiUserLoginArgs>({
+    getApiUserLogin: build.query<
+      GetApiUserLoginResponse,
+      GetApiUserLoginResponse
+    >({
       query: queryArg => ({
         path: `/user/login`,
         method: GET,
@@ -937,11 +986,11 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     getApiUserLogout: build.query<
       GetApiUserLogoutResponse,
-      getApiUserLogoutArgs
+      GetApiUserLogoutResponse
     >({ query: queryArg => ({ path: `/user/logout`, method: GET }) }),
     getApiUserUsername: build.query<
       GetApiUserUsernameResponse,
-      getApiUserUsernameArgs
+      GetApiUserUsernameResponse
     >({
       query: queryArg => ({
         path: `/user/${queryArg.username}`,
@@ -953,7 +1002,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     putApiUserUsername: build.mutation<
       PutApiUserUsernameResponse,
-      putApiUserUsernameArgs
+      PutApiUserUsernameResponse
     >({
       query: queryArg => ({
         path: `/user/${queryArg.username}`,
@@ -966,7 +1015,7 @@ export const injectedRtkApi = api.injectEndpoints({
     }),
     deleteApiUserUsername: build.mutation<
       DeleteApiUserUsernameResponse,
-      deleteApiUserUsernameArgs
+      DeleteApiUserUsernameResponse
     >({
       query: queryArg => ({
         path: `/user/${queryArg.username}`,

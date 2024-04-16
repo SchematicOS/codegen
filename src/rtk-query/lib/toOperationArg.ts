@@ -1,6 +1,6 @@
 import { toArgsName } from './util.ts'
 import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
-import { Model } from 'generate/elements/Model.ts'
+import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/lib/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
@@ -36,7 +36,7 @@ export const toEndpointArg = ({
   const parameterItems = toParametersByName({ operation, context })
 
   if (!body && !parameterItems) {
-    Model.create({
+    return Definition.fromValue({
       context,
       identifier,
       value: oasVoidValue,
@@ -57,7 +57,7 @@ export const toEndpointArg = ({
     }
   }
 
-  return Model.create({
+  return Definition.fromValue({
     context,
     identifier,
     value,

@@ -1,4 +1,4 @@
-import { EMPTY } from '../lib/constants.ts'
+import { EMPTY } from '../constants.ts'
 import type { Stringable } from '@schematicos/types'
 
 export class KeyValues implements Stringable {

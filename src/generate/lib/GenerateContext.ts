@@ -11,7 +11,6 @@ import { match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
 import { Import } from '../elements/Import.ts'
-import { Model } from '../elements/Model.ts'
 import { normalize } from 'path'
 import type { Settings } from './Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
@@ -20,7 +19,7 @@ const MAX_LOOKUPS = 10
 
 export type FileContents = {
   imports: Map<string, Set<string>>
-  models: Map<string, Stringable>
+  definitions: Map<string, Stringable>
   content: Stringable[]
 }
 
@@ -91,7 +90,7 @@ export class GenerateContext {
 
         const fileContents = [
           imports,
-          Array.from(file.models.values()),
+          Array.from(file.definitions.values()),
           file.content
         ]
           .filter((section): section is Stringable[] =>
@@ -148,51 +147,33 @@ export class GenerateContext {
     })
   }
 
-  registerModel(model: Model) {
-    const { destinationPath } = model
-
-    const currentFile = this.getFile(destinationPath)
-
-    const { identifier } = model
-
-    currentFile.models.set(identifier.toString(), model)
-  }
-
   registerDefinition(definition: Definition) {
-    const { destinationPath } = definition
+    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
 
-    console.log('Registering definition file', destinationPath)
+    const { destinationPath } = definition
 
     const currentFile = this.getFile(destinationPath)
 
     const { identifier } = definition
 
-    console.log(
-      'Registering definition',
-      identifier.toString(),
-      definition.toString()
-    )
-
-    currentFile.models.set(identifier.toString(), definition)
-
-    console.log('Continue here tomorrow')
+    currentFile.definitions.set(identifier.toString(), definition)
   }
 
   private registerRef({ ref, destinationPath }: RegisterRefArgs) {
-    const model = Model.fromRef({
+    const definition = Definition.fromRef({
       context: this,
       ref,
       destinationPath
     })
 
-    if (model.isImported()) {
+    if (definition.isImported()) {
       this.registerImport({
-        importItem: model.identifier.toImport(),
+        importItem: definition.identifier.toImport(),
         destinationPath
       })
     }
 
-    this.registerModel(model)
+    this.registerDefinition(definition)
   }
 
   registerContent({ content, destinationPath }: RegisterContentArgs) {
@@ -267,7 +248,7 @@ export class GenerateContext {
 
     const newFile: FileContents = {
       imports: new Map(),
-      models: new Map(),
+      definitions: new Map(),
       content: []
     }
 

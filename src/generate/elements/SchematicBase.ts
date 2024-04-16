@@ -1,10 +1,10 @@
 import type { GenerateContext } from '../lib/GenerateContext.ts'
-import { EMPTY } from '../lib/constants.ts'
+import { EMPTY } from '../constants.ts'
 import type { Stringable } from '@schematicos/types'
 
 type SchenmaticBaseArgs = {
   context: GenerateContext
-  children?: Stringable[]
+  children?: Stringable | Stringable[]
 }
 
 export class SchematicBase implements Stringable {

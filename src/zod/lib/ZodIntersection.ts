@@ -1,7 +1,7 @@
-import { SchematicBase } from 'generate/elements/SchematicBase.ts';
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts';
+import { SchematicBase } from 'generate/elements/SchematicBase.ts'
+import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
 import type { OasSchemaRef, OasSchema, Stringable } from '@schematicos/types'
-import { isRef } from 'generate/helpers/ref.ts';
+import { isRef } from 'generate/helpers/ref.ts'
 
 type ZodIntersectionArgs = {
   context: GenerateContext
@@ -41,14 +41,16 @@ export class ZodIntersection extends SchematicBase implements Stringable {
   toString() {
     const [first, ...rest] = this.children
 
+    const firstString = first.toString()
+
     if (this.allObjects) {
       return rest.reduce<string>((acc, child) => {
         return `${acc}.merge(${child})`
-      }, first.toString())
+      }, firstString)
     } else {
       return rest.reduce<string>((acc, child) => {
         return `${acc}.and(${child})`
-      }, first.toString())
+      }, firstString)
     }
   }
 }

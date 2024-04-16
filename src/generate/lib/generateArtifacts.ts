@@ -10,9 +10,9 @@ import invariant from 'tiny-invariant'
 import { GenerateContext } from './GenerateContext.ts'
 import { Settings } from './Settings.ts'
 import { ContextData } from './ContextData.ts'
-import type { TypeSystem, Transformer } from '../types.ts';
-import { Identifier } from '../elements/Identifier.ts';
-import { Model } from '../elements/Model.ts';
+import type { TypeSystem, Transformer } from '../types.ts'
+import { Identifier } from '../elements/Identifier.ts'
+import { Definition } from '../elements/Definition.ts'
 
 type GenerateArtifactsArgs = {
   schemaModel: OasRoot
@@ -28,7 +28,7 @@ export const generateArtifacts = async ({
   prettierConfig,
   transformers,
   typeSystem
-}: GenerateArtifactsArgs):Promise<Record<string, string>> => {
+}: GenerateArtifactsArgs): Promise<Record<string, string>> => {
   const settings = new Settings(settingsConfig)
 
   const contextData = new ContextData({
@@ -54,20 +54,18 @@ export const generateArtifacts = async ({
         context
       })
 
-      const model = Model.create({
+      return { value, identifier }
+    })
+    .filter(({ identifier }) => identifier.modelSettings.isSelected())
+    .forEach(({ value, identifier }) => {
+      const definition = Definition.fromValue({
         context,
         value,
         identifier,
         destinationPath: identifier.modelSettings.getExportPath()
       })
 
-      return model
-    })
-    .filter(model => {
-      return model.isSelected()
-    })
-    .forEach(model => {
-      context.registerModel(model)
+      context.registerDefinition(definition)
     })
 
   const artifactsMap = context.render()
@@ -82,7 +80,7 @@ export const generateArtifacts = async ({
 export const prettifyArtifacts = async (
   artifactsMap: Record<string, string>,
   prettierConfig?: PrettierConfigType
-):Promise<Record<string, string>> => {
+): Promise<Record<string, string>> => {
   if (!prettierConfig) {
     return artifactsMap
   }

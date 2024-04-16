@@ -1,6 +1,9 @@
 {
   "name": "@schematicos/parse",
   "version": "0.0.2",
+  "tasks": {
+    "types": "deno check **/*.ts"
+  },
   "exports": {
     "./cli": "./src/cli/mod.ts"
   },

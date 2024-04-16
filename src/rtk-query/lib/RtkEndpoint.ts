@@ -3,7 +3,7 @@ import { QueryCall } from './QueryCall.ts'
 import { toEndpointArg } from './toOperationArg.ts'
 import { toOperationResponse } from './toOperationResponse.ts'
 import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
-import type { Model } from 'generate/elements/Model.ts'
+import type { Definition } from 'generate/elements/Definition.ts'
 import type { OperationSettings } from 'generate/lib/Settings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { OasOperation, Stringable } from '@schematicos/types'
@@ -17,8 +17,13 @@ export type RtkEndpointArgs = {
 export class RtkEndpoint extends SchematicBase implements Stringable {
   operation: OasOperation
   operationSettings: OperationSettings
-  endpointResponse: Model
-  endpointArg: Model
+
+  endpointResponse: Definition
+  endpointResponseType: Definition
+
+  endpointArg: Definition
+  endpointArgType: Definition
+
   queryCall: QueryCall
 
   private constructor({
@@ -36,6 +41,11 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
       destinationPath: operationSettings.getExportPath(),
       operation
     })
+
+    this.endpointResponseType =
+      this.endpointResponse.identifier.toTypeDefinition()
+
+    this.endpointArgType = this.endpointResponse.identifier.toTypeDefinition()
 
     this.endpointArg = toEndpointArg({
       context,
@@ -57,21 +67,24 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
   }
 
   register() {
-    const { context, endpointResponse, endpointArg } = this
+    const { endpointResponse, endpointResponseType } = this
+    const { endpointArg, endpointArgType, context } = this
 
-    context.registerModel(endpointResponse)
+    context.registerDefinition(endpointResponse)
 
-    context.registerModel(endpointArg)
+    context.registerDefinition(endpointResponseType)
+
+    context.registerDefinition(endpointArg)
+
+    context.registerDefinition(endpointArgType)
   }
 
   toString(): string {
-    const { queryCall, operation } = this
+    const { queryCall, operation, endpointResponseType, endpointArgType } = this
 
-    const endpointResponseType = this.endpointResponse.identifier.toType()
-
-    return `${toEndpointName(operation)}: build.${toEndpointType(
-      operation
-    )}<${endpointResponseType},${this.endpointArg.identifier.name}>
+    return `${toEndpointName(operation)}: build.${toEndpointType(operation)}<${
+      endpointResponseType.identifier
+    },${endpointArgType.identifier}>
     ({query: ${queryCall}})`
   }
 }

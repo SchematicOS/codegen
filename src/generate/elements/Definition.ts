@@ -1,13 +1,18 @@
+import type {
+  OasSchema,
+  OasVoid,
+  OasSchemaRef,
+  Stringable
+} from '@schematicos/types'
 import type { GenerateContext } from '../lib/GenerateContext.ts'
 import { Identifier } from './Identifier.ts'
 import type { IdentifierType } from './Identifier.ts'
 import { SchematicBase } from './SchematicBase.ts'
-import type { OasSchemaRef, Stringable } from '@schematicos/types'
 import { match } from 'ts-pattern'
 
-type DefinitionArgs = {
+type ConstructorArgs = {
   context: GenerateContext
-  value: Stringable
+  children: Stringable
   identifier: Identifier
   destinationPath: string
 }
@@ -18,34 +23,39 @@ type FromRefArgs = {
   destinationPath: string
 }
 
+type FromValueArgs = {
+  context: GenerateContext
+  identifier: Identifier
+  value: OasSchema | OasSchemaRef | OasVoid
+  destinationPath: string
+}
+
 export class Definition extends SchematicBase implements Stringable {
-  value: Stringable
   identifier: Identifier
   destinationPath: string
 
   private constructor({
     context,
     identifier,
-    value,
+    children,
     destinationPath
-  }: DefinitionArgs) {
-    super({ context })
+  }: ConstructorArgs) {
+    super({ context, children })
 
     this.identifier = identifier
-    this.value = value
     this.destinationPath = destinationPath
   }
 
   static create({
     context,
+    children,
     identifier,
-    value,
     destinationPath
-  }: DefinitionArgs): Definition {
+  }: ConstructorArgs): Definition {
     return new Definition({
       context,
+      children,
       identifier,
-      value,
       destinationPath
     })
   }
@@ -56,10 +66,32 @@ export class Definition extends SchematicBase implements Stringable {
       context
     })
 
+    const resolved = context.resolveRefSingle(ref)
+
+    return Definition.fromValue({
+      context,
+      identifier,
+      value: resolved,
+      destinationPath
+    })
+  }
+
+  static fromValue({
+    context,
+    identifier,
+    value,
+    destinationPath
+  }: FromValueArgs): Definition {
+    const children = context.toTypeSystem({
+      value,
+      required: true,
+      destinationPath
+    })
+
     return new Definition({
       context,
       identifier,
-      value: context.resolveRefSingle(ref),
+      children,
       destinationPath
     })
   }
@@ -77,9 +109,9 @@ export class Definition extends SchematicBase implements Stringable {
   }
 
   toString(): string {
-    return `export ${toTypeKeyword(
-      this.identifier.type
-    )} ${this.identifier.toString()} = ${this.value};`
+    return `export ${toTypeKeyword(this.identifier.type)} ${
+      this.identifier
+    } = ${this.children};`
   }
 }
 
