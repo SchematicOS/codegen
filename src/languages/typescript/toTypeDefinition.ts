@@ -16,17 +16,10 @@ export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
 
   const inferred = context.toInferType(valueIdentifier)
 
-  const definition = Definition.create({
+  return Definition.create({
     identifier: typeIdentifier,
     children: inferred,
     destinationPath: sourcePath,
     context
   })
-
-  context.register({
-    definition,
-    destinationPath: definition.destinationPath
-  })
-
-  return definition
 }
