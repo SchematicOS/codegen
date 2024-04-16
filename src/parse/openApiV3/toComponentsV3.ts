@@ -36,8 +36,12 @@ export const toComponentsV3 = ({
     models: schemas
       ? toSchemasV3({ schemas, path: path.concat('schemas'), context })
       : undefined,
-    responses: responses ? toResponsesV3(responses, context) : undefined,
-    parameters: parameters ? toParametersV3(parameters, context) : undefined,
+    responses: responses
+      ? toResponsesV3({ responses, path: path.concat('responses'), context })
+      : undefined,
+    parameters: parameters
+      ? toParametersV3({ parameters, path: path.concat('parameters'), context })
+      : undefined,
     examples: examples
       ? toExamplesV3(
           { examples, example: undefined, exampleKey: 'TEMP' },
@@ -45,7 +49,11 @@ export const toComponentsV3 = ({
         )
       : undefined,
     requestBodies: requestBodies
-      ? toRequestBodiesV3(requestBodies, context)
+      ? toRequestBodiesV3({
+          requestBodies,
+          path: path.concat('requestBodies'),
+          context
+        })
       : undefined,
     headers: headers
       ? toHeadersV3({ headers, path: path.concat('headers'), context })

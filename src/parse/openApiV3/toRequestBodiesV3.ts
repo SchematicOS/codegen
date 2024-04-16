@@ -5,36 +5,56 @@ import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import { toContentV3 } from './toContentV3.ts'
 
-export const toRequestBodyV3 = (
-  requestBody: OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject,
-  ctx: ParseContextType
-): OasRequestBody | OasRequestBodyRef => {
+type ToRequestBodyV3Args = {
+  requestBody: OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
+  path: string[]
+  context: ParseContextType
+}
+
+export const toRequestBodyV3 = ({
+  requestBody,
+  path,
+  context
+}: ToRequestBodyV3Args): OasRequestBody | OasRequestBodyRef => {
   if (isRef(requestBody)) {
-    return toRefV31(requestBody, 'requestBody', ctx)
+    return toRefV31(requestBody, 'requestBody', context)
   }
 
   const { description, content, required, ...skipped } = requestBody
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_REQUEST_BODY', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_REQUEST_BODY', skipped })
 
   return {
     schematicType: 'requestBody',
     description,
-    content: toContentV3(content, ctx),
+    content: toContentV3({ content, path: path.concat('content'), context }),
     required
   }
 }
 
-export const toRequestBodiesV3 = (
+type ToRequestBodiesV3Args = {
   requestBodies: Record<
     string,
     OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
-  >,
-  ctx: ParseContextType
-): Record<string, OasRequestBody | OasRequestBodyRef> => {
+  >
+  path: string[]
+  context: ParseContextType
+}
+
+export const toRequestBodiesV3 = ({
+  requestBodies,
+  path,
+  context
+}: ToRequestBodiesV3Args): Record<
+  string,
+  OasRequestBody | OasRequestBodyRef
+> => {
   return Object.fromEntries(
     Object.entries(requestBodies).map(([key, value]) => {
-      return [key, toRequestBodyV3(value, ctx)]
+      return [
+        key,
+        toRequestBodyV3({ requestBody: value, path: path.concat(key), context })
+      ]
     })
   )
 }

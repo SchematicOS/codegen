@@ -15,23 +15,42 @@ const isLocationV3 = (location: string): location is OasParameterLocation => {
   return ['query', 'header', 'path', 'cookie'].includes(location)
 }
 
-export const toParameterListV3 = (
-  parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[],
+type ToParameterListV3Args = {
+  parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[]
+  path: string[]
   context: ParseContextType
-): (OasParameter | OasParameterRef)[] => {
-  return parameters.map(parameter => toParameterV3(parameter, context))
 }
 
-export const toParametersV3 = (
+export const toParameterListV3 = ({
+  parameters,
+  path,
+  context
+}: ToParameterListV3Args): (OasParameter | OasParameterRef)[] => {
+  return parameters.map((parameter, index) =>
+    toParameterV3({ parameter, path: path.concat(`[${index}]`), context })
+  )
+}
+
+type ToParametersV3Args = {
   parameters: Record<
     string,
     OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
-  >,
+  >
+  path: string[]
   context: ParseContextType
-): Record<string, OasParameter | OasParameterRef> => {
+}
+
+export const toParametersV3 = ({
+  parameters,
+  path,
+  context
+}: ToParametersV3Args): Record<string, OasParameter | OasParameterRef> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
-      return [key, toParameterV3(value, context)]
+      return [
+        key,
+        toParameterV3({ parameter: value, path: path.concat(key), context })
+      ]
     })
   )
 }

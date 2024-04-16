@@ -13,11 +13,19 @@ type OperationInfo = {
   pathItem: OasPathItem
 }
 
-export const toOperationV3 = (
-  operation: OpenAPIV3.OperationObject,
-  operationInfo: OperationInfo,
-  ctx: ParseContextType
-): OasOperation => {
+type ToOperationV3Args = {
+  operation: OpenAPIV3.OperationObject
+  operationInfo: OperationInfo
+  path: string[]
+  context: ParseContextType
+}
+
+export const toOperationV3 = ({
+  operation,
+  operationInfo,
+  path: p,
+  context
+}: ToOperationV3Args): OasOperation => {
   const { method, path, pathItem } = operationInfo
   const {
     tags,
@@ -30,7 +38,7 @@ export const toOperationV3 = (
     ...skipped
   } = operation
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_OPERATION', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_OPERATION', skipped })
 
   return stripUndefined<OasOperation>({
     schematicType: 'operation',
@@ -40,17 +48,40 @@ export const toOperationV3 = (
     tags,
     summary,
     description,
-    parameters: parameters ? toParameterListV3(parameters, ctx) : undefined,
-    requestBody: requestBody ? toRequestBodyV3(requestBody, ctx) : undefined,
-    responses: toResponsesV3(responses, ctx),
+    parameters: parameters
+      ? toParameterListV3({
+          parameters,
+          path: p.concat('parameters'),
+          context
+        })
+      : undefined,
+    requestBody: requestBody
+      ? toRequestBodyV3({
+          requestBody,
+          path: p.concat('requstBody'),
+          context
+        })
+      : undefined,
+    responses: toResponsesV3({
+      responses,
+      path: p.concat('responses'),
+      context
+    }),
     deprecated
   })
 }
 
-export const toOperationsV3 = (
-  paths: OpenAPIV3.PathsObject,
-  ctx: ParseContextType
-): OasOperation[] => {
+type ToOperationsV3Args = {
+  paths: OpenAPIV3.PathsObject
+  path: string[]
+  context: ParseContextType
+}
+
+export const toOperationsV3 = ({
+  paths,
+  path: p,
+  context
+}: ToOperationsV3Args): OasOperation[] => {
   return Object.entries(paths).flatMap(([path, pathItem]) => {
     if (!pathItem) {
       return []
@@ -68,7 +99,11 @@ export const toOperationsV3 = (
       ...rest
     } = pathItem
 
-    const pathItemObject = toPathItem(rest, ctx)
+    const pathItemObject = toPathItem({
+      pathItem: rest,
+      path: p.concat('pathItem'),
+      context
+    })
 
     const methodObjects = {
       get,
@@ -87,15 +122,16 @@ export const toOperationsV3 = (
           return
         }
 
-        return toOperationV3(
+        return toOperationV3({
           operation,
-          {
+          operationInfo: {
             method: method as Method,
             path,
             pathItem: pathItemObject
           },
-          ctx
-        )
+          path: p.concat([path, method]),
+          context
+        })
       })
       .filter((item): item is OasOperation => Boolean(item))
   })

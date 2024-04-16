@@ -13,10 +13,17 @@ import { toTagsV3 } from './toTagsV3.ts'
 import { toOperationsV3 } from './toOperationsV3.ts'
 import { toComponentsV3 } from './toComponentsV3.ts'
 
-export const toPathItem = (
-  pathItem: OpenAPIV3.PathItemObject,
+type ToPathItemV3Args = {
+  pathItem: OpenAPIV3.PathItemObject
+  path: string[]
   context: ParseContextType
-): OasPathItem => {
+}
+
+export const toPathItem = ({
+  pathItem,
+  path,
+  context
+}: ToPathItemV3Args): OasPathItem => {
   const { $ref, summary, description, parameters, ...skipped } = pathItem
 
   context.notImplemented({ section: 'OPENAPI_V3_PATH_ITEM', skipped })
@@ -26,7 +33,13 @@ export const toPathItem = (
     $ref,
     summary,
     description,
-    parameters: parameters ? toParameterListV3(parameters, context) : undefined
+    parameters: parameters
+      ? toParameterListV3({
+          parameters,
+          path: path.concat('parameters'),
+          context
+        })
+      : undefined
   }
 }
 
@@ -98,7 +111,11 @@ export const fromDocumentV3 = ({
     schematicType: 'openapi',
     openapi,
     info: fromInfoV3({ info, path: path.concat('info'), context }),
-    operations: toOperationsV3(paths, context),
+    operations: toOperationsV3({
+      paths,
+      path: path.concat('operations'),
+      context
+    }),
     components: components
       ? toComponentsV3({ components, path: path.concat('components'), context })
       : undefined,

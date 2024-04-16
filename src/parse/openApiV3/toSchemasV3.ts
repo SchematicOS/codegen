@@ -33,6 +33,7 @@ type ToSchemaV3Args = {
 
 export const toSchemaV3 = ({
   schema,
+  path,
   context
 }: ToSchemaV3Args): OasSchema | OasSchemaRef => {
   if (isRef(schema)) {
@@ -53,7 +54,13 @@ export const toSchemaV3 = ({
         discriminator: discriminator
           ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        members: oneOf.map(item => toSchemaV3({ schema: item, context }))
+        members: oneOf.map(item => {
+          return toSchemaV3({
+            schema: item,
+            path: path.concat('members'),
+            context
+          })
+        })
       }
     })
     .with({ anyOf: P.array() }, matched => {
@@ -69,7 +76,9 @@ export const toSchemaV3 = ({
         discriminator: discriminator
           ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        members: anyOf.map(item => toSchemaV3({ schema: item, context }))
+        members: anyOf.map(item =>
+          toSchemaV3({ schema: item, path: path.concat('members'), context })
+        )
       }
     })
     .with({ allOf: P.array() }, matched => {
@@ -85,7 +94,9 @@ export const toSchemaV3 = ({
         discriminator: discriminator
           ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        members: allOf.map(item => toSchemaV3({ schema: item, context }))
+        members: allOf.map(item =>
+          toSchemaV3({ schema: item, path: path.concat('members'), context })
+        )
       }
     })
     .with({ type: 'object' }, matched => {
@@ -107,13 +118,18 @@ export const toSchemaV3 = ({
           ? toDiscriminatorV3(discriminator, context)
           : undefined,
         properties: properties
-          ? toSchemasV3({ schemas: properties, context })
+          ? toSchemasV3({
+              schemas: properties,
+              path: path.concat('properties'),
+              context
+            })
           : undefined,
         required,
-        additionalProperties: toAdditionalPropertiesV3(
+        additionalProperties: toAdditionalPropertiesV3({
           additionalProperties,
+          path: path.concat('additionalProperties'),
           context
-        )
+        })
       }
     })
     .with({ type: 'array' }, matched => {
@@ -124,7 +140,11 @@ export const toSchemaV3 = ({
       return {
         schematicType: 'schema',
         type: type,
-        items: toSchemaV3({ schema: items, context })
+        items: toSchemaV3({
+          schema: items,
+          path: path.concat('items'),
+          context
+        })
       }
     })
     .with({ type: 'integer' }, matched => {

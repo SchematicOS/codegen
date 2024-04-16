@@ -7,34 +7,55 @@ import { stripUndefined } from '../util/stripUndefined.ts'
 import type { OasResponse, OasResponseRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 
-export const toResponsesV3 = (
-  responses: OpenAPIV3.ResponsesObject,
-  ctx: ParseContextType
-): Record<string, OasResponseRef | OasResponse> => {
+type ToResponsesV3Args = {
+  responses: OpenAPIV3.ResponsesObject
+  path: string[]
+  context: ParseContextType
+}
+
+export const toResponsesV3 = ({
+  responses,
+  path,
+  context
+}: ToResponsesV3Args): Record<string, OasResponseRef | OasResponse> => {
   return Object.fromEntries(
     Object.entries(responses).map(([key, value]) => {
-      return [key, toResponseV3(value, ctx)]
+      return [
+        key,
+        toResponseV3({ response: value, path: path.concat(key), context })
+      ]
     })
   )
 }
 
-export const toResponseV3 = (
-  response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject,
-  ctx: ParseContextType
-): OasResponse | OasResponseRef => {
+type ToResponseV3Args = {
+  response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject
+  path: string[]
+  context: ParseContextType
+}
+
+export const toResponseV3 = ({
+  response,
+  path,
+  context
+}: ToResponseV3Args): OasResponse | OasResponseRef => {
   if (isRef(response)) {
-    return toRefV31(response, 'response', ctx)
+    return toRefV31(response, 'response', context)
   }
 
   const { description, headers, content, ...skipped } = response
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_RESPONSE', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_RESPONSE', skipped })
 
   const out = stripUndefined({
     schematicType: 'response',
     description,
-    headers: headers ? toHeadersV3(headers, ctx) : undefined,
-    content: content ? toContentV3(content, ctx) : undefined
+    headers: headers
+      ? toHeadersV3({ headers, path: path.concat('headers'), context })
+      : undefined,
+    content: content
+      ? toContentV3({ content, path: path.concat('content'), context })
+      : undefined
   }) as OasResponse
 
   return out
