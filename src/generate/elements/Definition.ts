@@ -6,9 +6,7 @@ import type {
 } from '@schematicos/types'
 import type { GenerateContext } from '../context/GenerateContext.ts'
 import { Identifier } from './Identifier.ts'
-import type { IdentifierType } from './Identifier.ts'
 import { SchematicBase } from './SchematicBase.ts'
-import { match } from 'ts-pattern'
 
 type ConstructorArgs = {
   context: GenerateContext
@@ -109,15 +107,6 @@ export class Definition extends SchematicBase implements Stringable {
   }
 
   toString(): string {
-    return `export ${toTypeKeyword(this.identifier.type)} ${
-      this.identifier
-    } = ${this.children};`
+    return `export ${this.identifier.type} ${this.identifier} = ${this.children};`
   }
-}
-
-const toTypeKeyword = (type: IdentifierType) => {
-  return match(type)
-    .with('type', () => 'type')
-    .with('value', () => 'const')
-    .exhaustive()
 }

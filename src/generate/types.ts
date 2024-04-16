@@ -1,3 +1,4 @@
+import type { EntityType } from 'typescript/EntityType.ts'
 import type { GenerateContext } from './context/GenerateContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
 import type {
@@ -27,7 +28,7 @@ export type TypeSystem = {
   id: string
   create: TypeSystemFn
   formatIdentifier: (name: string) => string
-  type: 'value' | 'type'
+  type: EntityType
 }
 
 export type TransformerArgs = {

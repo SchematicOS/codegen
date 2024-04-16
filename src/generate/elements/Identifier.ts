@@ -7,14 +7,13 @@ import type { Stringable } from '@schematicos/types'
 import { capitalize } from 'generate/helpers/strings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { ZodInferType } from 'zod/lib/ZodInferType.ts'
-
-export type IdentifierType = 'value' | 'type'
+import { EntityType } from 'typescript/EntityType.ts'
 
 type IdentifierArgs = {
   name: string
   source: string
   modelSettings: ModelSettings
-  type: IdentifierType
+  type: EntityType
   context: GenerateContext
 }
 
@@ -28,7 +27,7 @@ export class Identifier implements Stringable {
   /** source is where Identifier is defined */
   source: string
   modelSettings: ModelSettings
-  type: IdentifierType
+  type: EntityType
   context: GenerateContext
 
   private constructor({
@@ -86,12 +85,14 @@ export class Identifier implements Stringable {
     return normalize(this.source) !== normalize(destination)
   }
 
+  // TODO This is only relevant to TS + Zod
+  // Think about breaking this out into a language-specific extension
   toTypeDefinition(): Definition {
     const typeIdentifier = Identifier.create({
       name: capitalize(this.name),
       source: this.source,
       modelSettings: this.modelSettings,
-      type: 'type',
+      type: EntityType.create('type'),
       context: this.context
     })
 
