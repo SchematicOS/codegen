@@ -1,8 +1,8 @@
-import { parseArgs } from "cli/parse-args";
-import { generate } from './lib/generate.ts'
+import { parseArgs } from 'cli/parse-args'
+import { run } from './lib/run.ts'
 import { resolve } from 'path'
-import { readFile } from "./lib/readFile.ts";
-import type { PrettierConfigType, SettingsConfigType } from "@schematicos/types";
+import { readFile } from './lib/readFile.ts'
+import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 
 const parseArguments = (args: string[]) => {
   const parsedArgs = parseArgs(args, {
@@ -22,29 +22,38 @@ const parseArguments = (args: string[]) => {
       directory: '.schematic'
     },
     stopEarly: false,
-    "--": true,
+    '--': true
   })
 
   return parsedArgs
 }
 
 function printHelp(): void {
-  console.log(`Usage: generate [OPTIONS...]`);
-  console.log("\nOptional flags:");
-  console.log("  -s, --schema              Path to OpenAPI schema file. Defaults to 'schema.json'");
-  console.log("  -t, --settings            Path to settings file. Defaults to 'settings.json'");
-  console.log("  -p, --prettier            Path to prettier config file. Defaults to 'prettier.json'");
-  console.log("  -d, --directory           Directory containing schema and settings files. Defaults to './.schematic'");
-  console.log("  -h, --help                Display this help and exit");
+  console.log(`Usage: generate [OPTIONS...]`)
+  console.log('\nOptional flags:')
+  console.log(
+    "  -s, --schema              Path to OpenAPI schema file. Defaults to 'schema.json'"
+  )
+  console.log(
+    "  -t, --settings            Path to settings file. Defaults to 'settings.json'"
+  )
+  console.log(
+    "  -p, --prettier            Path to prettier config file. Defaults to 'prettier.json'"
+  )
+  console.log(
+    "  -d, --directory           Directory containing schema and settings files. Defaults to './.schematic'"
+  )
+  console.log('  -h, --help                Display this help and exit')
 }
 
 const main = (inputArgs: string[]) => {
-  const {help, directory, schema, settings, prettier} = parseArguments(inputArgs)
+  const { help, directory, schema, settings, prettier } =
+    parseArguments(inputArgs)
 
   // If help flag enabled, print help.
   if (help) {
-    printHelp();
-    Deno.exit(0);
+    printHelp()
+    Deno.exit(0)
   }
 
   const schemaFormat = schema.endsWith('.json') ? 'json' : 'yaml'
@@ -60,7 +69,7 @@ const main = (inputArgs: string[]) => {
 
   const settingsPath = resolve(directory, settings)
 
-  const settingsConfig = readFile<SettingsConfigType>(settingsPath)
+  const settingsConfig = readFile<SettingsType>(settingsPath)
 
   if (!settingsConfig) {
     console.error(`Could not read settings from "${settingsPath}"`)
@@ -76,7 +85,7 @@ const main = (inputArgs: string[]) => {
     return
   }
 
-  generate({
+  run({
     schema: schemaContent,
     schemaFormat,
     settingsConfig,

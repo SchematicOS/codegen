@@ -1,10 +1,10 @@
 import { FormField } from './FormField.ts'
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
-import type { OperationSettings } from 'generate/lib/Settings.ts'
+import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import type { OasObject, OasOperation, Stringable } from '@schematicos/types'
 import camelCase from 'lodash-es/camelCase.js'
 import { match } from 'ts-pattern'
@@ -55,7 +55,11 @@ export class FormContainer extends SchematicBase implements Stringable {
     this.register()
   }
 
-  static create({ context, operation, operationSettings }: FormContainerArgs):FormContainer | undefined {
+  static create({
+    context,
+    operation,
+    operationSettings
+  }: FormContainerArgs): FormContainer | undefined {
     const value = toBodySchemaValue({ context, operation })
 
     if (!value) {
@@ -89,7 +93,7 @@ export class FormContainer extends SchematicBase implements Stringable {
     })
   }
 
-  toString():string {
+  toString(): string {
     return `export const ${this.formName} = () => {
       const { control, handleSubmit } = useForm({
         resolver: zodResolver(${this.zodFormModel})

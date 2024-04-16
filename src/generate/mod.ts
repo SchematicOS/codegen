@@ -1,34 +1,34 @@
 import type {
   PrettierConfigType,
   OasRoot,
-  SettingsConfigType
+  SettingsType
 } from '@schematicos/types'
 import * as prettier from 'prettier/standalone'
 import typescript from 'prettier/plugins/typescript'
 import estree from 'prettier/plugins/estree'
 import invariant from 'tiny-invariant'
-import { GenerateContext } from './GenerateContext.ts'
-import { Settings } from './Settings.ts'
-import { ContextData } from './ContextData.ts'
-import type { TypeSystem, Transformer } from '../types.ts'
-import { Identifier } from '../elements/Identifier.ts'
-import { Definition } from '../elements/Definition.ts'
+import { GenerateContext } from './context/GenerateContext.ts'
+import { Settings } from './settings/Settings.ts'
+import { ContextData } from './context/ContextData.ts'
+import type { TypeSystem, Transformer } from './types.ts'
+import { Identifier } from './elements/Identifier.ts'
+import { Definition } from './elements/Definition.ts'
 
-type GenerateArtifactsArgs = {
+type GenerateArgs = {
   schemaModel: OasRoot
-  settingsConfig: SettingsConfigType
+  settingsConfig: SettingsType
   prettierConfig?: PrettierConfigType
   transformers: Transformer[]
   typeSystem: TypeSystem
 }
 
-export const generateArtifacts = async ({
+export const generate = async ({
   schemaModel,
   settingsConfig,
   prettierConfig,
   transformers,
   typeSystem
-}: GenerateArtifactsArgs): Promise<Record<string, string>> => {
+}: GenerateArgs): Promise<Record<string, string>> => {
   const settings = new Settings(settingsConfig)
 
   const contextData = new ContextData({

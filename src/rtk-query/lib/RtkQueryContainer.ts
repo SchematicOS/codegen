@@ -1,6 +1,6 @@
 import type { RtkEndpoint } from './RtkEndpoint.ts'
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
-import type { TransformerSettings } from 'generate/lib/Settings.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import type { TransformerSettings } from 'generate/settings/TransformerSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
 import { Import } from 'generate/elements/Import.ts'

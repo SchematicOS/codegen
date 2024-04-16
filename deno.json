@@ -1,6 +1,6 @@
 {
-  "name": "@schematicos/parse",
-  "version": "0.0.2",
+  "name": "@schematicos/codegen",
+  "version": "0.0.1",
   "tasks": {
     "types": "deno check **/*.ts"
   },
@@ -17,7 +17,7 @@
     "fs": "jsr:@std/fs@0.222.1",
     "cli": "jsr:@std/cli@0.222.1",
     "path": "jsr:@std/path@0.222.1",
-    "@schematicos/types": "npm:@schematicos/types@0.0.34",
+    "@schematicos/types": "npm:@schematicos/types@0.0.35",
     "generate/": "./src/generate/",
     "parse/": "./src/parse/",
     "mui-joy-forms/": "./src/mui-joy-forms/",

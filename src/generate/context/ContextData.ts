@@ -1,5 +1,5 @@
 import type { FileContents } from './GenerateContext.ts'
-import type { Settings } from './Settings.ts'
+import type { Settings } from '../settings/Settings.ts'
 import type { TypeSystem } from '../types.ts'
 import type { OasRoot } from '@schematicos/types'
 

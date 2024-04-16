@@ -8,7 +8,7 @@
       "jsr:@std/path@0.222.1": "jsr:@std/path@0.222.1",
       "jsr:@std/path@^0.222.1": "jsr:@std/path@0.222.1",
       "npm:@redocly/openapi-core@1.11.0": "npm:@redocly/openapi-core@1.11.0",
-      "npm:@schematicos/types@0.0.34": "npm:@schematicos/types@0.0.34",
+      "npm:@schematicos/types@0.0.35": "npm:@schematicos/types@0.0.35",
       "npm:openapi-types@12.1.3": "npm:openapi-types@12.1.3",
       "npm:prettier@3.2.5": "npm:prettier@3.2.5",
       "npm:tiny-invariant@1.3.3": "npm:tiny-invariant@1.3.3",
@@ -67,8 +67,8 @@
           "yaml-ast-parser": "yaml-ast-parser@0.0.43"
         }
       },
-      "@schematicos/types@0.0.34": {
-        "integrity": "sha512-KOb9sdaLoSsstN3/QdTALNCvXZ9NWNMxudMOyCRq7fzxCk555ERCCIG3LBUG7ovOXOn/56dkxIpCpvoj+2zQTQ==",
+      "@schematicos/types@0.0.35": {
+        "integrity": "sha512-unQbYOEitHyTA5+u2FuTiko2hkZoybDwqhvmRs3sPiS7ttsx++RZubQQoUvJMnJKIZK6IEPBdq+keJmuLzYkHQ==",
         "dependencies": {
           "zod": "zod@3.22.4"
         }
@@ -201,7 +201,7 @@
       "jsr:@std/fs@0.222.1",
       "jsr:@std/path@0.222.1",
       "npm:@redocly/openapi-core@1.11.0",
-      "npm:@schematicos/types@0.0.34",
+      "npm:@schematicos/types@0.0.35",
       "npm:openapi-types@12.1.3",
       "npm:prettier@3.2.5",
       "npm:tiny-invariant@1.3.3",

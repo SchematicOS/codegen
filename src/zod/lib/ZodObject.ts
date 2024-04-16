@@ -1,5 +1,5 @@
-import { SchematicBase } from 'generate/elements/SchematicBase.ts';
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts';
+import { SchematicBase } from 'generate/elements/SchematicBase.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type {
   OasObject,
   OasSchema,
@@ -7,7 +7,7 @@ import type {
   Stringable
 } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
-import { Key } from 'generate/elements/Key.ts';
+import { Key } from 'generate/elements/Key.ts'
 
 type ZodObjectProps = {
   context: GenerateContext

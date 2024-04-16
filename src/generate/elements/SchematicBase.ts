@@ -1,4 +1,4 @@
-import type { GenerateContext } from '../lib/GenerateContext.ts'
+import type { GenerateContext } from '../context/GenerateContext.ts'
 import { EMPTY } from '../constants.ts'
 import type { Stringable } from '@schematicos/types'
 

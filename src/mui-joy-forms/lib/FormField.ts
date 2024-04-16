@@ -1,6 +1,6 @@
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import { Import } from 'generate/elements/Import.ts'
-import type { OperationSettings } from 'generate/lib/Settings.ts'
+import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
 

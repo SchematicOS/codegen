@@ -1,4 +1,4 @@
-import { EMPTY } from '../../generate/constants.ts'
+import { EMPTY } from 'generate/constants.ts'
 import { Key } from 'generate/elements/Key.ts'
 import { Property } from 'generate/elements/Property.ts'
 import type { OasParameter } from '@schematicos/types'

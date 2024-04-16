@@ -1,4 +1,4 @@
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type { OasSchema, OasSchemaRef, Stringable } from '@schematicos/types'
 
 type ZodArrayArgs = {

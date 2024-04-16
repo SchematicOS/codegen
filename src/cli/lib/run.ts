@@ -1,25 +1,23 @@
 import { parseContent } from 'parse/lib/parseContent.ts'
-import type { SettingsConfigType, PrettierConfigType } from '@schematicos/types'
-import { generateArtifacts } from 'generate/lib/generateArtifacts.ts'
+import type { SettingsType, PrettierConfigType } from '@schematicos/types'
+import { generate } from 'generate/mod.ts'
 import { writeFile } from './writeFile.ts'
 import generateModules from './transfomers.ts'
 import { join } from 'path'
 
-type GenerateArgs = {
+type RunArgs = {
   schema: string
   schemaFormat: 'json' | 'yaml'
-  settingsConfig: SettingsConfigType
+  settingsConfig: SettingsType
   prettierConfig: PrettierConfigType
 }
 
-export const generate = async ({
+export const run = async ({
   schema,
   schemaFormat,
   settingsConfig,
   prettierConfig
-}: GenerateArgs) => {
-  
-
+}: RunArgs) => {
   const schemaModel = await parseContent({
     schemaDocument: schema,
     schemaFormat
@@ -29,7 +27,7 @@ export const generate = async ({
     throw new Error('Only OpenAPI v3 is supported')
   }
 
-  const artifactsMap = await generateArtifacts({
+  const artifactsMap = await generate({
     schemaModel,
     settingsConfig,
     prettierConfig,
@@ -47,6 +45,3 @@ export const generate = async ({
     })
   })
 }
-
-
-

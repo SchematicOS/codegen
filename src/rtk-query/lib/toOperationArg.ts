@@ -1,8 +1,8 @@
 import { toArgsName } from './util.ts'
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
-import { ModelSettings } from 'generate/lib/ModelSettings.ts'
+import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import type { OasOperation, OasSchema } from '@schematicos/types'
 import { oasVoidValue } from '@schematicos/types'
@@ -20,7 +20,10 @@ export const toEndpointArg = ({
   operation
 }: ToEndpointArgArgs) => {
   const modelSettings = ModelSettings.create({
-    exportPath: destinationPath
+    settings: {
+      exportPath: destinationPath,
+      selected: true
+    }
   })
 
   const identifier = Identifier.create({

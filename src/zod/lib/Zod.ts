@@ -11,10 +11,10 @@ import { ZodRef } from './ZodRef.ts'
 import { ZodObject } from './ZodObject.ts'
 import { ZodUnion } from './ZodUnion.ts'
 import { ZodIntersection } from './ZodIntersection.ts'
-import { SchematicBase } from 'generate/elements/SchematicBase.ts';
-import type { TypeSystemArgs } from 'generate/types.ts';
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts';
-import { Import } from 'generate/elements/Import.ts';
+import { SchematicBase } from 'generate/elements/SchematicBase.ts'
+import type { TypeSystemArgs } from 'generate/types.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import { Import } from 'generate/elements/Import.ts'
 
 export class Zod extends SchematicBase implements Stringable {
   destinationPath: string

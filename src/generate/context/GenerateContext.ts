@@ -12,7 +12,7 @@ import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
 import { Import } from '../elements/Import.ts'
 import { normalize } from 'path'
-import type { Settings } from './Settings.ts'
+import type { Settings } from '../settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 
 const MAX_LOOKUPS = 10

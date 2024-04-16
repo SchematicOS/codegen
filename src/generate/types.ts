@@ -1,5 +1,5 @@
-import type { GenerateContext } from './lib/GenerateContext.ts'
-import type { TransformerSettings } from './lib/Settings.ts'
+import type { GenerateContext } from './context/GenerateContext.ts'
+import type { TransformerSettings } from './settings/TransformerSettings.ts'
 import type {
   OasSchema,
   OasSchemaRef,

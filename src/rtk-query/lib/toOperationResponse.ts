@@ -1,8 +1,8 @@
 import { toResponseName } from './util.ts'
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
-import { ModelSettings } from 'generate/lib/ModelSettings.ts'
+import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import { toSuccessResponse } from 'generate/helpers/toSuccessResponse.ts'
 import type {
@@ -27,7 +27,10 @@ export const toOperationResponse = ({
   destinationPath
 }: ToOperationResponseArgs) => {
   const modelSettings = ModelSettings.create({
-    exportPath: destinationPath
+    settings: {
+      exportPath: destinationPath,
+      selected: true
+    }
   })
 
   const identifier = Identifier.create({

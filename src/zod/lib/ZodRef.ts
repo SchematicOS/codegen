@@ -1,7 +1,7 @@
-import { Identifier } from 'generate/elements/Identifier.ts';
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts';
+import { Identifier } from 'generate/elements/Identifier.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type { OasSchemaRef, Stringable } from '@schematicos/types'
-import { SchematicBase } from 'generate/elements/SchematicBase.ts';
+import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 
 type ZodRefProps = {
   context: GenerateContext

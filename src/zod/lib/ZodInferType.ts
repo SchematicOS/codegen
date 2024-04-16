@@ -1,7 +1,7 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Identifier } from 'generate/elements/Identifier.ts'
 import type { OasSchema, OasSchemaRef, OasVoid } from '@schematicos/types'
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 
 type ZodInferTypeArgs = {
   context: GenerateContext

@@ -2,9 +2,9 @@ import type { OasOperation, Stringable } from '@schematicos/types'
 import { toParamsArgs } from './toParamsArgs.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import { EMPTY } from '../../generate/constants.ts'
-import { KeyValues } from '../../generate/elements/KeyValues.ts'
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts'
+import { EMPTY } from 'generate/constants.ts'
+import { KeyValues } from 'generate/elements/KeyValues.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 
 type QueryCallProps = {
   queryArg: string

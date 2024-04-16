@@ -1,12 +1,12 @@
-import { SchematicBase } from 'generate/elements/SchematicBase.ts';
-import type { GenerateContext } from 'generate/lib/GenerateContext.ts';
+import { SchematicBase } from 'generate/elements/SchematicBase.ts'
+import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type {
   OasDiscriminator,
   OasSchemaRef,
   OasSchema,
   Stringable
 } from '@schematicos/types'
-import { isRef } from 'generate/helpers/ref.ts';
+import { isRef } from 'generate/helpers/ref.ts'
 
 type ZodUnionArgs = {
   context: GenerateContext
