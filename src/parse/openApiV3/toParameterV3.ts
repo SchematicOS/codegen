@@ -17,9 +17,9 @@ const isLocationV3 = (location: string): location is OasParameterLocation => {
 
 export const toParameterListV3 = (
   parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[],
-  ctx: ParseContextType
+  context: ParseContextType
 ): (OasParameter | OasParameterRef)[] => {
-  return parameters.map(parameter => toParameterV3(parameter, ctx))
+  return parameters.map(parameter => toParameterV3(parameter, context))
 }
 
 export const toParametersV3 = (
@@ -27,21 +27,28 @@ export const toParametersV3 = (
     string,
     OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
   >,
-  ctx: ParseContextType
+  context: ParseContextType
 ): Record<string, OasParameter | OasParameterRef> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
-      return [key, toParameterV3(value, ctx)]
+      return [key, toParameterV3(value, context)]
     })
   )
 }
 
-const toParameterV3 = (
-  parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject,
-  ctx: ParseContextType
-): OasParameter | OasParameterRef => {
+type ToParameterV3Args = {
+  parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
+  path: string[]
+  context: ParseContextType
+}
+
+const toParameterV3 = ({
+  parameter,
+  path,
+  context
+}: ToParameterV3Args): OasParameter | OasParameterRef => {
   if (isRef(parameter)) {
-    return toRefV31(parameter, 'parameter', ctx)
+    return toRefV31(parameter, 'parameter', context)
   }
 
   const {
@@ -58,7 +65,7 @@ const toParameterV3 = (
     ...skipped
   } = parameter
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_PARAMETER', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_PARAMETER', skipped })
 
   if (!isLocationV3(location)) {
     throw new Error(`Invalid location: ${location}`)
@@ -72,15 +79,19 @@ const toParameterV3 = (
     required,
     deprecated,
     allowEmptyValue,
-    schema: schema ? toSchemaV3(schema, ctx) : undefined,
+    schema: schema
+      ? toSchemaV3({ schema, path: path.concat('schema'), context })
+      : undefined,
     examples: toExamplesV3(
       {
         examples,
         example,
         exampleKey: `${name}-${location}`
       },
-      ctx
+      context
     ),
-    content: content ? toContentV3(content, ctx) : undefined
+    content: content
+      ? toContentV3({ content, path: path.concat('content'), context })
+      : undefined
   }
 }

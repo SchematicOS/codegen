@@ -7,7 +7,11 @@ import {
   lintDocument,
   detectSpec
 } from 'npm:@redocly/openapi-core@1.11.0'
-import type { Config, NormalizedProblem, Source } from 'npm:@redocly/openapi-core@1.11.0'
+import type {
+  Config,
+  NormalizedProblem,
+  Source
+} from 'npm:@redocly/openapi-core@1.11.0'
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { OasRoot, ParsePayload } from '@schematicos/types'
@@ -15,13 +19,13 @@ import { fromDocumentV3 } from '../openApiV3/parseOpenApiV3.ts'
 import { ParseContext } from './ParseContext.ts'
 
 export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
-  const ctx = new ParseContext()
+  const context = new ParseContext()
 
   const { document, specVersion } = await parseSchema(payload)
 
   return match(specVersion)
     .with(SpecVersion.OAS2, () => {
-      ctx.notImplemented({
+      context.notImplemented({
         section: 'PARSE_SCHEMA',
         message: 'OpenAPI v2 is not supported yet'
       })
@@ -29,10 +33,14 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
       throw new Error('OpenAPI v2 is not supported yet')
     })
     .with(SpecVersion.OAS3_0, (): OasRoot => {
-      return fromDocumentV3(document.parsed as OpenAPIV3.Document, ctx)
+      return fromDocumentV3({
+        document: document.parsed as OpenAPIV3.Document,
+        path: [],
+        context
+      })
     })
     .with(SpecVersion.OAS3_1, () => {
-      ctx.notImplemented({
+      context.notImplemented({
         section: 'PARSE_SCHEMA',
         message: 'OpenAPI v3.1 is not supported yet'
       })
@@ -40,7 +48,7 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
       throw new Error('OpenAPI v3.1 is not supported yet')
     })
     .otherwise(() => {
-      ctx.notImplemented({
+      context.notImplemented({
         section: 'PARSE_SCHEMA',
         message: `Unsupported spec version: ${specVersion}`
       })
@@ -49,10 +57,12 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
     })
 }
 
-export const parseSchema = async (payload: ParsePayload):Promise<{
+export const parseSchema = async (
+  payload: ParsePayload
+): Promise<{
   document: {
-      source: Source
-      parsed: unknown
+    source: Source
+    parsed: unknown
   }
   specVersion: SpecVersion
   issues: NormalizedProblem[]

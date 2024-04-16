@@ -15,18 +15,18 @@ import { toComponentsV3 } from './toComponentsV3.ts'
 
 export const toPathItem = (
   pathItem: OpenAPIV3.PathItemObject,
-  ctx: ParseContextType
+  context: ParseContextType
 ): OasPathItem => {
   const { $ref, summary, description, parameters, ...skipped } = pathItem
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_PATH_ITEM', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_PATH_ITEM', skipped })
 
   return {
     schematicType: 'pathItem',
     $ref,
     summary,
     description,
-    parameters: parameters ? toParameterListV3(parameters, ctx) : undefined
+    parameters: parameters ? toParameterListV3(parameters, context) : undefined
   }
 }
 
@@ -38,10 +38,13 @@ export type ToExamplesV3Args = {
   exampleKey: string
 }
 
-const fromInfoV3 = (
-  info: OpenAPIV3.InfoObject,
-  ctx: ParseContextType
-): OasInfo => {
+type FromInfoV3Args = {
+  info: OpenAPIV3.InfoObject
+  path: string[]
+  context: ParseContextType
+}
+
+const fromInfoV3 = ({ info, context }: FromInfoV3Args): OasInfo => {
   const {
     title,
     description,
@@ -52,7 +55,7 @@ const fromInfoV3 = (
     ...skipped
   } = info
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_INFO', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_INFO', skipped })
 
   return {
     schematicType: 'info',
@@ -76,20 +79,29 @@ const toContact = (contact: OpenAPIV3.ContactObject): OasContact => ({
   ...contact
 })
 
-export const fromDocumentV3 = (
-  document: OpenAPIV3.Document,
-  ctx: ParseContextType
-): OasRoot => {
+type FromDocumentV3Args = {
+  document: OpenAPIV3.Document
+  path: string[]
+  context: ParseContextType
+}
+
+export const fromDocumentV3 = ({
+  document,
+  path,
+  context
+}: FromDocumentV3Args): OasRoot => {
   const { openapi, info, paths, components, tags, ...skipped } = document
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_DOCUMENT', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_DOCUMENT', skipped })
 
   return {
     schematicType: 'openapi',
     openapi,
-    info: fromInfoV3(info, ctx),
-    operations: toOperationsV3(paths, ctx),
-    components: components ? toComponentsV3(components, ctx) : undefined,
-    tags: tags ? toTagsV3(tags, ctx) : undefined
+    info: fromInfoV3({ info, path: path.concat('info'), context }),
+    operations: toOperationsV3(paths, context),
+    components: components
+      ? toComponentsV3({ components, path: path.concat('components'), context })
+      : undefined,
+    tags: tags ? toTagsV3(tags, context) : undefined
   }
 }

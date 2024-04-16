@@ -7,30 +7,43 @@ import type { OasSchema, OasSchemaRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 
-export const toSchemasV3 = (
-  schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>,
-  ctx: ParseContextType
-): Record<string, OasSchema | OasSchemaRef> => {
+type ToSchemasV3Args = {
+  schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
+  path: string[]
+  context: ParseContextType
+}
+
+export const toSchemasV3 = ({
+  schemas,
+  path,
+  context
+}: ToSchemasV3Args): Record<string, OasSchema | OasSchemaRef> => {
   return Object.fromEntries(
-    Object.entries(schemas).map(([key, value]) => {
-      return [key, toSchemaV3(value, ctx)]
+    Object.entries(schemas).map(([key, schema]) => {
+      return [key, toSchemaV3({ schema, path: path.concat(key), context })]
     })
   )
 }
 
-export const toSchemaV3 = (
-  schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
-  ctx: ParseContextType
-): OasSchema | OasSchemaRef => {
+type ToSchemaV3Args = {
+  schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
+  path: string[]
+  context: ParseContextType
+}
+
+export const toSchemaV3 = ({
+  schema,
+  context
+}: ToSchemaV3Args): OasSchema | OasSchemaRef => {
   if (isRef(schema)) {
-    return toRefV31(schema, 'schema', ctx)
+    return toRefV31(schema, 'schema', context)
   }
 
   return match(schema)
     .with({ oneOf: P.array() }, matched => {
       const { oneOf, discriminator, title, description, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
 
       return {
         schematicType: 'schema',
@@ -38,15 +51,15 @@ export const toSchemaV3 = (
         title,
         description,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, ctx)
+          ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        members: oneOf.map(item => toSchemaV3(item, ctx))
+        members: oneOf.map(item => toSchemaV3({ schema: item, context }))
       }
     })
     .with({ anyOf: P.array() }, matched => {
       const { anyOf, discriminator, title, description, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
 
       return {
         schematicType: 'schema',
@@ -54,15 +67,15 @@ export const toSchemaV3 = (
         title,
         description,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, ctx)
+          ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        members: anyOf.map(item => toSchemaV3(item, ctx))
+        members: anyOf.map(item => toSchemaV3({ schema: item, context }))
       }
     })
     .with({ allOf: P.array() }, matched => {
       const { allOf, discriminator, title, description, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
 
       return {
         schematicType: 'schema',
@@ -70,9 +83,9 @@ export const toSchemaV3 = (
         title,
         description,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, ctx)
+          ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        members: allOf.map(item => toSchemaV3(item, ctx))
+        members: allOf.map(item => toSchemaV3({ schema: item, context }))
       }
     })
     .with({ type: 'object' }, matched => {
@@ -85,37 +98,39 @@ export const toSchemaV3 = (
         ...skipped
       } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
 
       return {
         schematicType: 'schema' as const,
         type: type,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, ctx)
+          ? toDiscriminatorV3(discriminator, context)
           : undefined,
-        properties: properties ? toSchemasV3(properties, ctx) : undefined,
+        properties: properties
+          ? toSchemasV3({ schemas: properties, context })
+          : undefined,
         required,
         additionalProperties: toAdditionalPropertiesV3(
           additionalProperties,
-          ctx
+          context
         )
       }
     })
     .with({ type: 'array' }, matched => {
       const { type, items, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_ARRAY', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_ARRAY', skipped })
 
       return {
         schematicType: 'schema',
         type: type,
-        items: toSchemaV3(items, ctx)
+        items: toSchemaV3({ schema: items, context })
       }
     })
     .with({ type: 'integer' }, matched => {
       const { type, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_INTEGER', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_INTEGER', skipped })
 
       return {
         schematicType: 'schema',
@@ -125,7 +140,7 @@ export const toSchemaV3 = (
     .with({ type: 'number' }, matched => {
       const { type, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_NUMBER', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_NUMBER', skipped })
 
       return {
         schematicType: 'schema',
@@ -135,7 +150,7 @@ export const toSchemaV3 = (
     .with({ type: 'boolean' }, matched => {
       const { type, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_BOOLEAN', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_BOOLEAN', skipped })
 
       return {
         schematicType: 'schema',
@@ -145,7 +160,7 @@ export const toSchemaV3 = (
     .with({ type: 'string' }, matched => {
       const { type, pattern, format, enum: enums, ...skipped } = matched
 
-      ctx.notImplemented({ section: 'OPENAPI_V3_SCHEMA_STRING', skipped })
+      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_STRING', skipped })
 
       return {
         schematicType: 'schema',
@@ -156,7 +171,7 @@ export const toSchemaV3 = (
       }
     })
     .otherwise(matched => {
-      ctx.unexpectedValue({
+      context.unexpectedValue({
         section: 'OPENAPI_V3_SCHEMA',
         message: `No type schema: ${JSON.stringify(matched, undefined, 2)}`
       })

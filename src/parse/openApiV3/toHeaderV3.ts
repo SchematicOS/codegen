@@ -7,23 +7,40 @@ import { isRef } from '../util/isRef.ts'
 import type { OasHeader, OasHeaderRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 
-export const toHeadersV3 = (
-  headers: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject>,
-  ctx: ParseContextType
-): Record<string, OasHeader | OasHeaderRef> => {
+type ToHeadersV3Args = {
+  headers: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject>
+  path: string[]
+  context: ParseContextType
+}
+
+export const toHeadersV3 = ({
+  headers,
+  path,
+  context
+}: ToHeadersV3Args): Record<string, OasHeader | OasHeaderRef> => {
   return Object.fromEntries(
     Object.entries(headers).map(([key, value]) => {
-      return [key, toHeaderV3(value, ctx)]
+      return [
+        key,
+        toHeaderV3({ header: value, path: path.concat(key), context })
+      ]
     })
   )
 }
 
-const toHeaderV3 = (
-  header: OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject,
-  ctx: ParseContextType
-): OasHeaderRef | OasHeader => {
+type ToHeaderV3Args = {
+  header: OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject
+  path: string[]
+  context: ParseContextType
+}
+
+const toHeaderV3 = ({
+  header,
+  path,
+  context
+}: ToHeaderV3Args): OasHeaderRef | OasHeader => {
   if (isRef(header)) {
-    return toRefV31(header, 'header', ctx)
+    return toRefV31(header, 'header', context)
   }
 
   const {
@@ -38,7 +55,7 @@ const toHeaderV3 = (
     ...skipped
   } = header
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_HEADER', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_HEADER', skipped })
 
   return {
     schematicType: 'header',
@@ -46,8 +63,12 @@ const toHeaderV3 = (
     required,
     deprecated,
     allowEmptyValue,
-    schema: schema ? toSchemaV3(schema, ctx) : undefined,
-    examples: toExamplesV3({ examples, example, exampleKey: `TEMP` }, ctx),
-    content: content ? toContentV3(content, ctx) : undefined
+    schema: schema
+      ? toSchemaV3({ schema, path: path.concat('schema'), context })
+      : undefined,
+    examples: toExamplesV3({ examples, example, exampleKey: `TEMP` }, context),
+    content: content
+      ? toContentV3({ content, path: path.concat('content'), context })
+      : undefined
   }
 }

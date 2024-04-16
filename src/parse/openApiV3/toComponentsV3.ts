@@ -8,10 +8,17 @@ import type { OasComponents } from '@schematicos/types'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRequestBodiesV3 } from './toRequestBodiesV3.ts'
 
-export const toComponentsV3 = (
-  components: OpenAPIV3.ComponentsObject,
-  ctx: ParseContextType
-): OasComponents => {
+type ToComponentsV3Args = {
+  components: OpenAPIV3.ComponentsObject
+  path: string[]
+  context: ParseContextType
+}
+
+export const toComponentsV3 = ({
+  components,
+  path,
+  context
+}: ToComponentsV3Args): OasComponents => {
   const {
     schemas,
     responses,
@@ -22,19 +29,26 @@ export const toComponentsV3 = (
     ...skipped
   } = components
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_COMPONENTS', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_COMPONENTS', skipped })
 
   return {
     schematicType: 'components',
-    models: schemas ? toSchemasV3(schemas, ctx) : undefined,
-    responses: responses ? toResponsesV3(responses, ctx) : undefined,
-    parameters: parameters ? toParametersV3(parameters, ctx) : undefined,
+    models: schemas
+      ? toSchemasV3({ schemas, path: path.concat('schemas'), context })
+      : undefined,
+    responses: responses ? toResponsesV3(responses, context) : undefined,
+    parameters: parameters ? toParametersV3(parameters, context) : undefined,
     examples: examples
-      ? toExamplesV3({ examples, example: undefined, exampleKey: 'TEMP' }, ctx)
+      ? toExamplesV3(
+          { examples, example: undefined, exampleKey: 'TEMP' },
+          context
+        )
       : undefined,
     requestBodies: requestBodies
-      ? toRequestBodiesV3(requestBodies, ctx)
+      ? toRequestBodiesV3(requestBodies, context)
       : undefined,
-    headers: headers ? toHeadersV3(headers, ctx) : undefined
+    headers: headers
+      ? toHeadersV3({ headers, path: path.concat('headers'), context })
+      : undefined
   }
 }

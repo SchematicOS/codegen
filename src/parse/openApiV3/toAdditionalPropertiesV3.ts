@@ -2,14 +2,21 @@ import type { OpenAPIV3 } from 'openapi-types'
 import type { ParseContextType } from '../lib/types.ts'
 import { toSchemaV3 } from './toSchemasV3.ts'
 
-export const toAdditionalPropertiesV3 = (
+type ToAdditionalPropertiesV3Args = {
   additionalProperties:
     | boolean
     | OpenAPIV3.ReferenceObject
     | OpenAPIV3.SchemaObject
-    | undefined,
-  ctx: ParseContextType
-) => {
+    | undefined
+  path: string[]
+  context: ParseContextType
+}
+
+export const toAdditionalPropertiesV3 = ({
+  additionalProperties,
+  path,
+  context
+}: ToAdditionalPropertiesV3Args) => {
   if (typeof additionalProperties === 'boolean') {
     return additionalProperties
   }
@@ -18,7 +25,11 @@ export const toAdditionalPropertiesV3 = (
     return undefined
   }
 
-  const parsed = toSchemaV3(additionalProperties, ctx)
+  const parsed = toSchemaV3({
+    schema: additionalProperties,
+    path: path.concat('additionalProperties'),
+    context
+  })
 
   return parsed
 }
