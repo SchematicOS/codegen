@@ -19,7 +19,12 @@ export const transform = ({
       }
     })
     .filter(({ operationSettings }) => operationSettings.isSelected())
-    .map(({ operation, operationSettings }) => {
+    .map(({ operation, operationSettings }, index) => {
+      console.log(
+        `${index}. `.padEnd(5),
+        operation.method.toUpperCase().padEnd(8),
+        operation.path
+      )
       return RtkEndpoint.create({
         context,
         operation,

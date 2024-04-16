@@ -37,7 +37,7 @@ export const run = async ({
   Object.entries(artifactsMap).forEach(([filePath, content]) => {
     console.log('FILEPATH', filePath)
 
-    const resolvedPath = join('./.generated', filePath)
+    const resolvedPath = join('./.generated/deno-subhosting', filePath)
 
     writeFile({
       content,

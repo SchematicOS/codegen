@@ -107,7 +107,7 @@ const toChildren = ({
     })
 
   return WithDescription.create({
-    description: value.description,
+    description: value?.description,
     value: Optional.create({
       required,
       value: children

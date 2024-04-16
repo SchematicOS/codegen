@@ -1,12 +1,6 @@
 import { isRef, toRefName } from '../helpers/ref.ts'
 import type { TypeSystemArgs, RefToResolved, TypeSystem } from '../types.ts'
-import type {
-  Method,
-  OasRef,
-  OasRoot,
-  OasSchemaRef,
-  Stringable
-} from '@schematicos/types'
+import type { Method, OasRef, OasRoot, Stringable } from '@schematicos/types'
 import { P, match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
@@ -14,7 +8,6 @@ import { Import } from '../elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
-import { Identifier } from 'generate/elements/Identifier.ts'
 
 const MAX_LOOKUPS = 10
 
