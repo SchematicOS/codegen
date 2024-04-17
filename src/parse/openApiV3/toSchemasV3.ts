@@ -125,7 +125,6 @@ export const toSchemaV3 = ({
       } = matched
 
       const fields = stripUndefined({
-        schematicType: 'schema' as const,
         type: type,
         properties: properties
           ? toSchemasV3({
@@ -148,7 +147,6 @@ export const toSchemaV3 = ({
       const { type, items, ...skipped } = matched
 
       const fields = stripUndefined({
-        schematicType: 'schema',
         type: type,
         items: toSchemaV3({
           schema: items,

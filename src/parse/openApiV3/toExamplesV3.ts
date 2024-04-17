@@ -4,6 +4,8 @@ import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
+import { Example } from 'parse/elements/Example.ts'
 
 type ToExampleSimpleV3Args = {
   example: unknown
@@ -41,7 +43,7 @@ export const toExamplesV3 = ({
   | undefined => {
   if (example && examples) {
     context.unexpectedValue({
-      section: 'OPENAPI_V3_EXAMPLES',
+      trail,
       message: `Both example and examples are defined for ${exampleKey}`
     })
   }
@@ -83,12 +85,11 @@ export const toExampleV3 = ({
 
   const { summary, description, value, ...skipped } = example
 
-  context.notImplemented({ section: 'OPENAPI_V3_EXAMPLE', skipped })
-
-  return {
-    schematicType: 'example',
+  const fields = stripUndefined({
     summary,
     description,
     value
-  }
+  })
+
+  return Example.create({ fields, trail, skipped, context })
 }

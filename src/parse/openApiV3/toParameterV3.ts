@@ -92,7 +92,6 @@ const toParameterV3 = ({
   }
 
   const fields = stripUndefined({
-    schematicType: 'parameter',
     name,
     location,
     description,

@@ -59,7 +59,6 @@ const toHeaderV3 = ({
   } = header
 
   const fields = stripUndefined({
-    schematicType: 'header',
     description,
     required,
     deprecated,

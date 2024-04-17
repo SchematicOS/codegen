@@ -5,6 +5,8 @@ import { toSchemaV3 } from './toSchemasV3.ts'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { OasContent } from '@schematicos/types'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
+import { MediaType } from 'parse/elements/MediaType.ts'
 
 type ToMediaTypeItemV3Args = {
   mediaTypeItem: OpenAPIV3.MediaTypeObject
@@ -21,10 +23,7 @@ export const toMediaTypeItemV3 = ({
 }: ToMediaTypeItemV3Args): OasMediaTypeItem => {
   const { schema, example, examples, ...skipped } = mediaTypeItem
 
-  context.notImplemented({ section: 'OPENAPI_V3_MEDIA_TYPE_ITEM', skipped })
-
-  return {
-    schematicType: 'mediaType',
+  const fields = stripUndefined({
     mediaType: mediaType,
     schema: schema
       ? toSchemaV3({ schema, trail: trail.add('schema'), context })
@@ -36,7 +35,9 @@ export const toMediaTypeItemV3 = ({
       trail: trail.add('examples'),
       context
     })
-  }
+  })
+
+  return MediaType.create({ fields, trail, skipped, context })
 }
 
 type ToMediaTypeItemsV3Args = {

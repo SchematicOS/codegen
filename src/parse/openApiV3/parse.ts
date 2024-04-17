@@ -23,7 +23,6 @@ export const toDocumentV3 = ({
   const { openapi, info, paths, components, tags, ...skipped } = document
 
   const fields = stripUndefined({
-    schematicType: 'openapi',
     openapi,
     info: toInfoV3({ info, trail: trail.add('info'), context }),
     operations: toOperationsV3({

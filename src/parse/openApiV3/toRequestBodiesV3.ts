@@ -31,7 +31,6 @@ export const toRequestBodyV3 = ({
   const { description, content, required, ...skipped } = requestBody
 
   const fields = stripUndefined({
-    schematicType: 'requestBody',
     description,
     content: toMediaTypeItemsV3({
       content,

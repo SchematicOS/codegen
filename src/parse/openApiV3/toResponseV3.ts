@@ -48,7 +48,6 @@ export const toResponseV3 = ({
   const { description, headers, content, ...skipped } = response
 
   const fields = stripUndefined({
-    schematicType: 'response',
     description,
     headers: headers
       ? toHeadersV3({ headers, trail: trail.add('headers'), context })
