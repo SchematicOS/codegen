@@ -22,7 +22,7 @@ export class ObjectOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToObjectV3Args) {
-    return new Object({ fields, trail, context, skipped })
+    return new ObjectOas({ fields, trail, context, skipped })
   }
 
   get properties() {

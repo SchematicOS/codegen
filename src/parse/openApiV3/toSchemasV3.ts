@@ -16,6 +16,7 @@ import { IntegerOas } from 'parse/elements/schema/Integer.ts'
 import { NumberOas } from 'parse/elements/schema/Number.ts'
 import { BooleanOas } from 'parse/elements/schema/Boolean.ts'
 import { StringOas } from 'parse/elements/schema/String.ts'
+import { UnknownOas } from 'parse/elements/schema/Unknown.ts'
 
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
@@ -116,7 +117,7 @@ export const toSchemaV3 = ({
     })
     .with({ type: 'object' }, matched => {
       const {
-        type,
+        type: _type,
         // discriminator,
         properties,
         required,
@@ -125,7 +126,6 @@ export const toSchemaV3 = ({
       } = matched
 
       const fields = stripUndefined({
-        type: type,
         properties: properties
           ? toSchemasV3({
               schemas: properties,
@@ -212,9 +212,13 @@ export const toSchemaV3 = ({
       return StringOas.create({ fields, trail, skipped, context })
     })
     .otherwise(matched => {
-      context.unexpectedValue({
-        trail,
-        message: `No type schema: ${JSON.stringify(matched, undefined, 2)}`
+      const { type: _type, title, description, ...skipped } = matched
+
+      const fields = stripUndefined({
+        title,
+        description
       })
-    }) as OasSchema
+
+      return UnknownOas.create({ fields, trail, skipped, context })
+    })
 }

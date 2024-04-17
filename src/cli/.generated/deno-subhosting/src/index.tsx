@@ -12,6 +12,13 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const compilerOptions = z
   .object({
+    /** Whether to enable TypeScript's experimental decorators. If set to `false`,
+ECMAScript decorators will be enabled instead.
+
+If omitted, this field will be interpreted as `false`.
+
+If the code being deployed uses any kind of decorators, this field must be
+set. Otherwise, the build process will fail. */
     experimentalDecorators: z.boolean().optional(),
     jsx: z.string().optional(),
     jsxFactory: z.string().optional(),
@@ -64,9 +71,12 @@ export type GetApiOrganizationsOrganizationIdResponse = z.infer<
 export const getApiOrganizationsOrganizationIdArgs = z
   .object({ organizationId: z.string().optional() })
   .optional()
-export const analyticsFieldType = z
-  .enum(['time', 'number', 'string', 'boolean', 'other'])
-  .optional()
+export const analyticsFieldType =
+  /** A data type that analytic data can be represented in.
+
+Inspired by Grafana's data types defined at:
+https://github.com/grafana/grafana/blob/e3288834b37b9aac10c1f43f0e621b35874c1f8a/packages/grafana-data/src/types/dataFrame.ts#L11-L23 */
+  z.enum(['time', 'number', 'string', 'boolean', 'other']).optional()
 export const analyticsFieldSchema = z
   .object({ name: z.string().optional(), type: analyticsFieldType.optional() })
   .optional()
@@ -125,7 +135,14 @@ export const getApiOrganizationsOrganizationIdProjectsArgs = z
   })
   .optional()
 export const createProjectRequest = z
-  .object({ name: z.string().optional(), description: z.string().optional() })
+  .object({
+    /** The name of the project. This must be globally unique. If this is `null`,
+a random unique name will be generated. */
+    name: z.string().optional(),
+    /** The description of the project. If this is `null`, an empty string will be
+set. */
+    description: z.string().optional()
+  })
   .optional()
 export const postApiOrganizationsOrganizationIdProjectsResponse =
   project.optional()
@@ -140,9 +157,10 @@ export const postApiOrganizationsOrganizationIdProjectsArgs = z
   .optional()
 export const kvDatabase = z
   .object({
-    id: z.string().optional(),
+    /** A KV database ID */ id: z.string().optional(),
+    /** An organization ID that this KV database belongs to */
     organizationId: z.string().optional(),
-    description: z.string().optional(),
+    /** A description of this KV database */ description: z.string().optional(),
     updatedAt: z.string().optional(),
     createdAt: z.string().optional()
   })
@@ -164,7 +182,11 @@ export const getApiOrganizationsOrganizationIdDatabasesArgs = z
   })
   .optional()
 export const createKvDatabaseRequest = z
-  .object({ description: z.string().optional() })
+  .object({
+    /** The description of the KV database. If this is `null`, an empty string
+will be set. */
+    description: z.string().optional()
+  })
   .optional()
 export const postApiOrganizationsOrganizationIdDatabasesResponse =
   kvDatabase.optional()
@@ -178,7 +200,11 @@ export const postApiOrganizationsOrganizationIdDatabasesArgs = z
   })
   .optional()
 export const updateKvDatabaseRequest = z
-  .object({ description: z.string().optional() })
+  .object({
+    /** The description of the KV database to be updated to. If this is `null`, no
+update will be made to the KV database description. */
+    description: z.string().optional()
+  })
   .optional()
 export const patchApiDatabasesDatabaseIdResponse = kvDatabase.optional()
 export type PatchApiDatabasesDatabaseIdResponse = z.infer<
@@ -205,7 +231,14 @@ export const deleteApiProjectsProjectIdArgs = z
   .object({ projectId: z.string().optional() })
   .optional()
 export const updateProjectRequest = z
-  .object({ name: z.string().optional(), description: z.string().optional() })
+  .object({
+    /** The name of the project to be updated to. This must be globally unique.
+If this is `null`, no update will be made to the project name. */
+    name: z.string().optional(),
+    /** The description of the project to be updated to. If this is `null`, no
+update will be made to the project description. */
+    description: z.string().optional()
+  })
   .optional()
 export const patchApiProjectsProjectIdResponse = project.optional()
 export type PatchApiProjectsProjectIdResponse = z.infer<
@@ -228,18 +261,28 @@ export const getApiProjectsProjectIdAnalyticsArgs = z
     until: z.string().optional()
   })
   .optional()
-export const deploymentId = z.string().optional()
-export const deploymentStatus = z
-  .enum(['failed', 'pending', 'success'])
-  .optional()
+export const deploymentId =
+  /** A deployment ID
+
+Note that this is not UUID v4, as opposed to organization ID and project ID. */
+  z.string().optional()
+export const deploymentStatus =
+  /** The status of a deployment. */
+  z.enum(['failed', 'pending', 'success']).optional()
 export const deployment = z
   .object({
     id: deploymentId.optional(),
     projectId: z.string().optional(),
+    /** The description of this deployment. This is present only when the `status`
+is `success`. */
     description: z.string().optional(),
     status: deploymentStatus.optional(),
     domains: z.array(z.string().optional()).optional(),
     databases: z.record(z.string(), z.string().optional()).optional(),
+    /** The wall-clock timeout in milliseconds for requests to the deployment.
+
+This becomes `null` when no timeout is set, or the deployment has not been
+done successfully yet. */
     requestTimeout: z.number().int().optional(),
     permissions: deploymentPermissions.optional().optional(),
     createdAt: z.string().optional(),
@@ -264,15 +307,40 @@ export const getApiProjectsProjectIdDeploymentsArgs = z
   .optional()
 export const createDeploymentRequest = z
   .object({
+    /** An URL of the entry point of the application.
+This is the file that will be executed when the deployment is invoked. */
     entryPointUrl: z.string().optional(),
+    /** An URL of the import map file.
+
+If `null` is given, import map auto-discovery logic will be performed,
+where it looks for Deno's config file (i.e. `deno.json` or `deno.jsonc`)
+which may contain an embedded import map or a path to an import map file.
+If found, that import map will be used.
+
+If an empty string is given, no import map will be used. */
     importMapUrl: z.string().optional(),
+    /** An URL of the lock file.
+
+If `null` is given, lock file auto-discovery logic will be performed,
+where it looks for Deno's config file (i.e. `deno.json` or `deno.jsonc`)
+which may contain a path to a lock file or boolean value, such as `"lock":
+false` or `"lock": "my-lock.lock"`. If a config file is found, the
+semantics of the lock field is the same as the Deno CLI, so refer to [the
+CLI doc page](https://docs.deno.com/runtime/manual/basics/modules/integrity_checking#auto-generated-lockfile).
+
+If an empty string is given, no lock file will be used. */
     lockFileUrl: z.string().optional(),
     compilerOptions: compilerOptions.optional().optional(),
     assets: assets.optional(),
     envVars: z.record(z.string(), z.string().optional()).optional(),
     databases: z.record(z.string(), z.string().optional()).optional(),
+    /** The wall-clock timeout in milliseconds for requests to the deployment.
+
+If not provided, the system default value will be used. */
     requestTimeout: z.number().int().optional(),
     permissions: deploymentPermissions.optional().optional(),
+    /** A description of the created deployment. If not provided, an empty string
+will be set. */
     description: z.string().optional()
   })
   .optional()
@@ -290,8 +358,13 @@ export const redeployRequest = z
   .object({
     envVars: z.record(z.string(), z.string().optional()).optional(),
     databases: z.record(z.string(), z.string().optional()).optional(),
+    /** The wall-clock timeout in milliseconds for requests to the deployment.
+
+If not provided, no update will happen to the existing request timeout. */
     requestTimeout: z.number().int().optional(),
     permissions: deploymentPermissionsOverwrite.optional().optional(),
+    /** A description of the created deployment. If not provided, no update will
+happen to the description. */
     description: z.string().optional()
   })
   .optional()
@@ -373,7 +446,7 @@ export const region = z
   .optional()
 export const appLogsResponseEntry = z
   .object({
-    time: z.string().optional(),
+    /** Log timestamp */ time: z.string().optional(),
     level: logLevel.optional(),
     message: z.string().optional(),
     region: region.optional()
@@ -431,13 +504,18 @@ export const dnsRecord = z
   .optional()
 export const domain = z
   .object({
-    id: z.string().optional(),
+    /** The ID of the domain. */ id: z.string().optional(),
+    /** The ID of the organization that the domain is associated with. */
     organizationId: z.string().optional(),
-    domain: z.string().optional(),
+    /** The domain value. */ domain: z.string().optional(),
     token: z.string().optional(),
+    /** Whether the domain's ownership is validated or not. */
     isValidated: z.boolean().optional(),
     certificates: z.array(domainCertificate.optional()).optional(),
     provisioningStatus: provisioningStatus.optional(),
+    /** The ID of the project that the domain is associated with.
+
+If the domain is not associated with any project, this field is omitted. */
     projectId: z.string().optional(),
     deploymentId: deploymentId.optional().optional(),
     createdAt: z.string().optional(),
@@ -511,7 +589,9 @@ export const postApiDomainsDomainIdVerifyArgs = z
   .optional()
 export const addDomainCertificateRequest = z
   .object({
+    /** The PEM encoded private key for the TLS certificate */
     privateKey: z.string().optional(),
+    /** The PRM encoded certificate chain for the TLS certificate */
     certificateChain: z.string().optional()
   })
   .optional()
@@ -534,18 +614,33 @@ export type PostApiDomainsDomainIdCertificatesProvisionResponse = z.infer<
 export const postApiDomainsDomainIdCertificatesProvisionArgs = z
   .object({ domainId: z.string().optional() })
   .optional()
-export const cursorLinkHeader = z.string().optional()
+export const cursorLinkHeader =
+  /** Pagination links.
+This header provides a URL for the `next` page.
+The format conforms to [RFC 8288](https://tools.ietf.org/html/rfc8288). */
+  z.string().optional()
 export const errorBody = z
-  .object({ code: z.string().optional(), message: z.string().optional() })
+  .object({
+    /** The error code */ code: z.string().optional(),
+    /** The error message */ message: z.string().optional()
+  })
   .optional()
-export const paginationLinkHeader = z.string().optional()
+export const paginationLinkHeader =
+  /** Pagination links.
+This header provides URLS for the `prev`, `next`, `first`, and `last` pages.
+The format conforms to [RFC 8288](https://tools.ietf.org/html/rfc8288). */
+  z.string().optional()
 
 export const CreateOrganizationsOrganizationIdProjects = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
       z
         .object({
+          /** The name of the project. This must be globally unique. If this is `null`,
+a random unique name will be generated. */
           name: z.string().optional(),
+          /** The description of the project. If this is `null`, an empty string will be
+set. */
           description: z.string().optional()
         })
         .optional()
@@ -604,7 +699,13 @@ export const CreateOrganizationsOrganizationIdProjects = () => {
 export const CreateOrganizationsOrganizationIdDatabases = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
-      z.object({ description: z.string().optional() }).optional()
+      z
+        .object({
+          /** The description of the KV database. If this is `null`, an empty string
+will be set. */
+          description: z.string().optional()
+        })
+        .optional()
     )
   })
 
@@ -649,15 +750,40 @@ export const CreateProjectsProjectIdDeployments = () => {
     resolver: zodResolver(
       z
         .object({
+          /** An URL of the entry point of the application.
+This is the file that will be executed when the deployment is invoked. */
           entryPointUrl: z.string().optional(),
+          /** An URL of the import map file.
+
+If `null` is given, import map auto-discovery logic will be performed,
+where it looks for Deno's config file (i.e. `deno.json` or `deno.jsonc`)
+which may contain an embedded import map or a path to an import map file.
+If found, that import map will be used.
+
+If an empty string is given, no import map will be used. */
           importMapUrl: z.string().optional(),
+          /** An URL of the lock file.
+
+If `null` is given, lock file auto-discovery logic will be performed,
+where it looks for Deno's config file (i.e. `deno.json` or `deno.jsonc`)
+which may contain a path to a lock file or boolean value, such as `"lock":
+false` or `"lock": "my-lock.lock"`. If a config file is found, the
+semantics of the lock field is the same as the Deno CLI, so refer to [the
+CLI doc page](https://docs.deno.com/runtime/manual/basics/modules/integrity_checking#auto-generated-lockfile).
+
+If an empty string is given, no lock file will be used. */
           lockFileUrl: z.string().optional(),
           compilerOptions: compilerOptions.optional().optional(),
           assets: assets.optional(),
           envVars: z.record(z.string(), z.string().optional()).optional(),
           databases: z.record(z.string(), z.string().optional()).optional(),
+          /** The wall-clock timeout in milliseconds for requests to the deployment.
+
+If not provided, the system default value will be used. */
           requestTimeout: z.number().int().optional(),
           permissions: deploymentPermissions.optional().optional(),
+          /** A description of the created deployment. If not provided, an empty string
+will be set. */
           description: z.string().optional()
         })
         .optional()
@@ -824,8 +950,13 @@ export const CreateDeploymentsDeploymentIdRedeploy = () => {
         .object({
           envVars: z.record(z.string(), z.string().optional()).optional(),
           databases: z.record(z.string(), z.string().optional()).optional(),
+          /** The wall-clock timeout in milliseconds for requests to the deployment.
+
+If not provided, no update will happen to the existing request timeout. */
           requestTimeout: z.number().int().optional(),
           permissions: deploymentPermissionsOverwrite.optional().optional(),
+          /** A description of the created deployment. If not provided, no update will
+happen to the description. */
           description: z.string().optional()
         })
         .optional()
@@ -968,7 +1099,9 @@ export const CreateDomainsDomainIdCertificates = () => {
     resolver: zodResolver(
       z
         .object({
+          /** The PEM encoded private key for the TLS certificate */
           privateKey: z.string().optional(),
+          /** The PRM encoded certificate chain for the TLS certificate */
           certificateChain: z.string().optional()
         })
         .optional()
