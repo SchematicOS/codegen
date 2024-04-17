@@ -1,48 +1,18 @@
 /* eslint-disable no-restricted-imports */
 import type { OpenAPIV3 } from 'openapi-types'
 import type {
-  OasPathItem,
   OasRoot,
   OasInfo,
   OasLicense,
   OasContact
 } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
-import { toParameterListV3 } from './toParameterV3.ts'
 import { toTagsV3 } from './toTagsV3.ts'
 import { toOperationsV3 } from './toOperationsV3.ts'
 import { toComponentsV3 } from './components/toComponentsV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-
-type ToPathItemV3Args = {
-  pathItem: OpenAPIV3.PathItemObject
-  trail: Trail
-  context: ParseContext
-}
-
-export const toPathItem = ({
-  pathItem,
-  trail,
-  context
-}: ToPathItemV3Args): OasPathItem => {
-  const { $ref, summary, description, parameters, ...skipped } = pathItem
-
-  context.notImplemented({ section: 'OPENAPI_V3_PATH_ITEM', skipped })
-
-  return {
-    schematicType: 'pathItem',
-    $ref,
-    summary,
-    description,
-    parameters: parameters
-      ? toParameterListV3({
-          parameters,
-          trail: trail.add('parameters'),
-          context
-        })
-      : undefined
-  }
-}
+import { Document } from 'parse/elements/Document.ts'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
 
 type FromInfoV3Args = {
   info: OpenAPIV3.InfoObject
@@ -98,9 +68,7 @@ export const fromDocumentV3 = ({
 }: FromDocumentV3Args): OasRoot => {
   const { openapi, info, paths, components, tags, ...skipped } = document
 
-  context.notImplemented({ section: 'OPENAPI_V3_DOCUMENT', skipped })
-
-  return {
+  const fields = stripUndefined({
     schematicType: 'openapi',
     openapi,
     info: fromInfoV3({ info, trail: trail.add('info'), context }),
@@ -119,5 +87,7 @@ export const fromDocumentV3 = ({
     tags: tags
       ? toTagsV3({ tags, trail: trail.add('tags'), context })
       : undefined
-  }
+  })
+
+  return Document.create({ fields, trail, context, skipped })
 }

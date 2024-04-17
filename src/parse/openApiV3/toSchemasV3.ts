@@ -7,6 +7,11 @@ import type { OasSchema, OasSchemaRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
+import { Union } from 'parse/elements/schema/Union.ts'
+import { ObjectOas } from 'parse/elements/schema/Object.ts'
+import { ArrayOas } from 'parse/elements/schema/Array.ts'
+import { Intersection } from 'parse/elements/schema/Intersection.ts'
 
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
@@ -48,11 +53,7 @@ export const toSchemaV3 = ({
     .with({ oneOf: P.array() }, matched => {
       const { oneOf, discriminator, title, description, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
-
-      return {
-        schematicType: 'schema',
-        type: 'union',
+      const fields = stripUndefined({
         title,
         description,
         discriminator: discriminator
@@ -65,16 +66,14 @@ export const toSchemaV3 = ({
             context
           })
         })
-      }
+      })
+
+      return Union.create({ fields, trail, skipped, context })
     })
     .with({ anyOf: P.array() }, matched => {
       const { anyOf, discriminator, title, description, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
-
-      return {
-        schematicType: 'schema',
-        type: 'union',
+      const fields = stripUndefined({
         title,
         description,
         discriminator: discriminator
@@ -87,16 +86,14 @@ export const toSchemaV3 = ({
         members: anyOf.map(item =>
           toSchemaV3({ schema: item, trail: trail.add('members'), context })
         )
-      }
+      })
+
+      return Union.create({ fields, trail, skipped, context })
     })
     .with({ allOf: P.array() }, matched => {
       const { allOf, discriminator, title, description, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
-
-      return {
-        schematicType: 'schema',
-        type: 'intersection',
+      const fields = stripUndefined({
         title,
         description,
         discriminator: discriminator
@@ -109,7 +106,9 @@ export const toSchemaV3 = ({
         members: allOf.map(item =>
           toSchemaV3({ schema: item, trail: trail.add('members'), context })
         )
-      }
+      })
+
+      return Intersection.create({ fields, trail, skipped, context })
     })
     .with({ type: 'object' }, matched => {
       const {
@@ -121,18 +120,9 @@ export const toSchemaV3 = ({
         ...skipped
       } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_OBJECT', skipped })
-
-      return {
+      const fields = stripUndefined({
         schematicType: 'schema' as const,
         type: type,
-        // discriminator: discriminator
-        //   ? toDiscriminatorV3({
-        //       discriminator,
-        //       trail: trail.add('discriminator'),
-        //       context
-        //     })
-        //   : undefined,
         properties: properties
           ? toSchemasV3({
               schemas: properties,
@@ -146,14 +136,14 @@ export const toSchemaV3 = ({
           trail: trail.add('additionalProperties'),
           context
         })
-      }
+      })
+
+      return ObjectOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'array' }, matched => {
       const { type, items, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_ARRAY', skipped })
-
-      return {
+      const fields = stripUndefined({
         schematicType: 'schema',
         type: type,
         items: toSchemaV3({
@@ -161,7 +151,9 @@ export const toSchemaV3 = ({
           trail: trail.add('items'),
           context
         })
-      }
+      })
+
+      return ArrayOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'integer' }, matched => {
       const { type, ...skipped } = matched

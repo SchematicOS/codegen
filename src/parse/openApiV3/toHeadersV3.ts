@@ -7,6 +7,8 @@ import type { OasHeader, OasHeaderRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
+import { Header } from 'parse/elements/Header.ts'
 
 type ToHeadersV3Args = {
   headers: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject>
@@ -56,9 +58,7 @@ const toHeaderV3 = ({
     ...skipped
   } = header
 
-  context.notImplemented({ section: 'OPENAPI_V3_HEADER', skipped })
-
-  return {
+  const fields = stripUndefined({
     schematicType: 'header',
     description,
     required,
@@ -77,5 +77,7 @@ const toHeaderV3 = ({
     content: content
       ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
       : undefined
-  }
+  })
+
+  return Header.create({ fields, trail, skipped, context })
 }

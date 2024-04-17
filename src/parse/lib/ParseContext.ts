@@ -1,12 +1,9 @@
-import type {
-  NotImplementedArgs,
-  UnexpectedValueArgs,
-  ParsingSection
-} from './types.ts'
+import type { NotImplementedArgs, UnexpectedValueArgs } from './types.ts'
 import { match, P } from 'ts-pattern'
+import type { Trail } from 'parse/lib/Trail.ts'
 
 type UnsupportedSection = {
-  section: ParsingSection
+  trail: Trail
   key?: string
   value?: string
   message?: string
@@ -24,28 +21,28 @@ export class ParseContext {
 
   notImplemented(args: NotImplementedArgs) {
     match(args)
-      .with({ skipped: P._ }, ({ section, skipped }) => {
+      .with({ skipped: P._ }, ({ trail, skipped }) => {
         Object.entries(skipped).forEach(([key, value]) => {
           this.unsupportedSections.push({
-            section,
+            trail,
             key,
             value: JSON.stringify(value, undefined, 2)
           })
 
           // console.log(
-          //   `Not implemented in ${section}: ${key} (${JSON.stringify(value, undefined, 2)})`
+          //   `Not implemented in ${trail}: ${key} (${JSON.stringify(value, undefined, 2)})`
           // )
         })
       })
-      .with({ message: P._ }, ({ section, message }) => {
-        this.unsupportedSections.push({ section, message })
+      .with({ message: P._ }, ({ trail, message }) => {
+        this.unsupportedSections.push({ trail, message })
 
-        // console.log(`Not implemented: ${section} (${message})`)
+        // console.log(`Not implemented: ${trail} (${message})`)
       })
       .exhaustive()
   }
 
-  unexpectedValue({ section, message }: UnexpectedValueArgs) {
-    console.log(`Unexpected value in ${section}: ${message}`)
+  unexpectedValue({ trail, message }: UnexpectedValueArgs) {
+    console.log(`Unexpected value in ${trail}: ${message}`)
   }
 }

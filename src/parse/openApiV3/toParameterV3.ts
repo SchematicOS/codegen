@@ -11,6 +11,8 @@ import { toRefV31 } from './toRefV31.ts'
 import { toSchemaV3 } from './toSchemasV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
+import { Parameter } from 'parse/elements/Parameter.ts'
 
 const isLocationV3 = (location: string): location is OasParameterLocation => {
   return ['query', 'header', 'path', 'cookie'].includes(location)
@@ -85,13 +87,11 @@ const toParameterV3 = ({
     ...skipped
   } = parameter
 
-  context.notImplemented({ section: 'OPENAPI_V3_PARAMETER', skipped })
-
   if (!isLocationV3(location)) {
     throw new Error(`Invalid location: ${location}`)
   }
 
-  return {
+  const fields = stripUndefined({
     schematicType: 'parameter',
     name,
     location,
@@ -112,5 +112,7 @@ const toParameterV3 = ({
     content: content
       ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
       : undefined
-  }
+  })
+
+  return Parameter.create({ fields, trail, skipped, context })
 }

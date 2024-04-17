@@ -7,6 +7,7 @@ import type {
   OasResponseRef,
   OasSchemaRef
 } from '@schematicos/types'
+import type { Trail } from 'parse/lib/Trail.ts'
 
 export type ParsingSection =
   | 'PARSE_SCHEMA'
@@ -36,13 +37,13 @@ export type ParsingSection =
 
 export type NotImplementedArgs =
   | {
-      section: ParsingSection
+      trail: Trail
       skipped: Record<string, unknown>
     }
   | UnexpectedValueArgs
 
 export type UnexpectedValueArgs = {
-  section: ParsingSection
+  trail: Trail
   message: string
 }
 

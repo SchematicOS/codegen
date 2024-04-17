@@ -1,5 +1,5 @@
 import { toResponsesV3 } from '../toResponseV3.ts'
-import { toHeadersV3 } from '../toHeaderV3.ts'
+import { toHeadersV3 } from '../toHeadersV3.ts'
 import { toSchemasV3 } from '../toSchemasV3.ts'
 import { toParametersV3 } from '../toParameterV3.ts'
 import type { OpenAPIV3 } from 'openapi-types'
@@ -31,7 +31,7 @@ export const toComponentsV3 = ({
     ...skipped
   } = components
 
-  const properties = stripUndefined({
+  const fields = stripUndefined({
     models: schemas
       ? toSchemasV3({ schemas, trail: trail.add('schemas'), context })
       : undefined,
@@ -66,5 +66,5 @@ export const toComponentsV3 = ({
       : undefined
   })
 
-  return Components.create({ properties, trail, context, skipped })
+  return Components.create({ fields, trail, context, skipped })
 }

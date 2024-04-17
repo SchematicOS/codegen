@@ -1,5 +1,5 @@
 import { toRefV31 } from './toRefV31.ts'
-import { toHeadersV3 } from './toHeaderV3.ts'
+import { toHeadersV3 } from './toHeadersV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { stripUndefined } from '../util/stripUndefined.ts'
