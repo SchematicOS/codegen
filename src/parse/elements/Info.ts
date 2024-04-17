@@ -1,7 +1,20 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasInfoData } from '@schematicos/types'
+import type {
+  OasContactData,
+  OasInfoData,
+  OasLicenseData
+} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
+
+export type InfoFields = {
+  title: string
+  version: string
+  description: string | undefined
+  termsOfService: string | undefined
+  contact: OasContactData | undefined
+  license: OasLicenseData | undefined
+}
 
 type ToInfoV3Args = {
   fields: Omit<OasInfoData, 'schematicType'>

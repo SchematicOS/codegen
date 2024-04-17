@@ -5,8 +5,6 @@ import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import type {
-  OasOperationData,
-  OasResponseData,
   OasResponseRefData,
   OasSchemaData,
   OasSchemaRefData,
@@ -14,10 +12,12 @@ import type {
 } from '@schematicos/types'
 import { oasVoidValue } from '@schematicos/types'
 import { toSuccessResponse } from 'generate/helpers/toSuccessResponse.ts'
+import type { Operation } from 'parse/elements/Operation.ts'
+import type { Response } from 'parse/elements/Response.ts'
 
 type ToOperationResponseArgs = {
   context: GenerateContext
-  operation: OasOperationData
+  operation: Operation
   destinationPath: string
 }
 
@@ -54,7 +54,7 @@ export const toOperationResponse = ({
 
 type ToResponseValue = {
   context: GenerateContext
-  response: OasResponseData | OasResponseRefData | undefined
+  response: Response | OasResponseRefData | undefined
 }
 
 const toResponseValue = ({

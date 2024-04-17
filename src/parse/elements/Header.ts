@@ -1,10 +1,27 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { OasHeaderData } from '@schematicos/types'
+import type {
+  OasExampleData,
+  OasExampleRefData,
+  OasHeaderData,
+  OasSchemaData,
+  OasSchemaRefData
+} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { OasBase } from 'parse/elements/OasBase.ts'
+import type { MediaType } from 'parse/elements/MediaType.ts'
+
+export type HeaderFields = {
+  description: string | undefined
+  required: boolean | undefined
+  deprecated: boolean | undefined
+  allowEmptyValue: boolean | undefined
+  schema: OasSchemaData | OasSchemaRefData | undefined
+  examples: Record<string, OasExampleData | OasExampleRefData> | undefined
+  content: Record<string, MediaType> | undefined
+}
 
 type ToHeaderV3Args = {
-  fields: Omit<OasHeaderData, 'schematicType'>
+  fields: HeaderFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -12,7 +29,7 @@ type ToHeaderV3Args = {
 
 export class Header extends OasBase implements OasHeaderData {
   schematicType: 'header' = 'header'
-  fields: Omit<OasHeaderData, 'schematicType'>
+  fields: HeaderFields
 
   private constructor({ fields, trail, skipped, context }: ToHeaderV3Args) {
     super({ trail, skipped, context })

@@ -3,7 +3,6 @@ import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type {
   OasResponseRefData,
-  OasResponseData,
   Method,
   OasParameterRefData,
   OasRequestBodyRefData
@@ -48,7 +47,7 @@ export class Operation extends OasBase {
     return new Operation({ fields, trail, context, skipped })
   }
 
-  toSuccessResponse(): OasResponseData | OasResponseRefData {
+  toSuccessResponse(): Response | OasResponseRefData {
     const { default: defaultResponse, ...httpCodeResponses } = this.responses
 
     const successCode = Object.keys(httpCodeResponses)

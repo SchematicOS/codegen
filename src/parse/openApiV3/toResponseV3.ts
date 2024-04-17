@@ -2,12 +2,12 @@ import { toRefV31 } from './toRefV31.ts'
 import { toHeadersV3 } from './toHeadersV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import { stripUndefined } from '../util/stripUndefined.ts'
-import type { OasResponseData, OasResponseRefData } from '@schematicos/types'
+import type { OasResponseRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { Response } from 'parse/elements/Response.ts'
+import type { ResponseFields } from 'parse/elements/Response.ts'
 
 type ToResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject
@@ -41,7 +41,7 @@ export const toOptionalResponsesV3 = ({
   trail,
   context
 }: ToOptionalResponsesV3Args):
-  | Record<string, OasResponseRefData | OasResponseData>
+  | Record<string, Response | OasResponseRefData>
   | undefined => {
   if (!responses) {
     return undefined
@@ -67,7 +67,7 @@ export const toResponseV3 = ({
 
   const { description, headers, content, ...skipped } = response
 
-  const fields = stripUndefined({
+  const fields: ResponseFields = {
     description,
     headers: toHeadersV3({ headers, trail: trail.add('headers'), context }),
     content: toOptionalMediaTypeItemsV3({
@@ -75,7 +75,7 @@ export const toResponseV3 = ({
       trail: trail.add('content'),
       context
     })
-  })
+  }
 
   return Response.create({ fields, trail, skipped, context })
 }

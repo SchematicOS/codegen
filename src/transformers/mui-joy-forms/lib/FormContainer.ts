@@ -5,23 +5,20 @@ import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
-import type {
-  OasObjectData,
-  OasOperationData,
-  Stringable
-} from '@schematicos/types'
+import type { OasObjectData, Stringable } from '@schematicos/types'
 import camelCase from 'lodash-es/camelCase.js'
 import { match } from 'ts-pattern'
+import type { Operation } from 'parse/elements/Operation.ts'
 
 type FormContainerArgs = {
   context: GenerateContext
-  operation: OasOperationData
+  operation: Operation
   operationSettings: OperationSettings
 }
 
 type FormContainerConstructorArgs = {
   context: GenerateContext
-  operation: OasOperationData
+  operation: Operation
   value: OasObjectData
   operationSettings: OperationSettings
 }
@@ -173,7 +170,7 @@ const toFormFields = ({
   return fields
 }
 
-const toFormName = (operation: OasOperationData) => {
+const toFormName = (operation: Operation) => {
   const verb = match(operation.method)
     .with('post', () => 'Create')
     .with('put', () => 'Update')
@@ -184,7 +181,7 @@ const toFormName = (operation: OasOperationData) => {
 
 type ToBodySchemaValueArgs = {
   context: GenerateContext
-  operation: OasOperationData
+  operation: Operation
 }
 
 const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {

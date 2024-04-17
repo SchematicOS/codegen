@@ -4,14 +4,15 @@ import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
-import type { OasOperationData, OasSchemaData } from '@schematicos/types'
+import type { OasSchemaData } from '@schematicos/types'
 import { oasVoidValue } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
+import type { Operation } from 'parse/elements/Operation.ts'
 
 type ToEndpointArgArgs = {
   context: GenerateContext
   destinationPath: string
-  operation: OasOperationData
+  operation: Operation
 }
 
 export const toEndpointArg = ({
@@ -69,7 +70,7 @@ export const toEndpointArg = ({
 }
 
 type ToBodySchemaArgs = {
-  operation: OasOperationData
+  operation: Operation
   context: GenerateContext
 }
 
@@ -88,7 +89,7 @@ const toBodySchema = ({ operation, context }: ToBodySchemaArgs) => {
 }
 
 type ToParametersByNameArgs = {
-  operation: OasOperationData
+  operation: Operation
   context: GenerateContext
 }
 

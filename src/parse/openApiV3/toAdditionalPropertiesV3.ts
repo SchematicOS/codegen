@@ -26,11 +26,9 @@ export const toAdditionalPropertiesV3 = ({
     return undefined
   }
 
-  const parsed = toSchemaV3({
+  return toSchemaV3({
     schema: additionalProperties,
     trail: trail.add('additionalProperties'),
     context
   })
-
-  return parsed
 }

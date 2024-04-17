@@ -1,14 +1,14 @@
 import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'
-import { toSchemaV3 } from './toSchemasV3.ts'
+import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type { OasHeaderData, OasHeaderRefData } from '@schematicos/types'
+import type { OasHeaderRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
-import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Header } from 'parse/elements/Header.ts'
+import type { HeaderFields } from 'parse/elements/Header.ts'
 
 type ToHeadersV3Args = {
   headers:
@@ -22,9 +22,7 @@ export const toHeadersV3 = ({
   headers,
   trail,
   context
-}: ToHeadersV3Args):
-  | Record<string, OasHeaderData | OasHeaderRefData>
-  | undefined => {
+}: ToHeadersV3Args): Record<string, Header | OasHeaderRefData> | undefined => {
   if (!headers) {
     return undefined
   }
@@ -49,7 +47,7 @@ const toHeaderV3 = ({
   header,
   trail,
   context
-}: ToHeaderV3Args): OasHeaderRefData | OasHeaderData => {
+}: ToHeaderV3Args): Header | OasHeaderRefData => {
   if (isRef(header)) {
     return toRefV31({ ref: header, refType: 'header', trail, context })
   }
@@ -66,14 +64,12 @@ const toHeaderV3 = ({
     ...skipped
   } = header
 
-  const fields = stripUndefined({
+  const fields: HeaderFields = {
     description,
     required,
     deprecated,
     allowEmptyValue,
-    schema: schema
-      ? toSchemaV3({ schema, trail: trail.add('schema'), context })
-      : undefined,
+    schema: toOptionalSchemaV3({ schema, trail: trail.add('schema'), context }),
     examples: toExamplesV3({
       examples,
       example,
@@ -86,7 +82,7 @@ const toHeaderV3 = ({
       trail: trail.add('content'),
       context
     })
-  })
+  }
 
   return Header.create({ fields, trail, skipped, context })
 }

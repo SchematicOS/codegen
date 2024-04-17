@@ -8,16 +8,16 @@ import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
 import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
-import type { OasOperationData } from '@schematicos/types'
+import type { Operation } from 'parse/elements/Operation.ts'
 
 export type RtkEndpointArgs = {
   context: GenerateContext
   operationSettings: OperationSettings
-  operation: OasOperationData
+  operation: Operation
 }
 
 export class RtkEndpoint extends SchematicBase implements Stringable {
-  operation: OasOperationData
+  operation: Operation
   operationSettings: OperationSettings
 
   endpointResponse: Definition

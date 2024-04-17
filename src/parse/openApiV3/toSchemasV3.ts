@@ -13,7 +13,7 @@ import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Union } from 'parse/elements/schema/Union.ts'
-import { ObjectOas } from 'parse/elements/schema/Object.ts'
+import { ObjectOas, ObjectOasFields } from 'parse/elements/schema/Object.ts'
 import { ArrayOas } from 'parse/elements/schema/Array.ts'
 import { Intersection } from 'parse/elements/schema/Intersection.ts'
 import { IntegerOas } from 'parse/elements/schema/Integer.ts'
@@ -41,6 +41,28 @@ export const toSchemasV3 = ({
       ]
     })
   )
+}
+
+type ToOptionalSchemasV3Args = {
+  schemas:
+    | Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
+    | undefined
+  trail: Trail
+  context: ParseContext
+}
+
+export const toOptionalSchemasV3 = ({
+  schemas,
+  trail,
+  context
+}: ToOptionalSchemasV3Args):
+  | Record<string, OasSchemaData | OasSchemaRefData>
+  | undefined => {
+  if (!schemas) {
+    return undefined
+  }
+
+  return toSchemasV3({ schemas, trail, context })
 }
 
 type ToSchemaV3Args = {
@@ -122,28 +144,31 @@ export const toSchemaV3 = ({
     .with({ type: 'object' }, matched => {
       const {
         type: _type,
-        // discriminator,
+        title,
+        description,
+        default: defaultValue,
         properties,
         required,
         additionalProperties,
         ...skipped
       } = matched
 
-      const fields = stripUndefined({
-        properties: properties
-          ? toSchemasV3({
-              schemas: properties,
-              trail: trail.add('properties'),
-              context
-            })
-          : undefined,
+      const fields: ObjectOasFields = {
+        title,
+        description,
+        default: defaultValue,
+        properties: toOptionalSchemasV3({
+          schemas: properties,
+          trail: trail.add('properties'),
+          context
+        }),
         required,
         additionalProperties: toAdditionalPropertiesV3({
           additionalProperties,
           trail: trail.add('additionalProperties'),
           context
         })
-      })
+      }
 
       return ObjectOas.create({ fields, trail, skipped, context })
     })
@@ -225,4 +250,22 @@ export const toSchemaV3 = ({
 
       return UnknownOas.create({ fields, trail, skipped, context })
     })
+}
+
+type ToOptionalSchemaV3Args = {
+  schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined
+  trail: Trail
+  context: ParseContext
+}
+
+export const toOptionalSchemaV3 = ({
+  schema,
+  trail,
+  context
+}: ToOptionalSchemaV3Args): OasSchemaData | OasSchemaRefData | undefined => {
+  if (!schema) {
+    return undefined
+  }
+
+  return toSchemaV3({ schema, trail, context })
 }

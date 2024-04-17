@@ -1,7 +1,27 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasParameterData } from '@schematicos/types'
+import type {
+  OasExampleData,
+  OasExampleRefData,
+  OasParameterData,
+  OasParameterLocation,
+  OasSchemaData,
+  OasSchemaRefData
+} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
+import type { MediaType } from 'parse/elements/MediaType.ts'
+
+export type ParameterFields = {
+  name: string
+  location: OasParameterLocation
+  description: string | undefined
+  required: boolean | undefined
+  deprecated: boolean | undefined
+  allowEmptyValue: boolean | undefined
+  schema: OasSchemaData | OasSchemaRefData | undefined
+  examples: Record<string, OasExampleData | OasExampleRefData> | undefined
+  content: Record<string, MediaType> | undefined
+}
 
 type ToParameterV3Args = {
   fields: Omit<OasParameterData, 'schematicType'>

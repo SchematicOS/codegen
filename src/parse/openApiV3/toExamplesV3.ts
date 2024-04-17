@@ -1,11 +1,11 @@
-import type { OasExampleData, OasExampleRefData } from '@schematicos/types'
+import type { OasExampleRefData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Example } from 'parse/elements/Example.ts'
+import type { ExampleFields } from 'parse/elements/Example.ts'
 
 type ToExampleSimpleV3Args = {
   example: unknown
@@ -14,12 +14,17 @@ type ToExampleSimpleV3Args = {
 }
 
 export const toExampleSimpleV3 = ({
-  example
-}: ToExampleSimpleV3Args): OasExampleData | OasExampleRefData => {
-  return {
-    schematicType: 'example',
-    value: example
+  example,
+  trail,
+  context
+}: ToExampleSimpleV3Args): Example | OasExampleRefData => {
+  const fields: ExampleFields = {
+    value: example,
+    summary: undefined,
+    description: undefined
   }
+
+  return Example.create({ fields, trail, skipped: {}, context })
 }
 
 export type ToExamplesV3Args = {
@@ -39,7 +44,7 @@ export const toExamplesV3 = ({
   trail,
   context
 }: ToExamplesV3Args):
-  | Record<string, OasExampleData | OasExampleRefData>
+  | Record<string, Example | OasExampleRefData>
   | undefined => {
   if (example && examples) {
     context.unexpectedValue({
@@ -78,18 +83,18 @@ export const toExampleV3 = ({
   example,
   trail,
   context
-}: ToExampleV3Args): OasExampleData | OasExampleRefData => {
+}: ToExampleV3Args): Example | OasExampleRefData => {
   if (isRef(example)) {
     return toRefV31({ ref: example, refType: 'example', trail, context })
   }
 
   const { summary, description, value, ...skipped } = example
 
-  const fields = stripUndefined({
+  const fields: ExampleFields = {
     summary,
     description,
     value
-  })
+  }
 
   return Example.create({ fields, trail, skipped, context })
 }

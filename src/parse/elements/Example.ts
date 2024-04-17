@@ -1,10 +1,15 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasExampleData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 
+export type ExampleFields = {
+  summary: string | undefined
+  description: string | undefined
+  value: unknown
+}
+
 type ToExampleV3Args = {
-  fields: Omit<OasExampleData, 'schematicType'>
+  fields: ExampleFields
   trail: Trail
   context: ParseContext
   skipped: Record<string, unknown>
@@ -12,7 +17,7 @@ type ToExampleV3Args = {
 
 export class Example extends OasBase {
   schematicType: 'example' = 'example'
-  fields: Omit<OasExampleData, 'schematicType'>
+  fields: ExampleFields
 
   private constructor({ fields, trail, skipped, context }: ToExampleV3Args) {
     super({ trail, skipped, context })

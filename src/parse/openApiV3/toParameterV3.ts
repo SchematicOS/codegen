@@ -7,11 +7,11 @@ import type {
 import type { OpenAPIV3 } from 'openapi-types'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'
-import { toSchemaV3 } from './toSchemasV3.ts'
+import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
-import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Parameter } from 'parse/elements/Parameter.ts'
+import type { ParameterFields } from 'parse/elements/Parameter.ts'
 
 const isLocationV3 = (location: string): location is OasParameterLocation => {
   return ['query', 'header', 'path', 'cookie'].includes(location)
@@ -63,6 +63,28 @@ export const toParametersV3 = ({
   )
 }
 
+type ToOptionalParametersV3Args = {
+  parameters:
+    | Record<string, OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject>
+    | undefined
+  trail: Trail
+  context: ParseContext
+}
+
+export const toOptionalParametersV3 = ({
+  parameters,
+  trail,
+  context
+}: ToOptionalParametersV3Args):
+  | Record<string, Parameter | OasParameterRefData>
+  | undefined => {
+  if (!parameters) {
+    return undefined
+  }
+
+  return toParametersV3({ parameters, trail, context })
+}
+
 type ToParameterV3Args = {
   parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
   trail: Trail
@@ -96,16 +118,14 @@ const toParameterV3 = ({
     throw new Error(`Invalid location: ${location}`)
   }
 
-  const fields = stripUndefined({
+  const fields: ParameterFields = {
     name,
     location,
     description,
     required,
     deprecated,
     allowEmptyValue,
-    schema: schema
-      ? toSchemaV3({ schema, trail: trail.add('schema'), context })
-      : undefined,
+    schema: toOptionalSchemaV3({ schema, trail: trail.add('schema'), context }),
     examples: toExamplesV3({
       examples,
       example,
@@ -118,7 +138,7 @@ const toParameterV3 = ({
       trail: trail.add('content'),
       context
     })
-  })
+  }
 
   return Parameter.create({ fields, trail, skipped, context })
 }
