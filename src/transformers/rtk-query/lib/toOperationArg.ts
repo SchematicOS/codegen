@@ -50,8 +50,6 @@ export const toEndpointArg = ({
   const parametersProperties = parameterItems?.properties || {}
   const parametersRequired = parameterItems?.required || []
 
-  console.log('Required parameters: ', parametersRequired)
-
   const value: OasSchemaData = {
     schematicType: 'schema', // TODO if there is no body and params, this should be void. Currently it is an empty object
     type: 'object',
