@@ -1,5 +1,4 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasMediaTypeData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { toSchemaV3 } from './toSchemasV3.ts'
 import { toExamplesV3 } from './toExamplesV3.ts'
@@ -19,7 +18,7 @@ export const toMediaTypeItemV3 = ({
   mediaType,
   trail,
   context
-}: ToMediaTypeItemV3Args): OasMediaTypeData => {
+}: ToMediaTypeItemV3Args): MediaType => {
   const { schema, example, examples, ...skipped } = mediaTypeItem
 
   const fields = stripUndefined({
@@ -49,7 +48,7 @@ export const toMediaTypeItemsV3 = ({
   content,
   trail,
   context
-}: ToMediaTypeItemsV3Args): Record<string, OasMediaTypeData> => {
+}: ToMediaTypeItemsV3Args): Record<string, MediaType> => {
   return Object.fromEntries(
     Object.entries(content).map(([mediaType, value]) => {
       return [
@@ -63,4 +62,22 @@ export const toMediaTypeItemsV3 = ({
       ]
     })
   )
+}
+
+type ToOptionalMediaTypeItemsV3Args = {
+  content: Record<string, OpenAPIV3.MediaTypeObject> | undefined
+  trail: Trail
+  context: ParseContext
+}
+
+export const toOptionalMediaTypeItemsV3 = ({
+  content,
+  trail,
+  context
+}: ToOptionalMediaTypeItemsV3Args): Record<string, MediaType> | undefined => {
+  if (!content) {
+    return
+  }
+
+  return toMediaTypeItemsV3({ content, trail, context })
 }

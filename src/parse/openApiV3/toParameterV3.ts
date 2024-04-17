@@ -1,7 +1,6 @@
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type {
-  OasParameterData,
   OasParameterLocation,
   OasParameterRefData
 } from '@schematicos/types'
@@ -10,7 +9,7 @@ import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'
 import { toSchemaV3 } from './toSchemasV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Parameter } from 'parse/elements/Parameter.ts'
 
@@ -19,7 +18,9 @@ const isLocationV3 = (location: string): location is OasParameterLocation => {
 }
 
 type ToParameterListV3Args = {
-  parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[]
+  parameters:
+    | (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[]
+    | undefined
   trail: Trail
   context: ParseContext
 }
@@ -28,7 +29,11 @@ export const toParameterListV3 = ({
   parameters,
   trail,
   context
-}: ToParameterListV3Args): (OasParameterData | OasParameterRefData)[] => {
+}: ToParameterListV3Args): (Parameter | OasParameterRefData)[] | undefined => {
+  if (!parameters) {
+    return undefined
+  }
+
   return parameters.map((parameter, index) =>
     toParameterV3({ parameter, trail: trail.add(`[${index}]`), context })
   )
@@ -47,10 +52,7 @@ export const toParametersV3 = ({
   parameters,
   trail,
   context
-}: ToParametersV3Args): Record<
-  string,
-  OasParameterData | OasParameterRefData
-> => {
+}: ToParametersV3Args): Record<string, Parameter | OasParameterRefData> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
       return [
@@ -71,7 +73,7 @@ const toParameterV3 = ({
   parameter,
   trail,
   context
-}: ToParameterV3Args): OasParameterData | OasParameterRefData => {
+}: ToParameterV3Args): Parameter | OasParameterRefData => {
   if (isRef(parameter)) {
     return toRefV31({ ref: parameter, refType: 'parameter', trail, context })
   }
@@ -111,9 +113,11 @@ const toParameterV3 = ({
       trail: trail.add('examples'),
       context
     }),
-    content: content
-      ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
-      : undefined
+    content: toOptionalMediaTypeItemsV3({
+      content,
+      trail: trail.add('content'),
+      context
+    })
   })
 
   return Parameter.create({ fields, trail, skipped, context })

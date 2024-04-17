@@ -24,10 +24,7 @@ export const toRequestBodyV3 = ({
   requestBody,
   trail,
   context
-}: ToRequestBodyV3Args):
-  | OasRequestBodyData
-  | OasRequestBodyRefData
-  | undefined => {
+}: ToRequestBodyV3Args): RequestBody | OasRequestBodyRefData | undefined => {
   if (!requestBody) {
     return undefined
   }

@@ -1,22 +1,19 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type {
-  OasOperationData,
-  Method,
-  OasPathItemData
-} from '@schematicos/types'
+import type { Method } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
-import { stripUndefined } from '../util/stripUndefined.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { Operation } from 'parse/elements/Operation.ts'
+import type { OperationFields } from 'parse/elements/Operation.ts'
 import { toPathItemV3 } from 'parse/openApiV3/toPathItemV3.ts'
+import type { PathItem } from 'parse/elements/PathItem.ts'
 
 type OperationInfo = {
   method: Method
   path: string
-  pathItem: OasPathItemData
+  pathItem: PathItem
 }
 
 type ToOperationV3Args = {
@@ -45,36 +42,31 @@ export const toOperationV3 = ({
     ...skipped
   } = operation
 
-  const fields = stripUndefined<OasOperationData>({
-    schematicType: 'operation',
-    pathItem: pathItem,
+  const fields: OperationFields = {
+    pathItem,
     path,
     method,
     operationId,
     summary,
     tags,
     description,
-    parameters: parameters
-      ? toParameterListV3({
-          parameters,
-          trail: trail.add('parameters'),
-          context
-        })
-      : undefined,
-    requestBody: requestBody
-      ? toRequestBodyV3({
-          requestBody,
-          trail: trail.add('requestBody'),
-          context
-        })
-      : undefined,
+    parameters: toParameterListV3({
+      parameters,
+      trail: trail.add('parameters'),
+      context
+    }),
+    requestBody: toRequestBodyV3({
+      requestBody,
+      trail: trail.add('requestBody'),
+      context
+    }),
     responses: toResponsesV3({
       responses,
       trail: trail.add('responses'),
       context
     }),
     deprecated
-  })
+  }
 
   return Operation.create({ fields, trail, context, skipped })
 }

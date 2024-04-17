@@ -1,4 +1,4 @@
-import { toResponsesV3 } from '../toResponseV3.ts'
+import { toOptionalResponsesV3 } from '../toResponseV3.ts'
 import { toHeadersV3 } from '../toHeadersV3.ts'
 import { toSchemasV3 } from '../toSchemasV3.ts'
 import { toParametersV3 } from '../toParameterV3.ts'
@@ -38,9 +38,11 @@ export const toComponentsV3 = ({
     models: schemas
       ? toSchemasV3({ schemas, trail: trail.add('schemas'), context })
       : undefined,
-    responses: responses
-      ? toResponsesV3({ responses, trail: trail.add('responses'), context })
-      : undefined,
+    responses: toOptionalResponsesV3({
+      responses,
+      trail: trail.add('responses'),
+      context
+    }),
     parameters: parameters
       ? toParametersV3({
           parameters,
@@ -48,23 +50,19 @@ export const toComponentsV3 = ({
           context
         })
       : undefined,
-    examples: examples
-      ? toExamplesV3({
-          examples,
-          example: undefined,
-          exampleKey: 'TEMP',
-          trail,
-          context
-        })
-      : undefined,
+    examples: toExamplesV3({
+      examples,
+      example: undefined,
+      exampleKey: 'TEMP',
+      trail,
+      context
+    }),
     requestBodies: toRequestBodiesV3({
       requestBodies,
       trail: trail.add('requestBodies'),
       context
     }),
-    headers: headers
-      ? toHeadersV3({ headers, trail: trail.add('headers'), context })
-      : undefined
+    headers: toHeadersV3({ headers, trail: trail.add('headers'), context })
   })
 
   return Components.create({ fields, trail, context, skipped })

@@ -2,12 +2,33 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type {
-  OasOperationData,
   OasResponseRefData,
-  OasResponseData
+  OasResponseData,
+  Method,
+  OasParameterRefData,
+  OasRequestBodyRefData
 } from '@schematicos/types'
+import type { PathItem } from 'parse/elements/PathItem.ts'
+import type { Parameter } from 'parse/elements/Parameter.ts'
+import type { RequestBody } from 'parse/elements/RequestBody.ts'
+import type { Response } from 'parse/elements/Response.ts'
+
+export type OperationFields = {
+  path: string
+  method: Method
+  pathItem: PathItem
+  operationId: string | undefined
+  summary: string | undefined
+  tags: string[] | undefined
+  description: string | undefined
+  parameters: (Parameter | OasParameterRefData)[] | undefined
+  requestBody: RequestBody | OasRequestBodyRefData | undefined
+  responses: Record<string, Response | OasResponseRefData>
+  deprecated: boolean | undefined
+}
+
 type ToOperationV3Args = {
-  fields: Omit<OasOperationData, 'schematicType'>
+  fields: OperationFields
   trail: Trail
   context: ParseContext
   skipped: Record<string, unknown>
@@ -15,7 +36,7 @@ type ToOperationV3Args = {
 
 export class Operation extends OasBase {
   schematicType: 'operation' = 'operation'
-  fields: Omit<OasOperationData, 'schematicType'>
+  fields: OperationFields
 
   private constructor({ fields, trail, skipped, context }: ToOperationV3Args) {
     super({ trail, skipped, context })

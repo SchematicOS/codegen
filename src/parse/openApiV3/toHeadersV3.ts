@@ -6,12 +6,14 @@ import { isRef } from '../util/isRef.ts'
 import type { OasHeaderData, OasHeaderRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Header } from 'parse/elements/Header.ts'
 
 type ToHeadersV3Args = {
-  headers: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject>
+  headers:
+    | Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject>
+    | undefined
   trail: Trail
   context: ParseContext
 }
@@ -20,7 +22,13 @@ export const toHeadersV3 = ({
   headers,
   trail,
   context
-}: ToHeadersV3Args): Record<string, OasHeaderData | OasHeaderRefData> => {
+}: ToHeadersV3Args):
+  | Record<string, OasHeaderData | OasHeaderRefData>
+  | undefined => {
+  if (!headers) {
+    return undefined
+  }
+
   return Object.fromEntries(
     Object.entries(headers).map(([key, value]) => {
       return [
@@ -73,9 +81,11 @@ const toHeaderV3 = ({
       trail,
       context
     }),
-    content: content
-      ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
-      : undefined
+    content: toOptionalMediaTypeItemsV3({
+      content,
+      trail: trail.add('content'),
+      context
+    })
   })
 
   return Header.create({ fields, trail, skipped, context })

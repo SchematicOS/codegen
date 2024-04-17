@@ -6,7 +6,7 @@ import { stripUndefined } from '../util/stripUndefined.ts'
 import type { OasResponseData, OasResponseRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { Response } from 'parse/elements/Response.ts'
 
 type ToResponsesV3Args = {
@@ -19,7 +19,7 @@ export const toResponsesV3 = ({
   responses,
   trail,
   context
-}: ToResponsesV3Args): Record<string, OasResponseRefData | OasResponseData> => {
+}: ToResponsesV3Args): Record<string, Response | OasResponseRefData> => {
   return Object.fromEntries(
     Object.entries(responses).map(([key, value]) => {
       return [
@@ -28,6 +28,26 @@ export const toResponsesV3 = ({
       ]
     })
   )
+}
+
+type ToOptionalResponsesV3Args = {
+  responses: OpenAPIV3.ResponsesObject | undefined
+  trail: Trail
+  context: ParseContext
+}
+
+export const toOptionalResponsesV3 = ({
+  responses,
+  trail,
+  context
+}: ToOptionalResponsesV3Args):
+  | Record<string, OasResponseRefData | OasResponseData>
+  | undefined => {
+  if (!responses) {
+    return undefined
+  }
+
+  return toResponsesV3({ responses, trail, context })
 }
 
 type ToResponseV3Args = {
@@ -40,7 +60,7 @@ export const toResponseV3 = ({
   response,
   trail,
   context
-}: ToResponseV3Args): OasResponseData | OasResponseRefData => {
+}: ToResponseV3Args): Response | OasResponseRefData => {
   if (isRef(response)) {
     return toRefV31({ ref: response, refType: 'response', trail, context })
   }
@@ -49,12 +69,12 @@ export const toResponseV3 = ({
 
   const fields = stripUndefined({
     description,
-    headers: headers
-      ? toHeadersV3({ headers, trail: trail.add('headers'), context })
-      : undefined,
-    content: content
-      ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
-      : undefined
+    headers: toHeadersV3({ headers, trail: trail.add('headers'), context }),
+    content: toOptionalMediaTypeItemsV3({
+      content,
+      trail: trail.add('content'),
+      context
+    })
   })
 
   return Response.create({ fields, trail, skipped, context })
