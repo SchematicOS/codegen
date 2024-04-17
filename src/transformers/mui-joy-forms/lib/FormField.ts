@@ -24,15 +24,7 @@ export class FormField extends SchematicBase implements Stringable {
     this.operationSettings = operationSettings
     this.fieldName = fieldName
 
-    this.register()
-  }
-
-  static create(args: FormFieldArgs) {
-    return new FormField(args)
-  }
-
-  register() {
-    this.context.register({
+    this.register({
       imports: [
         Import.create('react-hook-form', 'Controller'),
         Import.create('@mui/joy/FormLabel', { default: 'FormLabel' }),
@@ -42,6 +34,10 @@ export class FormField extends SchematicBase implements Stringable {
       ],
       destinationPath: this.operationSettings.getExportPath()
     })
+  }
+
+  static create(args: FormFieldArgs) {
+    return new FormField(args)
   }
 
   toString() {

@@ -52,7 +52,17 @@ export class FormContainer extends SchematicBase implements Stringable {
       formValue: this.value
     })
 
-    this.register()
+    this.register({
+      imports: [
+        Import.create('react', { default: 'React' }),
+        Import.create('zod', 'z'),
+        Import.create('@mui/joy/Box', { default: 'Box' }),
+        Import.create('react-hook-form', ['useForm', 'Controller']),
+        Import.create('@hookform/resolvers/zod', 'zodResolver'),
+        Import.create('@mui/joy/Button', { default: 'Button' })
+      ],
+      destinationPath: this.operationSettings.getExportPath()
+    })
   }
 
   static create({
@@ -75,20 +85,6 @@ export class FormContainer extends SchematicBase implements Stringable {
     }
 
     return new FormContainer({ context, operation, value, operationSettings })
-  }
-
-  register() {
-    this.context.register({
-      imports: [
-        Import.create('react', { default: 'React' }),
-        Import.create('zod', 'z'),
-        Import.create('@mui/joy/Box', { default: 'Box' }),
-        Import.create('react-hook-form', ['useForm', 'Controller']),
-        Import.create('@hookform/resolvers/zod', 'zodResolver'),
-        Import.create('@mui/joy/Button', { default: 'Button' })
-      ],
-      destinationPath: this.operationSettings.getExportPath()
-    })
   }
 
   toString(): string {

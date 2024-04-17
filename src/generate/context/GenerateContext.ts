@@ -24,7 +24,7 @@ type ConstructorArgs = {
   filePath?: string
 }
 
-type RegisterArgs =
+export type RegisterArgs =
   | {
       imports: Import[]
       destinationPath: string

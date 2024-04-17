@@ -1,4 +1,7 @@
-import type { GenerateContext } from '../context/GenerateContext.ts'
+import type {
+  GenerateContext,
+  RegisterArgs
+} from '../context/GenerateContext.ts'
 import { EMPTY } from '../constants.ts'
 import type { Stringable } from '@schematicos/types'
 
@@ -22,5 +25,9 @@ export class SchematicBase implements Stringable {
       .filter(child => child !== EMPTY)
       .map(child => child.toString())
       .join(separator)
+  }
+
+  register(args: RegisterArgs) {
+    this.context.register(args)
   }
 }

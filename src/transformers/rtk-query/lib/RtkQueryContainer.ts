@@ -23,15 +23,7 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
 
     this.transformerSettings = transformerSettings
 
-    this.register()
-  }
-
-  static create(args: RtkQueryContainerProps): RtkQueryContainer {
-    return new RtkQueryContainer(args)
-  }
-
-  register() {
-    this.context.register({
+    this.register({
       imports: [
         Import.create('@reduxjs/toolkit/query/react', [
           'createApi',
@@ -40,6 +32,10 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
       ],
       destinationPath: this.transformerSettings.getExportPath()
     })
+  }
+
+  static create(args: RtkQueryContainerProps): RtkQueryContainer {
+    return new RtkQueryContainer(args)
   }
 
   toString(): string {

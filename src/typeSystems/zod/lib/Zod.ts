@@ -36,17 +36,15 @@ export class Zod extends SchematicBase implements Stringable {
     const children = toChildren({ context, destinationPath, value })
 
     this.children.push(children)
+
+    this.register({
+      imports: [Import.create('zod', 'z')],
+      destinationPath: this.destinationPath
+    })
   }
 
   static create(args: TypeSystemArgs): Stringable {
     return new Zod(args)
-  }
-
-  register() {
-    this.context.register({
-      imports: [Import.create('zod', 'z')],
-      destinationPath: this.destinationPath
-    })
   }
 
   toString() {
@@ -100,6 +98,7 @@ const toChildren = ({
     })
     .with({ type: 'void' }, () => `z.void()`)
     .with({ type: 'null' }, () => `z.null()`)
+    .with({ type: 'unknown' }, () => `z.unknown()`)
     .otherwise(matched => {
       console.log(`Unhandled value type: ${matched}`)
 
