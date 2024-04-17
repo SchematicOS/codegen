@@ -15,7 +15,7 @@ export const toTagsV3 = ({ tags, trail, context }: ToTagsV3Args): OasTag[] => {
     const { name, description, ...skipped } = tag
 
     return Tag.create({
-      properties: {
+      fields: {
         name,
         description
       },

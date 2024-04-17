@@ -1,12 +1,13 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { OasOperation, Method, OasPathItem } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
-import { toPathItem } from './parse.ts'
 import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
 import { stripUndefined } from '../util/stripUndefined.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
+import { Operation } from 'parse/elements/Operation.ts'
+import { toPathItemV3 } from 'parse/openApiV3/toPathItemV3.ts'
 
 type OperationInfo = {
   method: Method
@@ -29,6 +30,7 @@ export const toOperationV3 = ({
 }: ToOperationV3Args): OasOperation => {
   const { method, path, pathItem } = operationInfo
   const {
+    operationId,
     tags,
     summary,
     description,
@@ -39,15 +41,14 @@ export const toOperationV3 = ({
     ...skipped
   } = operation
 
-  context.notImplemented({ section: 'OPENAPI_V3_OPERATION', skipped })
-
-  return stripUndefined<OasOperation>({
+  const fields = stripUndefined<OasOperation>({
     schematicType: 'operation',
     pathItem: pathItem,
     path,
     method,
-    tags,
+    operationId,
     summary,
+    tags,
     description,
     parameters: parameters
       ? toParameterListV3({
@@ -70,6 +71,8 @@ export const toOperationV3 = ({
     }),
     deprecated
   })
+
+  return Operation.create({ fields, trail, context, skipped })
 }
 
 type ToOperationsV3Args = {
@@ -100,7 +103,7 @@ export const toOperationsV3 = ({
       ...rest
     } = pathItem
 
-    const pathItemObject = toPathItem({
+    const pathItemObject = toPathItemV3({
       pathItem: rest,
       trail: trail.addApiPath(path),
       context

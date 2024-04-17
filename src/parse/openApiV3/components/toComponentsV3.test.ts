@@ -39,5 +39,5 @@ Deno.test('OpenAPI v3 components parse', () => {
     }
   }
 
-  assertEquals(components.properties, expected)
+  assertEquals(components.fields, expected)
 })

@@ -5,6 +5,8 @@ import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { RequestBody } from 'parse/elements/RequestBody.ts'
+import { stripUndefined } from 'parse/util/stripUndefined.ts'
 
 type ToRequestBodyV3Args = {
   requestBody: OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
@@ -28,9 +30,7 @@ export const toRequestBodyV3 = ({
 
   const { description, content, required, ...skipped } = requestBody
 
-  context.notImplemented({ section: 'OPENAPI_V3_REQUEST_BODY', skipped })
-
-  return {
+  const fields = stripUndefined({
     schematicType: 'requestBody',
     description,
     content: toMediaTypeItemsV3({
@@ -39,7 +39,14 @@ export const toRequestBodyV3 = ({
       context
     }),
     required
-  }
+  })
+
+  return RequestBody.create({
+    fields,
+    trail,
+    skipped,
+    context
+  })
 }
 
 type ToRequestBodiesV3Args = {

@@ -15,7 +15,7 @@ import type {
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { OasRoot, ParsePayload } from '@schematicos/types'
-import { fromDocumentV3 } from '../openApiV3/parse.ts'
+import { toDocumentV3 } from '../openApiV3/parse.ts'
 import { ParseContext } from './ParseContext.ts'
 import { Trail } from 'parse/lib/Trail.ts'
 
@@ -27,14 +27,14 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
   return match(specVersion)
     .with(SpecVersion.OAS2, () => {
       context.notImplemented({
-        section: 'PARSE_SCHEMA',
+        trail: Trail.create(),
         message: 'OpenAPI v2 is not supported yet'
       })
 
       throw new Error('OpenAPI v2 is not supported yet')
     })
     .with(SpecVersion.OAS3_0, (): OasRoot => {
-      return fromDocumentV3({
+      return toDocumentV3({
         document: document.parsed as OpenAPIV3.Document,
         trail: Trail.create(),
         context
@@ -42,7 +42,7 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
     })
     .with(SpecVersion.OAS3_1, () => {
       context.notImplemented({
-        section: 'PARSE_SCHEMA',
+        trail: Trail.create(),
         message: 'OpenAPI v3.1 is not supported yet'
       })
 
@@ -50,7 +50,7 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
     })
     .otherwise(() => {
       context.notImplemented({
-        section: 'PARSE_SCHEMA',
+        trail: Trail.create(),
         message: `Unsupported spec version: ${specVersion}`
       })
 

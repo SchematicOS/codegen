@@ -9,7 +9,7 @@
   },
   "imports": {
     "@redocly/openapi-core": "npm:@redocly/openapi-core@1.11.0",
-    "@schematicos/types": "npm:@schematicos/types@0.0.36",
+    "@schematicos/types": "npm:@schematicos/types@0.0.37",
     "cli": "jsr:@std/cli@0.222.1",
     "fs": "jsr:@std/fs@0.222.1",
     "assert": "jsr:@std/assert@0.222.1",

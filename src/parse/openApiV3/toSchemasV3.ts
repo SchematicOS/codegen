@@ -3,7 +3,7 @@ import { toDiscriminatorV3 } from './toDiscriminatorV3.ts'
 import { toAdditionalPropertiesV3 } from './toAdditionalPropertiesV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type { OasSchema, OasSchemaRef } from '@schematicos/types'
+import type { OasSchema, OasSchemaRef, OasString } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
@@ -12,6 +12,10 @@ import { Union } from 'parse/elements/schema/Union.ts'
 import { ObjectOas } from 'parse/elements/schema/Object.ts'
 import { ArrayOas } from 'parse/elements/schema/Array.ts'
 import { Intersection } from 'parse/elements/schema/Intersection.ts'
+import { IntegerOas } from 'parse/elements/schema/Integer.ts'
+import { NumberOas } from 'parse/elements/schema/Number.ts'
+import { BooleanOas } from 'parse/elements/schema/Boolean.ts'
+import { StringOas } from 'parse/elements/schema/String.ts'
 
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
@@ -156,51 +160,62 @@ export const toSchemaV3 = ({
       return ArrayOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'integer' }, matched => {
-      const { type, ...skipped } = matched
+      const { type, title, description, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_INTEGER', skipped })
+      const fields = stripUndefined({
+        type,
+        title,
+        description
+      })
 
-      return {
-        schematicType: 'schema',
-        type: type
-      }
+      return IntegerOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'number' }, matched => {
-      const { type, ...skipped } = matched
+      const { type, title, description, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_NUMBER', skipped })
+      const fields = stripUndefined({
+        type,
+        title,
+        description
+      })
 
-      return {
-        schematicType: 'schema',
-        type: type
-      }
+      return NumberOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'boolean' }, matched => {
-      const { type, ...skipped } = matched
+      const { type: _type, title, description, ...skipped } = matched
 
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_BOOLEAN', skipped })
+      const fields = stripUndefined({
+        title,
+        description
+      })
 
-      return {
-        schematicType: 'schema',
-        type: type
-      }
+      return BooleanOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'string' }, matched => {
-      const { type, pattern, format, enum: enums, ...skipped } = matched
-
-      context.notImplemented({ section: 'OPENAPI_V3_SCHEMA_STRING', skipped })
-
-      return {
-        schematicType: 'schema',
-        type: type,
+      const {
+        type,
+        title,
+        description,
         pattern,
-        enums,
-        format
-      }
+        format,
+        enum: enums,
+        ...skipped
+      } = matched
+
+      const fields = stripUndefined({
+        type,
+        title,
+        description,
+        pattern,
+        enums: enums as string[] | undefined,
+        format: format as OasString['format']
+      })
+
+      return StringOas.create({ fields, trail, skipped, context })
     })
     .otherwise(matched => {
       context.unexpectedValue({
-        section: 'OPENAPI_V3_SCHEMA',
+        trail,
         message: `No type schema: ${JSON.stringify(matched, undefined, 2)}`
       })
     }) as OasSchema

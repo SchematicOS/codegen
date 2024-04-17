@@ -7,6 +7,7 @@ import type { OasResponse, OasResponseRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
+import { Response } from 'parse/elements/Response.ts'
 
 type ToResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject
@@ -46,9 +47,7 @@ export const toResponseV3 = ({
 
   const { description, headers, content, ...skipped } = response
 
-  context.notImplemented({ section: 'OPENAPI_V3_RESPONSE', skipped })
-
-  return stripUndefined({
+  const fields = stripUndefined({
     schematicType: 'response',
     description,
     headers: headers
@@ -57,5 +56,7 @@ export const toResponseV3 = ({
     content: content
       ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
       : undefined
-  }) as OasResponse
+  })
+
+  return Response.create({ fields, trail, skipped, context })
 }
