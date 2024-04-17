@@ -7,21 +7,22 @@ import type {
   OasLicense,
   OasContact
 } from '@schematicos/types'
-import type { ParseContextType } from '../lib/types.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import { toTagsV3 } from './toTagsV3.ts'
 import { toOperationsV3 } from './toOperationsV3.ts'
-import { toComponentsV3 } from './toComponentsV3.ts'
+import { toComponentsV3 } from './components/toComponentsV3.ts'
+import type { Trail } from 'parse/lib/Trail.ts'
 
 type ToPathItemV3Args = {
   pathItem: OpenAPIV3.PathItemObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toPathItem = ({
   pathItem,
-  path,
+  trail,
   context
 }: ToPathItemV3Args): OasPathItem => {
   const { $ref, summary, description, parameters, ...skipped } = pathItem
@@ -36,25 +37,17 @@ export const toPathItem = ({
     parameters: parameters
       ? toParameterListV3({
           parameters,
-          path: path.concat('parameters'),
+          trail: trail.add('parameters'),
           context
         })
       : undefined
   }
 }
 
-export type ToExamplesV3Args = {
-  example: OpenAPIV3.ExampleObject | undefined
-  examples:
-    | Record<string, OpenAPIV3.ExampleObject | OpenAPIV3.ReferenceObject>
-    | undefined
-  exampleKey: string
-}
-
 type FromInfoV3Args = {
   info: OpenAPIV3.InfoObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 const fromInfoV3 = ({ info, context }: FromInfoV3Args): OasInfo => {
@@ -94,13 +87,13 @@ const toContact = (contact: OpenAPIV3.ContactObject): OasContact => ({
 
 type FromDocumentV3Args = {
   document: OpenAPIV3.Document
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const fromDocumentV3 = ({
   document,
-  path,
+  trail,
   context
 }: FromDocumentV3Args): OasRoot => {
   const { openapi, info, paths, components, tags, ...skipped } = document
@@ -110,15 +103,21 @@ export const fromDocumentV3 = ({
   return {
     schematicType: 'openapi',
     openapi,
-    info: fromInfoV3({ info, path: path.concat('info'), context }),
+    info: fromInfoV3({ info, trail: trail.add('info'), context }),
     operations: toOperationsV3({
       paths,
-      path: path.concat('operations'),
+      trail: trail.add('paths'),
       context
     }),
     components: components
-      ? toComponentsV3({ components, path: path.concat('components'), context })
+      ? toComponentsV3({
+          components,
+          trail: trail.add('components'),
+          context
+        })
       : undefined,
-    tags: tags ? toTagsV3(tags, context) : undefined
+    tags: tags
+      ? toTagsV3({ tags, trail: trail.add('tags'), context })
+      : undefined
   }
 }

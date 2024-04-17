@@ -1,11 +1,12 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { OasOperation, Method, OasPathItem } from '@schematicos/types'
-import type { ParseContextType } from '../lib/types.ts'
-import { toPathItem } from './parseOpenApiV3.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
+import { toPathItem } from './parse.ts'
 import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
 import { stripUndefined } from '../util/stripUndefined.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
+import type { Trail } from 'parse/lib/Trail.ts'
 
 type OperationInfo = {
   method: Method
@@ -16,14 +17,14 @@ type OperationInfo = {
 type ToOperationV3Args = {
   operation: OpenAPIV3.OperationObject
   operationInfo: OperationInfo
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toOperationV3 = ({
   operation,
   operationInfo,
-  path: p,
+  trail,
   context
 }: ToOperationV3Args): OasOperation => {
   const { method, path, pathItem } = operationInfo
@@ -51,20 +52,20 @@ export const toOperationV3 = ({
     parameters: parameters
       ? toParameterListV3({
           parameters,
-          path: p.concat('parameters'),
+          trail: trail.add('parameters'),
           context
         })
       : undefined,
     requestBody: requestBody
       ? toRequestBodyV3({
           requestBody,
-          path: p.concat('requstBody'),
+          trail: trail.add('requestBody'),
           context
         })
       : undefined,
     responses: toResponsesV3({
       responses,
-      path: p.concat('responses'),
+      trail: trail.add('responses'),
       context
     }),
     deprecated
@@ -73,13 +74,13 @@ export const toOperationV3 = ({
 
 type ToOperationsV3Args = {
   paths: OpenAPIV3.PathsObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toOperationsV3 = ({
   paths,
-  path: p,
+  trail,
   context
 }: ToOperationsV3Args): OasOperation[] => {
   return Object.entries(paths).flatMap(([path, pathItem]) => {
@@ -101,7 +102,7 @@ export const toOperationsV3 = ({
 
     const pathItemObject = toPathItem({
       pathItem: rest,
-      path: p.concat('pathItem'),
+      trail: trail.addApiPath(path),
       context
     })
 
@@ -129,7 +130,7 @@ export const toOperationsV3 = ({
             path,
             pathItem: pathItemObject
           },
-          path: p.concat([path, method]),
+          trail: trail.addApiPath(path).addMethod(method),
           context
         })
       })

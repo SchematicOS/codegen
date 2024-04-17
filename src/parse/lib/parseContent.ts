@@ -15,11 +15,12 @@ import type {
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { OasRoot, ParsePayload } from '@schematicos/types'
-import { fromDocumentV3 } from '../openApiV3/parseOpenApiV3.ts'
+import { fromDocumentV3 } from '../openApiV3/parse.ts'
 import { ParseContext } from './ParseContext.ts'
+import { Trail } from 'parse/lib/Trail.ts'
 
 export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
-  const context = new ParseContext()
+  const context = ParseContext.create()
 
   const { document, specVersion } = await parseSchema(payload)
 
@@ -35,7 +36,7 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
     .with(SpecVersion.OAS3_0, (): OasRoot => {
       return fromDocumentV3({
         document: document.parsed as OpenAPIV3.Document,
-        path: [],
+        trail: Trail.create(),
         context
       })
     })

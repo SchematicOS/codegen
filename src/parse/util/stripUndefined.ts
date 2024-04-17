@@ -1,4 +1,4 @@
-export const stripUndefined = <T extends Record<string, unknown>>(
+export const stripUndefinedRecursive = <T extends Record<string, unknown>>(
   objectValue: T
 ): T => {
   return Object.fromEntries(
@@ -12,10 +12,27 @@ export const stripUndefined = <T extends Record<string, unknown>>(
           keyValue !== null &&
           !Array.isArray(keyValue)
         ) {
-          return [key, stripUndefined(keyValue as Record<string, unknown>)]
+          return [
+            key,
+            stripUndefinedRecursive(keyValue as Record<string, unknown>)
+          ]
         } else {
           return [key, keyValue]
         }
       })
   ) as T
+}
+
+export type NoUndefinedField<T> = {
+  [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>
+}
+
+export const stripUndefined = <T extends Record<string, any>>(
+  input: T
+): NoUndefinedField<T> => {
+  const filteredEntries = Object.entries(input).filter(([key, value]) => {
+    return typeof value !== 'undefined'
+  })
+
+  return Object.fromEntries(filteredEntries) as NoUndefinedField<T>
 }

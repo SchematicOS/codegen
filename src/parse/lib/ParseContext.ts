@@ -1,5 +1,4 @@
 import type {
-  ParseContextType,
   NotImplementedArgs,
   UnexpectedValueArgs,
   ParsingSection
@@ -12,11 +11,15 @@ type UnsupportedSection = {
   value?: string
   message?: string
 }
-export class ParseContext implements ParseContextType {
+export class ParseContext {
   unsupportedSections: UnsupportedSection[]
 
-  constructor() {
+  private constructor() {
     this.unsupportedSections = []
+  }
+
+  static create() {
+    return new ParseContext()
   }
 
   notImplemented(args: NotImplementedArgs) {

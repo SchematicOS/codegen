@@ -2,8 +2,10 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@std/assert@0.222.1": "jsr:@std/assert@0.222.1",
       "jsr:@std/assert@^0.222.1": "jsr:@std/assert@0.222.1",
       "jsr:@std/cli@0.222.1": "jsr:@std/cli@0.222.1",
+      "jsr:@std/fmt@^0.222.1": "jsr:@std/fmt@0.222.1",
       "jsr:@std/fs@0.222.1": "jsr:@std/fs@0.222.1",
       "jsr:@std/path@0.222.1": "jsr:@std/path@0.222.1",
       "jsr:@std/path@^0.222.1": "jsr:@std/path@0.222.1",
@@ -16,13 +18,19 @@
     },
     "jsr": {
       "@std/assert@0.222.1": {
-        "integrity": "691637161ee584a9919d1f9950ddd1272feb8e0a19e83aa5b7563cedaf73d74c"
+        "integrity": "691637161ee584a9919d1f9950ddd1272feb8e0a19e83aa5b7563cedaf73d74c",
+        "dependencies": [
+          "jsr:@std/fmt@^0.222.1"
+        ]
       },
       "@std/cli@0.222.1": {
         "integrity": "18b3c15840d68dc588db53613e0e9b196e30e33ea2a2906624c991c008421ffa",
         "dependencies": [
           "jsr:@std/assert@^0.222.1"
         ]
+      },
+      "@std/fmt@0.222.1": {
+        "integrity": "ec3382f9b0261c1ab1a5c804aa355d816515fa984cdd827ed32edfb187c0a722"
       },
       "@std/fs@0.222.1": {
         "integrity": "337613f33e6e5970dddb263c3a3e5b8e39c97810ad6fe326cb9f65146af2503b",
@@ -197,6 +205,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@std/assert@0.222.1",
       "jsr:@std/cli@0.222.1",
       "jsr:@std/fs@0.222.1",
       "jsr:@std/path@0.222.1",

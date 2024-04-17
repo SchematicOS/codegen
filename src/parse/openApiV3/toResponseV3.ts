@@ -1,28 +1,29 @@
-import { toContentV3 } from './toContentV3.ts'
 import { toRefV31 } from './toRefV31.ts'
 import { toHeadersV3 } from './toHeaderV3.ts'
-import type { ParseContextType } from '../lib/types.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { stripUndefined } from '../util/stripUndefined.ts'
 import type { OasResponse, OasResponseRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
+import type { Trail } from 'parse/lib/Trail.ts'
+import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 
 type ToResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toResponsesV3 = ({
   responses,
-  path,
+  trail,
   context
 }: ToResponsesV3Args): Record<string, OasResponseRef | OasResponse> => {
   return Object.fromEntries(
     Object.entries(responses).map(([key, value]) => {
       return [
         key,
-        toResponseV3({ response: value, path: path.concat(key), context })
+        toResponseV3({ response: value, trail: trail.add(key), context })
       ]
     })
   )
@@ -30,33 +31,31 @@ export const toResponsesV3 = ({
 
 type ToResponseV3Args = {
   response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toResponseV3 = ({
   response,
-  path,
+  trail,
   context
 }: ToResponseV3Args): OasResponse | OasResponseRef => {
   if (isRef(response)) {
-    return toRefV31(response, 'response', context)
+    return toRefV31({ ref: response, refType: 'response', trail, context })
   }
 
   const { description, headers, content, ...skipped } = response
 
   context.notImplemented({ section: 'OPENAPI_V3_RESPONSE', skipped })
 
-  const out = stripUndefined({
+  return stripUndefined({
     schematicType: 'response',
     description,
     headers: headers
-      ? toHeadersV3({ headers, path: path.concat('headers'), context })
+      ? toHeadersV3({ headers, trail: trail.add('headers'), context })
       : undefined,
     content: content
-      ? toContentV3({ content, path: path.concat('content'), context })
+      ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
       : undefined
   }) as OasResponse
-
-  return out
 }

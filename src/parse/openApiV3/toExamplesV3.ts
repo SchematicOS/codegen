@@ -1,23 +1,46 @@
 import type { OasExample, OasExampleRef } from '@schematicos/types'
-import type { ParseContextType } from '../lib/types.ts'
-import type { ToExamplesV3Args } from './parseOpenApiV3.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
+import type { Trail } from 'parse/lib/Trail.ts'
 
-export const toExampleSimpleV3 = (example: unknown): OasExample | OasExampleRef => {
+type ToExampleSimpleV3Args = {
+  example: unknown
+  trail: Trail
+  context: ParseContext
+}
+
+export const toExampleSimpleV3 = ({
+  example
+}: ToExampleSimpleV3Args): OasExample | OasExampleRef => {
   return {
     schematicType: 'example',
     value: example
   }
 }
 
-export const toExamplesV3 = (
-  { example, examples, exampleKey }: ToExamplesV3Args,
-  ctx: ParseContextType
-): Record<string, OasExample | OasExampleRef> | undefined => {
+export type ToExamplesV3Args = {
+  example: OpenAPIV3.ExampleObject | undefined
+  examples:
+    | Record<string, OpenAPIV3.ExampleObject | OpenAPIV3.ReferenceObject>
+    | undefined
+  exampleKey: string
+  trail: Trail
+  context: ParseContext
+}
+
+export const toExamplesV3 = ({
+  example,
+  examples,
+  exampleKey,
+  trail,
+  context
+}: ToExamplesV3Args):
+  | Record<string, OasExample | OasExampleRef>
+  | undefined => {
   if (example && examples) {
-    ctx.unexpectedValue({
+    context.unexpectedValue({
       section: 'OPENAPI_V3_EXAMPLES',
       message: `Both example and examples are defined for ${exampleKey}`
     })
@@ -25,14 +48,17 @@ export const toExamplesV3 = (
 
   if (example) {
     return {
-      [exampleKey]: toExampleSimpleV3(example)
+      [exampleKey]: toExampleSimpleV3({ example, trail, context })
     }
   }
 
   if (examples) {
     return Object.fromEntries(
       Object.entries(examples).map(([key, value]) => {
-        return [key, toExampleV3(value, ctx)]
+        return [
+          key,
+          toExampleV3({ example: value, trail: trail.add(key), context })
+        ]
       })
     )
   }
@@ -40,17 +66,24 @@ export const toExamplesV3 = (
   return undefined
 }
 
-export const toExampleV3 = (
-  examples: OpenAPIV3.ExampleObject | OpenAPIV3.ReferenceObject,
-  ctx: ParseContextType
-): OasExample | OasExampleRef => {
-  if (isRef(examples)) {
-    return toRefV31(examples, 'example', ctx)
+type ToExampleV3Args = {
+  example: OpenAPIV3.ExampleObject | OpenAPIV3.ReferenceObject
+  trail: Trail
+  context: ParseContext
+}
+
+export const toExampleV3 = ({
+  example,
+  trail,
+  context
+}: ToExampleV3Args): OasExample | OasExampleRef => {
+  if (isRef(example)) {
+    return toRefV31({ ref: example, refType: 'example', trail, context })
   }
 
-  const { summary, description, value, ...skipped } = examples
+  const { summary, description, value, ...skipped } = example
 
-  ctx.notImplemented({ section: 'OPENAPI_V3_EXAMPLE', skipped })
+  context.notImplemented({ section: 'OPENAPI_V3_EXAMPLE', skipped })
 
   return {
     schematicType: 'example',

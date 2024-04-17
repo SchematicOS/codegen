@@ -157,6 +157,7 @@ export class GenerateContext {
       .exhaustive()
 
     if (!resolved) {
+      console.log(c?.models)
       throw new Error(`Ref "${arg.$ref}" not found`)
     }
 

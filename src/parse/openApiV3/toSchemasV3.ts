@@ -1,43 +1,47 @@
 import { toRefV31 } from './toRefV31.ts'
 import { toDiscriminatorV3 } from './toDiscriminatorV3.ts'
 import { toAdditionalPropertiesV3 } from './toAdditionalPropertiesV3.ts'
-import type { ParseContextType } from '../lib/types.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type { OasSchema, OasSchemaRef } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
+import type { Trail } from 'parse/lib/Trail.ts'
 
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toSchemasV3 = ({
   schemas,
-  path,
+  trail,
   context
 }: ToSchemasV3Args): Record<string, OasSchema | OasSchemaRef> => {
   return Object.fromEntries(
     Object.entries(schemas).map(([key, schema]) => {
-      return [key, toSchemaV3({ schema, path: path.concat(key), context })]
+      return [
+        key,
+        toSchemaV3({ schema, trail: trail.addSchemaRef(key), context })
+      ]
     })
   )
 }
 
 type ToSchemaV3Args = {
   schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toSchemaV3 = ({
   schema,
-  path,
+  trail,
   context
 }: ToSchemaV3Args): OasSchema | OasSchemaRef => {
   if (isRef(schema)) {
-    return toRefV31(schema, 'schema', context)
+    return toRefV31({ ref: schema, refType: 'schema', trail, context })
   }
 
   return match(schema)
@@ -52,12 +56,12 @@ export const toSchemaV3 = ({
         title,
         description,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, context)
+          ? toDiscriminatorV3({ discriminator, trail, context })
           : undefined,
         members: oneOf.map(item => {
           return toSchemaV3({
             schema: item,
-            path: path.concat('members'),
+            trail: trail.add('members'),
             context
           })
         })
@@ -74,10 +78,14 @@ export const toSchemaV3 = ({
         title,
         description,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, context)
+          ? toDiscriminatorV3({
+              discriminator,
+              trail: trail.add('discriminator'),
+              context
+            })
           : undefined,
         members: anyOf.map(item =>
-          toSchemaV3({ schema: item, path: path.concat('members'), context })
+          toSchemaV3({ schema: item, trail: trail.add('members'), context })
         )
       }
     })
@@ -92,17 +100,21 @@ export const toSchemaV3 = ({
         title,
         description,
         discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, context)
+          ? toDiscriminatorV3({
+              discriminator,
+              trail: trail.add('discriminator'),
+              context
+            })
           : undefined,
         members: allOf.map(item =>
-          toSchemaV3({ schema: item, path: path.concat('members'), context })
+          toSchemaV3({ schema: item, trail: trail.add('members'), context })
         )
       }
     })
     .with({ type: 'object' }, matched => {
       const {
         type,
-        discriminator,
+        // discriminator,
         properties,
         required,
         additionalProperties,
@@ -114,20 +126,24 @@ export const toSchemaV3 = ({
       return {
         schematicType: 'schema' as const,
         type: type,
-        discriminator: discriminator
-          ? toDiscriminatorV3(discriminator, context)
-          : undefined,
+        // discriminator: discriminator
+        //   ? toDiscriminatorV3({
+        //       discriminator,
+        //       trail: trail.add('discriminator'),
+        //       context
+        //     })
+        //   : undefined,
         properties: properties
           ? toSchemasV3({
               schemas: properties,
-              path: path.concat('properties'),
+              trail: trail.add('properties'),
               context
             })
           : undefined,
         required,
         additionalProperties: toAdditionalPropertiesV3({
           additionalProperties,
-          path: path.concat('additionalProperties'),
+          trail: trail.add('additionalProperties'),
           context
         })
       }
@@ -142,7 +158,7 @@ export const toSchemaV3 = ({
         type: type,
         items: toSchemaV3({
           schema: items,
-          path: path.concat('items'),
+          trail: trail.add('items'),
           context
         })
       }

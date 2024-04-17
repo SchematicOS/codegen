@@ -1,23 +1,29 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { OasRequestBody, OasRequestBodyRef } from '@schematicos/types'
-import type { ParseContextType } from '../lib/types.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
-import { toContentV3 } from './toContentV3.ts'
+import type { Trail } from 'parse/lib/Trail.ts'
+import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 
 type ToRequestBodyV3Args = {
   requestBody: OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toRequestBodyV3 = ({
   requestBody,
-  path,
+  trail,
   context
 }: ToRequestBodyV3Args): OasRequestBody | OasRequestBodyRef => {
   if (isRef(requestBody)) {
-    return toRefV31(requestBody, 'requestBody', context)
+    return toRefV31({
+      ref: requestBody,
+      refType: 'requestBody',
+      trail,
+      context
+    })
   }
 
   const { description, content, required, ...skipped } = requestBody
@@ -27,7 +33,11 @@ export const toRequestBodyV3 = ({
   return {
     schematicType: 'requestBody',
     description,
-    content: toContentV3({ content, path: path.concat('content'), context }),
+    content: toMediaTypeItemsV3({
+      content,
+      trail: trail.add('content'),
+      context
+    }),
     required
   }
 }
@@ -37,13 +47,13 @@ type ToRequestBodiesV3Args = {
     string,
     OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
   >
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toRequestBodiesV3 = ({
   requestBodies,
-  path,
+  trail,
   context
 }: ToRequestBodiesV3Args): Record<
   string,
@@ -53,7 +63,11 @@ export const toRequestBodiesV3 = ({
     Object.entries(requestBodies).map(([key, value]) => {
       return [
         key,
-        toRequestBodyV3({ requestBody: value, path: path.concat(key), context })
+        toRequestBodyV3({
+          requestBody: value,
+          trail: trail.add(key),
+          context
+        })
       ]
     })
   )

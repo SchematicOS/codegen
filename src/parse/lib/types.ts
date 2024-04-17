@@ -46,21 +46,16 @@ export type UnexpectedValueArgs = {
   message: string
 }
 
-export type ParseContextType = {
-  notImplemented: (args: NotImplementedArgs) => void
-  unexpectedValue: (args: UnexpectedValueArgs) => void
-}
-
 export type RefReturn<T extends OasRef['refType']> = T extends 'schema'
   ? OasSchemaRef
   : T extends 'response'
-    ? OasResponseRef
-    : T extends 'parameter'
-      ? OasParameterRef
-      : T extends 'example'
-        ? OasExampleRef
-        : T extends 'requestBody'
-          ? OasRequestBodyRef
-          : T extends 'header'
-            ? OasHeaderRef
-            : never
+  ? OasResponseRef
+  : T extends 'parameter'
+  ? OasParameterRef
+  : T extends 'example'
+  ? OasExampleRef
+  : T extends 'requestBody'
+  ? OasRequestBodyRef
+  : T extends 'header'
+  ? OasHeaderRef
+  : never

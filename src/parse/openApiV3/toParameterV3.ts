@@ -1,4 +1,4 @@
-import type { ParseContextType } from '../lib/types.ts'
+import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type {
   OasParameter,
@@ -7,9 +7,10 @@ import type {
 } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { toExamplesV3 } from './toExamplesV3.ts'
-import { toContentV3 } from './toContentV3.ts'
 import { toRefV31 } from './toRefV31.ts'
 import { toSchemaV3 } from './toSchemasV3.ts'
+import type { Trail } from 'parse/lib/Trail.ts'
+import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 
 const isLocationV3 = (location: string): location is OasParameterLocation => {
   return ['query', 'header', 'path', 'cookie'].includes(location)
@@ -17,17 +18,17 @@ const isLocationV3 = (location: string): location is OasParameterLocation => {
 
 type ToParameterListV3Args = {
   parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[]
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toParameterListV3 = ({
   parameters,
-  path,
+  trail,
   context
 }: ToParameterListV3Args): (OasParameter | OasParameterRef)[] => {
   return parameters.map((parameter, index) =>
-    toParameterV3({ parameter, path: path.concat(`[${index}]`), context })
+    toParameterV3({ parameter, trail: trail.add(`[${index}]`), context })
   )
 }
 
@@ -36,20 +37,20 @@ type ToParametersV3Args = {
     string,
     OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
   >
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 export const toParametersV3 = ({
   parameters,
-  path,
+  trail,
   context
 }: ToParametersV3Args): Record<string, OasParameter | OasParameterRef> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
       return [
         key,
-        toParameterV3({ parameter: value, path: path.concat(key), context })
+        toParameterV3({ parameter: value, trail: trail.add(key), context })
       ]
     })
   )
@@ -57,17 +58,17 @@ export const toParametersV3 = ({
 
 type ToParameterV3Args = {
   parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
-  path: string[]
-  context: ParseContextType
+  trail: Trail
+  context: ParseContext
 }
 
 const toParameterV3 = ({
   parameter,
-  path,
+  trail,
   context
 }: ToParameterV3Args): OasParameter | OasParameterRef => {
   if (isRef(parameter)) {
-    return toRefV31(parameter, 'parameter', context)
+    return toRefV31({ ref: parameter, refType: 'parameter', trail, context })
   }
 
   const {
@@ -99,18 +100,17 @@ const toParameterV3 = ({
     deprecated,
     allowEmptyValue,
     schema: schema
-      ? toSchemaV3({ schema, path: path.concat('schema'), context })
+      ? toSchemaV3({ schema, trail: trail.add('schema'), context })
       : undefined,
-    examples: toExamplesV3(
-      {
-        examples,
-        example,
-        exampleKey: `${name}-${location}`
-      },
+    examples: toExamplesV3({
+      examples,
+      example,
+      exampleKey: `${name}-${location}`,
+      trail: trail.add('examples'),
       context
-    ),
+    }),
     content: content
-      ? toContentV3({ content, path: path.concat('content'), context })
+      ? toMediaTypeItemsV3({ content, trail: trail.add('content'), context })
       : undefined
   }
 }
