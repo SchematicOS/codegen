@@ -31,7 +31,7 @@ export const toOperationV3 = ({
   operationInfo,
   trail,
   context
-}: ToOperationV3Args): OasOperationData => {
+}: ToOperationV3Args): Operation => {
   const { method, path, pathItem } = operationInfo
   const {
     operationId,
@@ -89,7 +89,7 @@ export const toOperationsV3 = ({
   paths,
   trail,
   context
-}: ToOperationsV3Args): OasOperationData[] => {
+}: ToOperationsV3Args): Operation[] => {
   return Object.entries(paths).flatMap(([path, pathItem]) => {
     if (!pathItem) {
       return []
@@ -141,6 +141,6 @@ export const toOperationsV3 = ({
           context
         })
       })
-      .filter((item): item is OasOperationData => Boolean(item))
+      .filter((item): item is Operation => Boolean(item))
   })
 }

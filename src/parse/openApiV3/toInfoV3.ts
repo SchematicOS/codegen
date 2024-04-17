@@ -1,8 +1,4 @@
-import type {
-  OasContactData,
-  OasInfoData,
-  OasLicenseData
-} from '@schematicos/types'
+import type { OasContactData, OasLicenseData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
@@ -15,11 +11,7 @@ type ToInfoV3Args = {
   context: ParseContext
 }
 
-export const toInfoV3 = ({
-  info,
-  trail,
-  context
-}: ToInfoV3Args): OasInfoData => {
+export const toInfoV3 = ({ info, trail, context }: ToInfoV3Args): Info => {
   const {
     title,
     description,

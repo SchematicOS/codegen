@@ -8,10 +8,10 @@ import { toExamplesV3 } from '../toExamplesV3.ts'
 import { toRequestBodiesV3 } from '../toRequestBodiesV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { stripUndefined } from 'parse/util/stripUndefined.ts'
-import { Components } from '../../elements/Components.ts'
+import { Components } from 'parse/elements/Components.ts'
 
 type ToComponentsV3Args = {
-  components: OpenAPIV3.ComponentsObject
+  components: OpenAPIV3.ComponentsObject | undefined
   trail: Trail
   context: ParseContext
 }
@@ -20,7 +20,10 @@ export const toComponentsV3 = ({
   components,
   trail,
   context
-}: ToComponentsV3Args): Components => {
+}: ToComponentsV3Args): Components | undefined => {
+  if (!components) {
+    return undefined
+  }
   const {
     schemas,
     responses,
@@ -54,13 +57,11 @@ export const toComponentsV3 = ({
           context
         })
       : undefined,
-    requestBodies: requestBodies
-      ? toRequestBodiesV3({
-          requestBodies,
-          trail: trail.add('requestBodies'),
-          context
-        })
-      : undefined,
+    requestBodies: toRequestBodiesV3({
+      requestBodies,
+      trail: trail.add('requestBodies'),
+      context
+    }),
     headers: headers
       ? toHeadersV3({ headers, trail: trail.add('headers'), context })
       : undefined

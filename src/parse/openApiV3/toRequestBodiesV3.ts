@@ -12,7 +12,10 @@ import { RequestBody } from 'parse/elements/RequestBody.ts'
 import { stripUndefined } from 'parse/util/stripUndefined.ts'
 
 type ToRequestBodyV3Args = {
-  requestBody: OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
+  requestBody:
+    | OpenAPIV3.ReferenceObject
+    | OpenAPIV3.RequestBodyObject
+    | undefined
   trail: Trail
   context: ParseContext
 }
@@ -21,7 +24,14 @@ export const toRequestBodyV3 = ({
   requestBody,
   trail,
   context
-}: ToRequestBodyV3Args): OasRequestBodyData | OasRequestBodyRefData => {
+}: ToRequestBodyV3Args):
+  | OasRequestBodyData
+  | OasRequestBodyRefData
+  | undefined => {
+  if (!requestBody) {
+    return undefined
+  }
+
   if (isRef(requestBody)) {
     return toRefV31({
       ref: requestBody,
@@ -52,10 +62,9 @@ export const toRequestBodyV3 = ({
 }
 
 type ToRequestBodiesV3Args = {
-  requestBodies: Record<
-    string,
-    OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject
-  >
+  requestBodies:
+    | Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject>
+    | undefined
   trail: Trail
   context: ParseContext
 }
@@ -64,12 +73,15 @@ export const toRequestBodiesV3 = ({
   requestBodies,
   trail,
   context
-}: ToRequestBodiesV3Args): Record<
-  string,
-  OasRequestBodyData | OasRequestBodyRefData
-> => {
-  return Object.fromEntries(
-    Object.entries(requestBodies).map(([key, value]) => {
+}: ToRequestBodiesV3Args):
+  | Record<string, OasRequestBodyData | OasRequestBodyRefData>
+  | undefined => {
+  if (!requestBodies) {
+    return undefined
+  }
+
+  const entries = Object.entries(requestBodies)
+    .map(([key, value]) => {
       return [
         key,
         toRequestBodyV3({
@@ -79,5 +91,7 @@ export const toRequestBodiesV3 = ({
         })
       ]
     })
-  )
+    .filter(([, value]) => Boolean(value))
+
+  return Object.fromEntries(entries)
 }
