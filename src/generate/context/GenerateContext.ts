@@ -237,12 +237,16 @@ export class GenerateContext {
       this.register({ definition, destinationPath })
     }
 
-    return this.contextData.typeSystem.create({
+    const a = this.contextData.typeSystem.create({
       value,
       required,
       destinationPath,
       context: this
     })
+
+    console.log('REQUIRED: ', required, a.toString())
+
+    return a
   }
 
   toInferType(value: Stringable) {

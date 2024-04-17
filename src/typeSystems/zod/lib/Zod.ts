@@ -19,7 +19,7 @@ import { Import } from 'generate/elements/Import.ts'
 export class Zod extends SchematicBase implements Stringable {
   destinationPath: string
   value: OasSchema | OasVoid | OasSchemaRef
-  required?: boolean
+  required: boolean | undefined
 
   private constructor({
     context,
@@ -33,7 +33,7 @@ export class Zod extends SchematicBase implements Stringable {
     this.value = value
     this.required = required
 
-    const children = toChildren({ context, destinationPath, value })
+    const children = toChildren({ value, required, destinationPath, context })
 
     this.children.push(children)
 
@@ -56,7 +56,7 @@ type ToChildrenArgs = {
   context: GenerateContext
   destinationPath: string
   value: OasSchema | OasVoid | OasSchemaRef
-  required?: boolean
+  required: boolean | undefined
 }
 
 const toChildren = ({

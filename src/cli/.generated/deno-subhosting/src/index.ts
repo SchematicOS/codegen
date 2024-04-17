@@ -21,150 +21,150 @@ z.boolean().optional(),
 jsx: z.string().optional(),
 jsxFactory: z.string().optional(),
 jsxFragmentFactory: z.string().optional(),
-jsxImportSource: z.string().optional()}).optional();
-export const encoding = z.enum(['utf-8', 'base64']).optional();
-export const file = z.union([z.object({content: z.string().optional(),
-encoding: encoding.optional()}).optional(),
-z.object({gitSha1: z.string().optional()}).optional()]).optional();
-export const symlink = z.object({target: z.string().optional()}).optional();
-export const asset = z.discriminatedUnion('status', file.optional().and(z.object({kind: z.literal('file').optional()}).optional()).optional(),
-symlink.optional().merge(z.object({kind: z.literal('symlink').optional()}).optional()).optional()).optional();
-export const assets = z.record(z.string(), asset.optional()).optional();
-export const deploymentPermissions = z.object({net: z.array(z.string().optional()).optional()}).optional();
-export const deploymentPermissionsOverwrite = z.object({net: z.array(z.string().optional()).optional()}).optional();
-export const organization = z.object({id: z.string().optional(),
-name: z.string().optional(),
-createdAt: z.string().optional(),
-updatedAt: z.string().optional()}).optional();
-export const getApiOrganizationsOrganizationIdResponse = organization.optional();
+jsxImportSource: z.string().optional()});
+export const encoding = z.enum(['utf-8', 'base64']);
+export const file = z.union([z.object({content: z.string(),
+encoding: encoding.optional()}),
+z.object({gitSha1: z.string()})]);
+export const symlink = z.object({target: z.string()});
+export const asset = z.discriminatedUnion('status', file.and(z.object({kind: z.literal('file')})),
+symlink.merge(z.object({kind: z.literal('symlink')})));
+export const assets = z.record(z.string(), asset);
+export const deploymentPermissions = z.object({net: z.array(z.string()).optional()});
+export const deploymentPermissionsOverwrite = z.object({net: z.array(z.string()).optional()});
+export const organization = z.object({id: z.string(),
+name: z.string(),
+createdAt: z.string(),
+updatedAt: z.string()});
+export const getApiOrganizationsOrganizationIdResponse = organization;
 export type GetApiOrganizationsOrganizationIdResponse = z.infer<typeof getApiOrganizationsOrganizationIdResponse>;
-export const getApiOrganizationsOrganizationIdArgs = z.object({organizationId: z.string().optional()}).optional();
+export const getApiOrganizationsOrganizationIdArgs = z.object({organizationId: z.string()});
 export const analyticsFieldType = /** A data type that analytic data can be represented in.
 
 Inspired by Grafana's data types defined at:
 https://github.com/grafana/grafana/blob/e3288834b37b9aac10c1f43f0e621b35874c1f8a/packages/grafana-data/src/types/dataFrame.ts#L11-L23 */
-z.enum(['time', 'number', 'string', 'boolean', 'other']).optional();
-export const analyticsFieldSchema = z.object({name: z.string().optional(),
-type: analyticsFieldType.optional()}).optional();
-export const analyticsDataValue = z.union([z.string().optional(),
-z.number().optional(),
-z.string().optional(),
-z.boolean().optional(),
-z.unknown().optional()]).optional();
-export const analytics = z.object({fields: z.array(analyticsFieldSchema.optional()).optional(),
-values: z.array(z.array(analyticsDataValue.optional()).optional()).optional()}).optional();
-export const getApiOrganizationsOrganizationIdAnalyticsResponse = analytics.optional();
+z.enum(['time', 'number', 'string', 'boolean', 'other']);
+export const analyticsFieldSchema = z.object({name: z.string(),
+type: analyticsFieldType});
+export const analyticsDataValue = z.union([z.string(),
+z.number(),
+z.string(),
+z.boolean(),
+z.unknown()]);
+export const analytics = z.object({fields: z.array(analyticsFieldSchema),
+values: z.array(z.array(analyticsDataValue))});
+export const getApiOrganizationsOrganizationIdAnalyticsResponse = analytics;
 export type GetApiOrganizationsOrganizationIdAnalyticsResponse = z.infer<typeof getApiOrganizationsOrganizationIdAnalyticsResponse>;
-export const getApiOrganizationsOrganizationIdAnalyticsArgs = z.object({organizationId: z.string().optional(),
-since: z.string().optional(),
-until: z.string().optional()}).optional();
-export const project = z.object({id: z.string().optional(),
-name: z.string().optional(),
-description: z.string().optional(),
-createdAt: z.string().optional(),
-updatedAt: z.string().optional()}).optional();
-export const getApiOrganizationsOrganizationIdProjectsResponse = z.array(project.optional()).optional();
+export const getApiOrganizationsOrganizationIdAnalyticsArgs = z.object({organizationId: z.string(),
+since: z.string(),
+until: z.string()});
+export const project = z.object({id: z.string(),
+name: z.string(),
+description: z.string(),
+createdAt: z.string(),
+updatedAt: z.string()});
+export const getApiOrganizationsOrganizationIdProjectsResponse = z.array(project);
 export type GetApiOrganizationsOrganizationIdProjectsResponse = z.infer<typeof getApiOrganizationsOrganizationIdProjectsResponse>;
 export const getApiOrganizationsOrganizationIdProjectsArgs = z.object({page: z.number().int().optional(),
 limit: z.number().int().optional(),
 q: z.string().optional(),
 sort: z.string().optional(),
 order: z.string().optional(),
-organizationId: z.string().optional()}).optional();
+organizationId: z.string()});
 export const createProjectRequest = z.object({name: /** The name of the project. This must be globally unique. If this is `null`,
 a random unique name will be generated. */
 z.string().optional(),
 description: /** The description of the project. If this is `null`, an empty string will be
 set. */
-z.string().optional()}).optional();
-export const postApiOrganizationsOrganizationIdProjectsResponse = project.optional();
+z.string().optional()});
+export const postApiOrganizationsOrganizationIdProjectsResponse = project;
 export type PostApiOrganizationsOrganizationIdProjectsResponse = z.infer<typeof postApiOrganizationsOrganizationIdProjectsResponse>;
-export const postApiOrganizationsOrganizationIdProjectsArgs = z.object({organizationId: z.string().optional(),
-body: createProjectRequest.optional()}).optional();
+export const postApiOrganizationsOrganizationIdProjectsArgs = z.object({organizationId: z.string(),
+body: createProjectRequest});
 export const kvDatabase = z.object({id: /** A KV database ID */
-z.string().optional(),
+z.string(),
 organizationId: /** An organization ID that this KV database belongs to */
-z.string().optional(),
+z.string(),
 description: /** A description of this KV database */
-z.string().optional(),
-updatedAt: z.string().optional(),
-createdAt: z.string().optional()}).optional();
-export const getApiOrganizationsOrganizationIdDatabasesResponse = z.array(kvDatabase.optional()).optional();
+z.string(),
+updatedAt: z.string(),
+createdAt: z.string()});
+export const getApiOrganizationsOrganizationIdDatabasesResponse = z.array(kvDatabase);
 export type GetApiOrganizationsOrganizationIdDatabasesResponse = z.infer<typeof getApiOrganizationsOrganizationIdDatabasesResponse>;
 export const getApiOrganizationsOrganizationIdDatabasesArgs = z.object({page: z.number().int().optional(),
 limit: z.number().int().optional(),
 q: z.string().optional(),
 sort: z.string().optional(),
 order: z.string().optional(),
-organizationId: z.string().optional()}).optional();
+organizationId: z.string()});
 export const createKvDatabaseRequest = z.object({description: /** The description of the KV database. If this is `null`, an empty string
 will be set. */
-z.string().optional()}).optional();
-export const postApiOrganizationsOrganizationIdDatabasesResponse = kvDatabase.optional();
+z.string().optional()});
+export const postApiOrganizationsOrganizationIdDatabasesResponse = kvDatabase;
 export type PostApiOrganizationsOrganizationIdDatabasesResponse = z.infer<typeof postApiOrganizationsOrganizationIdDatabasesResponse>;
-export const postApiOrganizationsOrganizationIdDatabasesArgs = z.object({organizationId: z.string().optional(),
-body: createKvDatabaseRequest.optional()}).optional();
+export const postApiOrganizationsOrganizationIdDatabasesArgs = z.object({organizationId: z.string(),
+body: createKvDatabaseRequest});
 export const updateKvDatabaseRequest = z.object({description: /** The description of the KV database to be updated to. If this is `null`, no
 update will be made to the KV database description. */
-z.string().optional()}).optional();
-export const patchApiDatabasesDatabaseIdResponse = kvDatabase.optional();
+z.string().optional()});
+export const patchApiDatabasesDatabaseIdResponse = kvDatabase;
 export type PatchApiDatabasesDatabaseIdResponse = z.infer<typeof patchApiDatabasesDatabaseIdResponse>;
-export const patchApiDatabasesDatabaseIdArgs = z.object({databaseId: z.string().optional(),
-body: updateKvDatabaseRequest.optional()}).optional();
-export const getApiProjectsProjectIdResponse = project.optional();
+export const patchApiDatabasesDatabaseIdArgs = z.object({databaseId: z.string(),
+body: updateKvDatabaseRequest});
+export const getApiProjectsProjectIdResponse = project;
 export type GetApiProjectsProjectIdResponse = z.infer<typeof getApiProjectsProjectIdResponse>;
-export const getApiProjectsProjectIdArgs = z.object({projectId: z.string().optional()}).optional();
-export const deleteApiProjectsProjectIdResponse = z.void().optional();
+export const getApiProjectsProjectIdArgs = z.object({projectId: z.string()});
+export const deleteApiProjectsProjectIdResponse = z.void();
 export type DeleteApiProjectsProjectIdResponse = z.infer<typeof deleteApiProjectsProjectIdResponse>;
-export const deleteApiProjectsProjectIdArgs = z.object({projectId: z.string().optional()}).optional();
+export const deleteApiProjectsProjectIdArgs = z.object({projectId: z.string()});
 export const updateProjectRequest = z.object({name: /** The name of the project to be updated to. This must be globally unique.
 If this is `null`, no update will be made to the project name. */
 z.string().optional(),
 description: /** The description of the project to be updated to. If this is `null`, no
 update will be made to the project description. */
-z.string().optional()}).optional();
-export const patchApiProjectsProjectIdResponse = project.optional();
+z.string().optional()});
+export const patchApiProjectsProjectIdResponse = project;
 export type PatchApiProjectsProjectIdResponse = z.infer<typeof patchApiProjectsProjectIdResponse>;
-export const patchApiProjectsProjectIdArgs = z.object({projectId: z.string().optional(),
-body: updateProjectRequest.optional()}).optional();
-export const getApiProjectsProjectIdAnalyticsResponse = analytics.optional();
+export const patchApiProjectsProjectIdArgs = z.object({projectId: z.string(),
+body: updateProjectRequest});
+export const getApiProjectsProjectIdAnalyticsResponse = analytics;
 export type GetApiProjectsProjectIdAnalyticsResponse = z.infer<typeof getApiProjectsProjectIdAnalyticsResponse>;
-export const getApiProjectsProjectIdAnalyticsArgs = z.object({projectId: z.string().optional(),
-since: z.string().optional(),
-until: z.string().optional()}).optional();
+export const getApiProjectsProjectIdAnalyticsArgs = z.object({projectId: z.string(),
+since: z.string(),
+until: z.string()});
 export const deploymentId = /** A deployment ID
 
 Note that this is not UUID v4, as opposed to organization ID and project ID. */
-z.string().optional();
+z.string();
 export const deploymentStatus = /** The status of a deployment. */
-z.enum(['failed', 'pending', 'success']).optional();
-export const deployment = z.object({id: deploymentId.optional(),
-projectId: z.string().optional(),
+z.enum(['failed', 'pending', 'success']);
+export const deployment = z.object({id: deploymentId,
+projectId: z.string(),
 description: /** The description of this deployment. This is present only when the `status`
 is `success`. */
 z.string().optional(),
-status: deploymentStatus.optional(),
-domains: z.array(z.string().optional()).optional(),
-databases: z.record(z.string(), z.string().optional()).optional(),
+status: deploymentStatus,
+domains: z.array(z.string()).optional(),
+databases: z.record(z.string(), z.string()),
 requestTimeout: /** The wall-clock timeout in milliseconds for requests to the deployment.
 
 This becomes `null` when no timeout is set, or the deployment has not been
 done successfully yet. */
 z.number().int().optional(),
-permissions: deploymentPermissions.optional().optional(),
-createdAt: z.string().optional(),
-updatedAt: z.string().optional()}).optional();
-export const getApiProjectsProjectIdDeploymentsResponse = z.array(deployment.optional()).optional();
+permissions: deploymentPermissions.optional(),
+createdAt: z.string(),
+updatedAt: z.string()});
+export const getApiProjectsProjectIdDeploymentsResponse = z.array(deployment);
 export type GetApiProjectsProjectIdDeploymentsResponse = z.infer<typeof getApiProjectsProjectIdDeploymentsResponse>;
 export const getApiProjectsProjectIdDeploymentsArgs = z.object({page: z.number().int().optional(),
 limit: z.number().int().optional(),
 q: z.string().optional(),
 sort: z.string().optional(),
 order: z.string().optional(),
-projectId: z.string().optional()}).optional();
+projectId: z.string()});
 export const createDeploymentRequest = z.object({entryPointUrl: /** An URL of the entry point of the application.
 This is the file that will be executed when the deployment is invoked. */
-z.string().optional(),
+z.string(),
 importMapUrl: /** An URL of the import map file.
 
 If `null` is given, import map auto-discovery logic will be performed,
@@ -185,148 +185,148 @@ CLI doc page](https://docs.deno.com/runtime/manual/basics/modules/integrity_chec
 
 If an empty string is given, no lock file will be used. */
 z.string().optional(),
-compilerOptions: compilerOptions.optional().optional(),
-assets: assets.optional(),
-envVars: z.record(z.string(), z.string().optional()).optional(),
-databases: z.record(z.string(), z.string().optional()).optional(),
+compilerOptions: compilerOptions.optional(),
+assets: assets,
+envVars: z.record(z.string(), z.string()),
+databases: z.record(z.string(), z.string()).optional(),
 requestTimeout: /** The wall-clock timeout in milliseconds for requests to the deployment.
 
 If not provided, the system default value will be used. */
 z.number().int().optional(),
-permissions: deploymentPermissions.optional().optional(),
+permissions: deploymentPermissions.optional(),
 description: /** A description of the created deployment. If not provided, an empty string
 will be set. */
-z.string().optional()}).optional();
-export const postApiProjectsProjectIdDeploymentsResponse = deployment.optional();
+z.string().optional()});
+export const postApiProjectsProjectIdDeploymentsResponse = deployment;
 export type PostApiProjectsProjectIdDeploymentsResponse = z.infer<typeof postApiProjectsProjectIdDeploymentsResponse>;
-export const postApiProjectsProjectIdDeploymentsArgs = z.object({projectId: z.string().optional(),
-body: createDeploymentRequest.optional()}).optional();
-export const redeployRequest = z.object({envVars: z.record(z.string(), z.string().optional()).optional(),
-databases: z.record(z.string(), z.string().optional()).optional(),
+export const postApiProjectsProjectIdDeploymentsArgs = z.object({projectId: z.string(),
+body: createDeploymentRequest});
+export const redeployRequest = z.object({envVars: z.record(z.string(), z.string()).optional(),
+databases: z.record(z.string(), z.string()).optional(),
 requestTimeout: /** The wall-clock timeout in milliseconds for requests to the deployment.
 
 If not provided, no update will happen to the existing request timeout. */
 z.number().int().optional(),
-permissions: deploymentPermissionsOverwrite.optional().optional(),
+permissions: deploymentPermissionsOverwrite.optional(),
 description: /** A description of the created deployment. If not provided, no update will
 happen to the description. */
-z.string().optional()}).optional();
-export const postApiDeploymentsDeploymentIdRedeployResponse = deployment.optional();
+z.string().optional()});
+export const postApiDeploymentsDeploymentIdRedeployResponse = deployment;
 export type PostApiDeploymentsDeploymentIdRedeployResponse = z.infer<typeof postApiDeploymentsDeploymentIdRedeployResponse>;
-export const postApiDeploymentsDeploymentIdRedeployArgs = z.object({deploymentId: deploymentId.optional(),
-body: redeployRequest.optional()}).optional();
-export const getApiDeploymentsDeploymentIdResponse = deployment.optional();
+export const postApiDeploymentsDeploymentIdRedeployArgs = z.object({deploymentId: deploymentId,
+body: redeployRequest});
+export const getApiDeploymentsDeploymentIdResponse = deployment;
 export type GetApiDeploymentsDeploymentIdResponse = z.infer<typeof getApiDeploymentsDeploymentIdResponse>;
-export const getApiDeploymentsDeploymentIdArgs = z.object({deploymentId: deploymentId.optional()}).optional();
-export const deleteApiDeploymentsDeploymentIdResponse = z.void().optional();
+export const getApiDeploymentsDeploymentIdArgs = z.object({deploymentId: deploymentId});
+export const deleteApiDeploymentsDeploymentIdResponse = z.void();
 export type DeleteApiDeploymentsDeploymentIdResponse = z.infer<typeof deleteApiDeploymentsDeploymentIdResponse>;
-export const deleteApiDeploymentsDeploymentIdArgs = z.object({deploymentId: deploymentId.optional()}).optional();
-export const buildLogsResponseEntry = z.object({level: z.string().optional(),
-message: z.string().optional()}).optional();
-export const getApiDeploymentsDeploymentIdBuildLogsResponse = z.array(buildLogsResponseEntry.optional()).optional();
+export const deleteApiDeploymentsDeploymentIdArgs = z.object({deploymentId: deploymentId});
+export const buildLogsResponseEntry = z.object({level: z.string(),
+message: z.string()});
+export const getApiDeploymentsDeploymentIdBuildLogsResponse = z.array(buildLogsResponseEntry);
 export type GetApiDeploymentsDeploymentIdBuildLogsResponse = z.infer<typeof getApiDeploymentsDeploymentIdBuildLogsResponse>;
-export const getApiDeploymentsDeploymentIdBuildLogsArgs = z.object({deploymentId: z.string().optional()}).optional();
-export const logLevel = z.enum(['error', 'warning', 'info', 'debug']).optional();
-export const region = z.enum(['gcp-asia-east1', 'gcp-asia-east2', 'gcp-asia-northeast1', 'gcp-asia-northeast2', 'gcp-asia-northeast3', 'gcp-asia-south1', 'gcp-asia-south2', 'gcp-asia-southeast1', 'gcp-asia-southeast2', 'gcp-australia-southeast1', 'gcp-australia-southeast2', 'gcp-europe-central2', 'gcp-europe-north1', 'gcp-europe-southwest1', 'gcp-europe-west1', 'gcp-europe-west2', 'gcp-europe-west3', 'gcp-europe-west4', 'gcp-europe-west6', 'gcp-europe-west8', 'gcp-me-west1', 'gcp-northamerica-northeast1', 'gcp-northamerica-northeast2', 'gcp-southamerica-east1', 'gcp-southamerica-west1', 'gcp-us-central1', 'gcp-us-east1', 'gcp-us-east4', 'gcp-us-east5', 'gcp-us-south1', 'gcp-us-west1', 'gcp-us-west2', 'gcp-us-west3', 'gcp-us-west4']).optional();
+export const getApiDeploymentsDeploymentIdBuildLogsArgs = z.object({deploymentId: z.string()});
+export const logLevel = z.enum(['error', 'warning', 'info', 'debug']);
+export const region = z.enum(['gcp-asia-east1', 'gcp-asia-east2', 'gcp-asia-northeast1', 'gcp-asia-northeast2', 'gcp-asia-northeast3', 'gcp-asia-south1', 'gcp-asia-south2', 'gcp-asia-southeast1', 'gcp-asia-southeast2', 'gcp-australia-southeast1', 'gcp-australia-southeast2', 'gcp-europe-central2', 'gcp-europe-north1', 'gcp-europe-southwest1', 'gcp-europe-west1', 'gcp-europe-west2', 'gcp-europe-west3', 'gcp-europe-west4', 'gcp-europe-west6', 'gcp-europe-west8', 'gcp-me-west1', 'gcp-northamerica-northeast1', 'gcp-northamerica-northeast2', 'gcp-southamerica-east1', 'gcp-southamerica-west1', 'gcp-us-central1', 'gcp-us-east1', 'gcp-us-east4', 'gcp-us-east5', 'gcp-us-south1', 'gcp-us-west1', 'gcp-us-west2', 'gcp-us-west3', 'gcp-us-west4']);
 export const appLogsResponseEntry = z.object({time: /** Log timestamp */
-z.string().optional(),
-level: logLevel.optional(),
-message: z.string().optional(),
-region: region.optional()}).optional();
-export const getApiDeploymentsDeploymentIdAppLogsResponse = z.array(appLogsResponseEntry.optional()).optional();
+z.string(),
+level: logLevel,
+message: z.string(),
+region: region});
+export const getApiDeploymentsDeploymentIdAppLogsResponse = z.array(appLogsResponseEntry);
 export type GetApiDeploymentsDeploymentIdAppLogsResponse = z.infer<typeof getApiDeploymentsDeploymentIdAppLogsResponse>;
 export const getApiDeploymentsDeploymentIdAppLogsArgs = z.object({q: z.string().optional(),
-level: logLevel.optional().optional(),
-region: region.optional().optional(),
+level: logLevel.optional(),
+region: region.optional(),
 since: z.string().optional(),
 until: z.string().optional(),
 limit: z.number().int().optional(),
 sort: z.string().optional(),
 order: z.string().optional(),
 cursor: z.string().optional(),
-deploymentId: z.string().optional()}).optional();
-export const tlsCipher = z.enum(['rsa', 'ec']).optional();
-export const domainCertificate = z.object({cipher: tlsCipher.optional(),
-expiresAt: z.string().optional(),
-createdAt: z.string().optional(),
-updatedAt: z.string().optional()}).optional();
-export const provisioningStatus = z.discriminatedUnion('status', z.object({code: z.literal('success').optional()}).optional(),
-z.object({message: z.string().optional(),
-code: z.literal('failed').optional()}).optional(),
-z.object({code: z.literal('pending').optional()}).optional(),
-z.object({code: z.literal('manual').optional()}).optional()).optional();
-export const dnsRecord = z.object({type: z.string().optional(),
-name: z.string().optional(),
-content: z.string().optional()}).optional();
+deploymentId: z.string()});
+export const tlsCipher = z.enum(['rsa', 'ec']);
+export const domainCertificate = z.object({cipher: tlsCipher,
+expiresAt: z.string(),
+createdAt: z.string(),
+updatedAt: z.string()});
+export const provisioningStatus = z.discriminatedUnion('status', z.object({code: z.literal('success')}),
+z.object({message: z.string(),
+code: z.literal('failed')}),
+z.object({code: z.literal('pending')}),
+z.object({code: z.literal('manual')}));
+export const dnsRecord = z.object({type: z.string(),
+name: z.string(),
+content: z.string()});
 export const domain = z.object({id: /** The ID of the domain. */
-z.string().optional(),
+z.string(),
 organizationId: /** The ID of the organization that the domain is associated with. */
-z.string().optional(),
+z.string(),
 domain: /** The domain value. */
-z.string().optional(),
-token: z.string().optional(),
+z.string(),
+token: z.string(),
 isValidated: /** Whether the domain's ownership is validated or not. */
-z.boolean().optional(),
-certificates: z.array(domainCertificate.optional()).optional(),
-provisioningStatus: provisioningStatus.optional(),
+z.boolean(),
+certificates: z.array(domainCertificate),
+provisioningStatus: provisioningStatus,
 projectId: /** The ID of the project that the domain is associated with.
 
 If the domain is not associated with any project, this field is omitted. */
 z.string().optional(),
-deploymentId: deploymentId.optional().optional(),
-createdAt: z.string().optional(),
-updatedAt: z.string().optional(),
-dnsRecords: z.array(dnsRecord.optional()).optional()}).optional();
-export const getApiOrganizationsOrganizationIdDomainsResponse = z.array(domain.optional()).optional();
+deploymentId: deploymentId.optional(),
+createdAt: z.string(),
+updatedAt: z.string(),
+dnsRecords: z.array(dnsRecord)});
+export const getApiOrganizationsOrganizationIdDomainsResponse = z.array(domain);
 export type GetApiOrganizationsOrganizationIdDomainsResponse = z.infer<typeof getApiOrganizationsOrganizationIdDomainsResponse>;
 export const getApiOrganizationsOrganizationIdDomainsArgs = z.object({page: z.number().int().optional(),
 limit: z.number().int().optional(),
 q: z.string().optional(),
 sort: z.string().optional(),
 order: z.string().optional(),
-organizationId: z.string().optional()}).optional();
-export const createDomainRequest = z.object({domain: z.string().optional()}).optional();
-export const postApiOrganizationsOrganizationIdDomainsResponse = domain.optional();
+organizationId: z.string()});
+export const createDomainRequest = z.object({domain: z.string()});
+export const postApiOrganizationsOrganizationIdDomainsResponse = domain;
 export type PostApiOrganizationsOrganizationIdDomainsResponse = z.infer<typeof postApiOrganizationsOrganizationIdDomainsResponse>;
-export const postApiOrganizationsOrganizationIdDomainsArgs = z.object({organizationId: z.string().optional(),
-body: createDomainRequest.optional()}).optional();
-export const getApiDomainsDomainIdResponse = domain.optional();
+export const postApiOrganizationsOrganizationIdDomainsArgs = z.object({organizationId: z.string(),
+body: createDomainRequest});
+export const getApiDomainsDomainIdResponse = domain;
 export type GetApiDomainsDomainIdResponse = z.infer<typeof getApiDomainsDomainIdResponse>;
-export const getApiDomainsDomainIdArgs = z.object({domainId: z.string().optional()}).optional();
-export const deleteApiDomainsDomainIdResponse = z.void().optional();
+export const getApiDomainsDomainIdArgs = z.object({domainId: z.string()});
+export const deleteApiDomainsDomainIdResponse = z.void();
 export type DeleteApiDomainsDomainIdResponse = z.infer<typeof deleteApiDomainsDomainIdResponse>;
-export const deleteApiDomainsDomainIdArgs = z.object({domainId: z.string().optional()}).optional();
-export const updateDomainAssociationRequest = z.object({deploymentId: deploymentId.optional().optional()}).optional();
-export const patchApiDomainsDomainIdResponse = z.void().optional();
+export const deleteApiDomainsDomainIdArgs = z.object({domainId: z.string()});
+export const updateDomainAssociationRequest = z.object({deploymentId: deploymentId.optional()});
+export const patchApiDomainsDomainIdResponse = z.void();
 export type PatchApiDomainsDomainIdResponse = z.infer<typeof patchApiDomainsDomainIdResponse>;
-export const patchApiDomainsDomainIdArgs = z.object({domainId: z.string().optional(),
-body: updateDomainAssociationRequest.optional()}).optional();
-export const postApiDomainsDomainIdVerifyResponse = z.void().optional();
+export const patchApiDomainsDomainIdArgs = z.object({domainId: z.string(),
+body: updateDomainAssociationRequest});
+export const postApiDomainsDomainIdVerifyResponse = z.void();
 export type PostApiDomainsDomainIdVerifyResponse = z.infer<typeof postApiDomainsDomainIdVerifyResponse>;
-export const postApiDomainsDomainIdVerifyArgs = z.object({domainId: z.string().optional()}).optional();
+export const postApiDomainsDomainIdVerifyArgs = z.object({domainId: z.string()});
 export const addDomainCertificateRequest = z.object({privateKey: /** The PEM encoded private key for the TLS certificate */
-z.string().optional(),
+z.string(),
 certificateChain: /** The PRM encoded certificate chain for the TLS certificate */
-z.string().optional()}).optional();
-export const postApiDomainsDomainIdCertificatesResponse = z.void().optional();
+z.string()});
+export const postApiDomainsDomainIdCertificatesResponse = z.void();
 export type PostApiDomainsDomainIdCertificatesResponse = z.infer<typeof postApiDomainsDomainIdCertificatesResponse>;
-export const postApiDomainsDomainIdCertificatesArgs = z.object({domainId: z.string().optional(),
-body: addDomainCertificateRequest.optional()}).optional();
-export const postApiDomainsDomainIdCertificatesProvisionResponse = z.void().optional();
+export const postApiDomainsDomainIdCertificatesArgs = z.object({domainId: z.string(),
+body: addDomainCertificateRequest});
+export const postApiDomainsDomainIdCertificatesProvisionResponse = z.void();
 export type PostApiDomainsDomainIdCertificatesProvisionResponse = z.infer<typeof postApiDomainsDomainIdCertificatesProvisionResponse>;
-export const postApiDomainsDomainIdCertificatesProvisionArgs = z.object({domainId: z.string().optional()}).optional();
+export const postApiDomainsDomainIdCertificatesProvisionArgs = z.object({domainId: z.string()});
 export const cursorLinkHeader = /** Pagination links.
 This header provides a URL for the `next` page.
 The format conforms to [RFC 8288](https://tools.ietf.org/html/rfc8288). */
-z.string().optional();
+z.string();
 export const errorBody = z.object({code: /** The error code */
-z.string().optional(),
+z.string(),
 message: /** The error message */
-z.string().optional()}).optional();
+z.string()});
 export const paginationLinkHeader = /** Pagination links.
 This header provides URLS for the `prev`, `next`, `first`, and `last` pages.
 The format conforms to [RFC 8288](https://tools.ietf.org/html/rfc8288). */
-z.string().optional();
+z.string();
 
 export const CreateOrganizationsOrganizationIdProjects = () => {
       const { control, handleSubmit } = useForm({
@@ -335,7 +335,7 @@ a random unique name will be generated. */
 z.string().optional(),
 description: /** The description of the project. If this is `null`, an empty string will be
 set. */
-z.string().optional()}).optional())
+z.string().optional()}))
       })
 
       const onSubmit = () => {
@@ -391,7 +391,7 @@ export const CreateOrganizationsOrganizationIdDatabases = () => {
       const { control, handleSubmit } = useForm({
         resolver: zodResolver(z.object({description: /** The description of the KV database. If this is `null`, an empty string
 will be set. */
-z.string().optional()}).optional())
+z.string().optional()}))
       })
 
       const onSubmit = () => {
@@ -434,7 +434,7 @@ export const CreateProjectsProjectIdDeployments = () => {
       const { control, handleSubmit } = useForm({
         resolver: zodResolver(z.object({entryPointUrl: /** An URL of the entry point of the application.
 This is the file that will be executed when the deployment is invoked. */
-z.string().optional(),
+z.string(),
 importMapUrl: /** An URL of the import map file.
 
 If `null` is given, import map auto-discovery logic will be performed,
@@ -455,18 +455,18 @@ CLI doc page](https://docs.deno.com/runtime/manual/basics/modules/integrity_chec
 
 If an empty string is given, no lock file will be used. */
 z.string().optional(),
-compilerOptions: compilerOptions.optional().optional(),
-assets: assets.optional(),
-envVars: z.record(z.string(), z.string().optional()).optional(),
-databases: z.record(z.string(), z.string().optional()).optional(),
+compilerOptions: compilerOptions.optional(),
+assets: assets,
+envVars: z.record(z.string(), z.string()),
+databases: z.record(z.string(), z.string()).optional(),
 requestTimeout: /** The wall-clock timeout in milliseconds for requests to the deployment.
 
 If not provided, the system default value will be used. */
 z.number().int().optional(),
-permissions: deploymentPermissions.optional().optional(),
+permissions: deploymentPermissions.optional(),
 description: /** A description of the created deployment. If not provided, an empty string
 will be set. */
-z.string().optional()}).optional())
+z.string().optional()}))
       })
 
       const onSubmit = () => {
@@ -624,16 +624,16 @@ z.string().optional()}).optional())
 
 export const CreateDeploymentsDeploymentIdRedeploy = () => {
       const { control, handleSubmit } = useForm({
-        resolver: zodResolver(z.object({envVars: z.record(z.string(), z.string().optional()).optional(),
-databases: z.record(z.string(), z.string().optional()).optional(),
+        resolver: zodResolver(z.object({envVars: z.record(z.string(), z.string()).optional(),
+databases: z.record(z.string(), z.string()).optional(),
 requestTimeout: /** The wall-clock timeout in milliseconds for requests to the deployment.
 
 If not provided, no update will happen to the existing request timeout. */
 z.number().int().optional(),
-permissions: deploymentPermissionsOverwrite.optional().optional(),
+permissions: deploymentPermissionsOverwrite.optional(),
 description: /** A description of the created deployment. If not provided, no update will
 happen to the description. */
-z.string().optional()}).optional())
+z.string().optional()}))
       })
 
       const onSubmit = () => {
@@ -726,7 +726,7 @@ z.string().optional()}).optional())
 
 export const CreateOrganizationsOrganizationIdDomains = () => {
       const { control, handleSubmit } = useForm({
-        resolver: zodResolver(z.object({domain: z.string().optional()}).optional())
+        resolver: zodResolver(z.object({domain: z.string()}))
       })
 
       const onSubmit = () => {
@@ -768,9 +768,9 @@ export const CreateOrganizationsOrganizationIdDomains = () => {
 export const CreateDomainsDomainIdCertificates = () => {
       const { control, handleSubmit } = useForm({
         resolver: zodResolver(z.object({privateKey: /** The PEM encoded private key for the TLS certificate */
-z.string().optional(),
+z.string(),
 certificateChain: /** The PRM encoded certificate chain for the TLS certificate */
-z.string().optional()}).optional())
+z.string()}))
       })
 
       const onSubmit = () => {
