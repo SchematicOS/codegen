@@ -2,18 +2,18 @@ import type { EntityType } from '../languages/typescript/EntityType.ts'
 import type { GenerateContext } from './context/GenerateContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
 import type {
-  OasSchema,
-  OasSchemaRef,
+  OasSchemaData,
+  OasSchemaRefData,
   OasVoid,
   Stringable,
   OasComponentType,
-  OasRef
+  OasRefData
 } from '@schematicos/types'
 
 export type TypeSystemArgs = {
   context: GenerateContext
   destinationPath: string
-  value: OasSchema | OasVoid | OasSchemaRef
+  value: OasSchemaData | OasVoid | OasSchemaRefData
   required?: boolean
 }
 
@@ -54,7 +54,7 @@ export type Transformer = {
   transform: TransformerFn
 }
 
-export type RefToResolved<T extends OasRef> = Extract<
+export type RefToResolved<T extends OasRefData> = Extract<
   OasComponentType,
   { schematicType: T['refType'] }
 >

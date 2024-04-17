@@ -1,6 +1,6 @@
-import type { OasRef } from '@schematicos/types'
+import type { OasRefData } from '@schematicos/types'
 
-export const toRefName = ($ref: string):string => {
+export const toRefName = ($ref: string): string => {
   // TODO: Add validation here to ensure reference exists
   const refName = $ref.split('/').slice(-1)[0]
 
@@ -11,7 +11,7 @@ export const toRefName = ($ref: string):string => {
   return refName
 }
 
-export const isRef = (arg: unknown): arg is OasRef => {
+export const isRef = (arg: unknown): arg is OasRefData => {
   if (!arg) {
     return false
   }

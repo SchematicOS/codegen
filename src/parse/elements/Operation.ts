@@ -1,10 +1,13 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasOperation } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-
+import type {
+  OasOperationData,
+  OasResponseRefData,
+  OasResponseData
+} from '@schematicos/types'
 type ToOperationV3Args = {
-  fields: Omit<OasOperation, 'schematicType'>
+  fields: Omit<OasOperationData, 'schematicType'>
   trail: Trail
   context: ParseContext
   skipped: Record<string, unknown>
@@ -12,7 +15,7 @@ type ToOperationV3Args = {
 
 export class Operation extends OasBase {
   schematicType: 'operation' = 'operation'
-  fields: Omit<OasOperation, 'schematicType'>
+  fields: Omit<OasOperationData, 'schematicType'>
 
   private constructor({ fields, trail, skipped, context }: ToOperationV3Args) {
     super({ trail, skipped, context })
@@ -22,6 +25,17 @@ export class Operation extends OasBase {
 
   static create({ fields, trail, context, skipped }: ToOperationV3Args) {
     return new Operation({ fields, trail, context, skipped })
+  }
+
+  toSuccessResponse(): OasResponseData | OasResponseRefData {
+    const { default: defaultResponse, ...httpCodeResponses } = this.responses
+
+    const successCode = Object.keys(httpCodeResponses)
+      .map(httpCode => parseInt(httpCode))
+      .sort((a, b) => a - b)
+      .find(httpCode => httpCode >= 200 && httpCode < 300)
+
+    return successCode ? httpCodeResponses[successCode] : defaultResponse
   }
 
   get path() {

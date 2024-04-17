@@ -1,6 +1,5 @@
-/* eslint-disable no-restricted-imports */
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasPathItem } from '@schematicos/types'
+import type { OasPathItemData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
@@ -17,7 +16,7 @@ export const toPathItemV3 = ({
   pathItem,
   trail,
   context
-}: ToPathItemV3Args): OasPathItem => {
+}: ToPathItemV3Args): OasPathItemData => {
   const { $ref, summary, description, parameters, ...skipped } = pathItem
 
   const fields = stripUndefined({

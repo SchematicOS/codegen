@@ -1,4 +1,4 @@
-import type { OasOperation, Stringable } from '@schematicos/types'
+import type { OasOperationData, Stringable } from '@schematicos/types'
 import { toParamsArgs } from './toParamsArgs.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
@@ -8,12 +8,12 @@ import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 
 type QueryCallProps = {
   queryArg: string
-  operation: OasOperation
+  operation: OasOperationData
   context: GenerateContext
 }
 
 export class QueryCall extends SchematicBase implements Stringable {
-  operation: OasOperation
+  operation: OasOperationData
   queryArg: string
   properties: KeyValues
 
@@ -40,7 +40,7 @@ export class QueryCall extends SchematicBase implements Stringable {
 }
 
 type ToPropertiesArgs = {
-  operation: OasOperation
+  operation: OasOperationData
   queryArg: string
   context: GenerateContext
 }
@@ -87,7 +87,7 @@ const toProperties = ({
 }
 
 type ToPathTemplateArgs = {
-  operation: OasOperation
+  operation: OasOperationData
   queryArg: string
 }
 

@@ -1,7 +1,7 @@
 import type {
-  OasSchema,
+  OasSchemaData,
   OasVoid,
-  OasSchemaRef,
+  OasSchemaRefData,
   Stringable
 } from '@schematicos/types'
 import type { GenerateContext } from '../context/GenerateContext.ts'
@@ -17,14 +17,14 @@ type ConstructorArgs = {
 
 type FromRefArgs = {
   context: GenerateContext
-  ref: OasSchemaRef
+  ref: OasSchemaRefData
   destinationPath: string
 }
 
 type FromValueArgs = {
   context: GenerateContext
   identifier: Identifier
-  value: OasSchema | OasSchemaRef | OasVoid
+  value: OasSchemaData | OasSchemaRefData | OasVoid
   destinationPath: string
 }
 

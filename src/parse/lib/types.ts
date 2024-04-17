@@ -1,11 +1,11 @@
 import type {
-  OasExampleRef,
-  OasHeaderRef,
-  OasParameterRef,
-  OasRef,
-  OasRequestBodyRef,
-  OasResponseRef,
-  OasSchemaRef
+  OasExampleRefData,
+  OasHeaderRefData,
+  OasParameterRefData,
+  OasRefData,
+  OasRequestBodyRefData,
+  OasResponseRefData,
+  OasSchemaRefData
 } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 
@@ -47,16 +47,16 @@ export type UnexpectedValueArgs = {
   message: string
 }
 
-export type RefReturn<T extends OasRef['refType']> = T extends 'schema'
-  ? OasSchemaRef
+export type RefReturn<T extends OasRefData['refType']> = T extends 'schema'
+  ? OasSchemaRefData
   : T extends 'response'
-  ? OasResponseRef
+  ? OasResponseRefData
   : T extends 'parameter'
-  ? OasParameterRef
+  ? OasParameterRefData
   : T extends 'example'
-  ? OasExampleRef
+  ? OasExampleRefData
   : T extends 'requestBody'
-  ? OasRequestBodyRef
+  ? OasRequestBodyRefData
   : T extends 'header'
-  ? OasHeaderRef
+  ? OasHeaderRefData
   : never

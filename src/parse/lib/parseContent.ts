@@ -14,12 +14,15 @@ import type {
 } from 'npm:@redocly/openapi-core@1.11.0'
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasRoot, ParsePayload } from '@schematicos/types'
+import type { ParsePayload } from '@schematicos/types'
 import { toDocumentV3 } from '../openApiV3/parse.ts'
 import { ParseContext } from './ParseContext.ts'
 import { Trail } from 'parse/lib/Trail.ts'
+import type { Document } from 'parse/elements/Document.ts'
 
-export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
+export const parseContent = async (
+  payload: ParsePayload
+): Promise<Document> => {
   const context = ParseContext.create()
 
   const { document, specVersion } = await parseSchema(payload)
@@ -33,7 +36,7 @@ export const parseContent = async (payload: ParsePayload): Promise<OasRoot> => {
 
       throw new Error('OpenAPI v2 is not supported yet')
     })
-    .with(SpecVersion.OAS3_0, (): OasRoot => {
+    .with(SpecVersion.OAS3_0, (): Document => {
       return toDocumentV3({
         document: document.parsed as OpenAPIV3.Document,
         trail: Trail.create(),

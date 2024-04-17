@@ -3,7 +3,11 @@ import { toDiscriminatorV3 } from './toDiscriminatorV3.ts'
 import { toAdditionalPropertiesV3 } from './toAdditionalPropertiesV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type { OasSchema, OasSchemaRef, OasString } from '@schematicos/types'
+import type {
+  OasSchemaData,
+  OasSchemaRefData,
+  OasStringData
+} from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
@@ -28,7 +32,7 @@ export const toSchemasV3 = ({
   schemas,
   trail,
   context
-}: ToSchemasV3Args): Record<string, OasSchema | OasSchemaRef> => {
+}: ToSchemasV3Args): Record<string, OasSchemaData | OasSchemaRefData> => {
   return Object.fromEntries(
     Object.entries(schemas).map(([key, schema]) => {
       return [
@@ -49,7 +53,7 @@ export const toSchemaV3 = ({
   schema,
   trail,
   context
-}: ToSchemaV3Args): OasSchema | OasSchemaRef => {
+}: ToSchemaV3Args): OasSchemaData | OasSchemaRefData => {
   if (isRef(schema)) {
     return toRefV31({ ref: schema, refType: 'schema', trail, context })
   }
@@ -206,7 +210,7 @@ export const toSchemaV3 = ({
         description,
         pattern,
         enums: enums as string[] | undefined,
-        format: format as OasString['format']
+        format: format as OasStringData['format']
       })
 
       return StringOas.create({ fields, trail, skipped, context })

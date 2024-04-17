@@ -1,16 +1,16 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
-import type { OasOperation, Stringable } from '@schematicos/types'
+import type { OasOperationData, Stringable } from '@schematicos/types'
 
 export type EndpointArgs = {
   context: GenerateContext
   settings: OperationSettings
-  operation: OasOperation
+  operation: OasOperationData
 }
 
 export class Endpoint extends SchematicBase implements Stringable {
-  operation: OasOperation
+  operation: OasOperationData
   settings: OperationSettings
 
   private constructor({ context, operation, settings }: EndpointArgs) {

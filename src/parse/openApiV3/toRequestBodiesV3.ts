@@ -1,5 +1,8 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasRequestBody, OasRequestBodyRef } from '@schematicos/types'
+import type {
+  OasRequestBodyData,
+  OasRequestBodyRefData
+} from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
@@ -18,7 +21,7 @@ export const toRequestBodyV3 = ({
   requestBody,
   trail,
   context
-}: ToRequestBodyV3Args): OasRequestBody | OasRequestBodyRef => {
+}: ToRequestBodyV3Args): OasRequestBodyData | OasRequestBodyRefData => {
   if (isRef(requestBody)) {
     return toRefV31({
       ref: requestBody,
@@ -63,7 +66,7 @@ export const toRequestBodiesV3 = ({
   context
 }: ToRequestBodiesV3Args): Record<
   string,
-  OasRequestBody | OasRequestBodyRef
+  OasRequestBodyData | OasRequestBodyRefData
 > => {
   return Object.fromEntries(
     Object.entries(requestBodies).map(([key, value]) => {

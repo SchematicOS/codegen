@@ -1,11 +1,11 @@
 import type { FileContents } from './GenerateContext.ts'
 import type { Settings } from '../settings/Settings.ts'
 import type { TypeSystem } from '../types.ts'
-import type { OasRoot } from '@schematicos/types'
+import type { Document } from 'parse/elements/Document.ts'
 
 type ConstructorArgs = {
   files: Map<string, FileContents>
-  schemaModel: OasRoot
+  schemaModel: Document
   settings: Settings
   typeSystem: TypeSystem
 }
@@ -13,7 +13,7 @@ type ConstructorArgs = {
 export class ContextData {
   rendering: boolean
   files: Map<string, FileContents>
-  schemaModel: OasRoot
+  schemaModel: Document
   settings: Settings
   typeSystem: TypeSystem
 

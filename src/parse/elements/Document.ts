@@ -1,18 +1,18 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { OasRoot } from '@schematicos/types'
+import type { OasDocumentData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { OasBase } from 'parse/elements/OasBase.ts'
 
 type ToDocumentV3Args = {
-  fields: Omit<OasRoot, 'schematicType'>
+  fields: Omit<OasDocumentData, 'schematicType'>
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
 }
 
-export class Document extends OasBase implements OasRoot {
+export class Document extends OasBase implements OasDocumentData {
   schematicType: 'openapi' = 'openapi'
-  fields: Omit<OasRoot, 'schematicType'>
+  fields: Omit<OasDocumentData, 'schematicType'>
 
   private constructor({ fields, trail, skipped, context }: ToDocumentV3Args) {
     super({ trail, skipped, context })

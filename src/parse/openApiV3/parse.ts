@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasRoot } from '@schematicos/types'
+import type { OasDocumentData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { toTagsV3 } from './toTagsV3.ts'
 import { toOperationsV3 } from './toOperationsV3.ts'
@@ -19,7 +19,7 @@ export const toDocumentV3 = ({
   document,
   trail,
   context
-}: ToDocumentV3Args): OasRoot => {
+}: ToDocumentV3Args): Document => {
   const { openapi, info, paths, components, tags, ...skipped } = document
 
   const fields = stripUndefined({

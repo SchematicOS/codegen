@@ -1,5 +1,9 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasOperation, Method, OasPathItem } from '@schematicos/types'
+import type {
+  OasOperationData,
+  Method,
+  OasPathItemData
+} from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
@@ -12,7 +16,7 @@ import { toPathItemV3 } from 'parse/openApiV3/toPathItemV3.ts'
 type OperationInfo = {
   method: Method
   path: string
-  pathItem: OasPathItem
+  pathItem: OasPathItemData
 }
 
 type ToOperationV3Args = {
@@ -27,7 +31,7 @@ export const toOperationV3 = ({
   operationInfo,
   trail,
   context
-}: ToOperationV3Args): OasOperation => {
+}: ToOperationV3Args): OasOperationData => {
   const { method, path, pathItem } = operationInfo
   const {
     operationId,
@@ -41,7 +45,7 @@ export const toOperationV3 = ({
     ...skipped
   } = operation
 
-  const fields = stripUndefined<OasOperation>({
+  const fields = stripUndefined<OasOperationData>({
     schematicType: 'operation',
     pathItem: pathItem,
     path,
@@ -85,7 +89,7 @@ export const toOperationsV3 = ({
   paths,
   trail,
   context
-}: ToOperationsV3Args): OasOperation[] => {
+}: ToOperationsV3Args): OasOperationData[] => {
   return Object.entries(paths).flatMap(([path, pathItem]) => {
     if (!pathItem) {
       return []
@@ -137,6 +141,6 @@ export const toOperationsV3 = ({
           context
         })
       })
-      .filter((item): item is OasOperation => Boolean(item))
+      .filter((item): item is OasOperationData => Boolean(item))
   })
 }

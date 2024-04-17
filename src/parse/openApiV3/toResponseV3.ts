@@ -3,7 +3,7 @@ import { toHeadersV3 } from './toHeadersV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { stripUndefined } from '../util/stripUndefined.ts'
-import type { OasResponse, OasResponseRef } from '@schematicos/types'
+import type { OasResponseData, OasResponseRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
@@ -19,7 +19,7 @@ export const toResponsesV3 = ({
   responses,
   trail,
   context
-}: ToResponsesV3Args): Record<string, OasResponseRef | OasResponse> => {
+}: ToResponsesV3Args): Record<string, OasResponseRefData | OasResponseData> => {
   return Object.fromEntries(
     Object.entries(responses).map(([key, value]) => {
       return [
@@ -40,7 +40,7 @@ export const toResponseV3 = ({
   response,
   trail,
   context
-}: ToResponseV3Args): OasResponse | OasResponseRef => {
+}: ToResponseV3Args): OasResponseData | OasResponseRefData => {
   if (isRef(response)) {
     return toRefV31({ ref: response, refType: 'response', trail, context })
   }

@@ -1,18 +1,18 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { OasHeader } from '@schematicos/types'
+import type { OasHeaderData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { OasBase } from 'parse/elements/OasBase.ts'
 
 type ToHeaderV3Args = {
-  fields: Omit<OasHeader, 'schematicType'>
+  fields: Omit<OasHeaderData, 'schematicType'>
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
 }
 
-export class Header extends OasBase implements OasHeader {
+export class Header extends OasBase implements OasHeaderData {
   schematicType: 'header' = 'header'
-  fields: Omit<OasHeader, 'schematicType'>
+  fields: Omit<OasHeaderData, 'schematicType'>
 
   private constructor({ fields, trail, skipped, context }: ToHeaderV3Args) {
     super({ trail, skipped, context })

@@ -1,12 +1,12 @@
-import type { OasString, Stringable } from '@schematicos/types'
+import type { OasStringData, Stringable } from '@schematicos/types'
 import { match, P } from 'ts-pattern'
 
 type ZodStringArgs = {
-  value: OasString
+  value: OasStringData
 }
 
 export class ZodString implements Stringable {
-  value: OasString
+  value: OasStringData
 
   private constructor({ value }: ZodStringArgs) {
     this.value = value

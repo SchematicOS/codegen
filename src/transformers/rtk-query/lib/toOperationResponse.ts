@@ -4,20 +4,20 @@ import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
-import { toSuccessResponse } from 'generate/helpers/toSuccessResponse.ts'
 import type {
-  OasOperation,
-  OasResponse,
-  OasResponseRef,
-  OasSchema,
-  OasSchemaRef,
+  OasOperationData,
+  OasResponseData,
+  OasResponseRefData,
+  OasSchemaData,
+  OasSchemaRefData,
   OasVoid
 } from '@schematicos/types'
 import { oasVoidValue } from '@schematicos/types'
+import { toSuccessResponse } from 'generate/helpers/toSuccessResponse.ts'
 
 type ToOperationResponseArgs = {
   context: GenerateContext
-  operation: OasOperation
+  operation: OasOperationData
   destinationPath: string
 }
 
@@ -54,13 +54,13 @@ export const toOperationResponse = ({
 
 type ToResponseValue = {
   context: GenerateContext
-  response: OasResponse | OasResponseRef | undefined
+  response: OasResponseData | OasResponseRefData | undefined
 }
 
 const toResponseValue = ({
   context,
   response
-}: ToResponseValue): OasSchema | OasSchemaRef | OasVoid => {
+}: ToResponseValue): OasSchemaData | OasSchemaRefData | OasVoid => {
   if (!response) {
     return oasVoidValue
   }

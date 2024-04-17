@@ -5,26 +5,30 @@ import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
-import type { OasObject, OasOperation, Stringable } from '@schematicos/types'
+import type {
+  OasObjectData,
+  OasOperationData,
+  Stringable
+} from '@schematicos/types'
 import camelCase from 'lodash-es/camelCase.js'
 import { match } from 'ts-pattern'
 
 type FormContainerArgs = {
   context: GenerateContext
-  operation: OasOperation
+  operation: OasOperationData
   operationSettings: OperationSettings
 }
 
 type FormContainerConstructorArgs = {
   context: GenerateContext
-  operation: OasOperation
-  value: OasObject
+  operation: OasOperationData
+  value: OasObjectData
   operationSettings: OperationSettings
 }
 
 export class FormContainer extends SchematicBase implements Stringable {
   formName: string
-  value: OasObject
+  value: OasObjectData
   zodFormModel: Stringable
   operationSettings: OperationSettings
 
@@ -122,13 +126,13 @@ export class FormContainer extends SchematicBase implements Stringable {
 type FormContainerInnerArgs = {
   context: GenerateContext
   formName: string
-  value: OasObject
+  value: OasObjectData
   zodFormModel: Stringable
 }
 
 export class FormContainerInner extends SchematicBase implements Stringable {
   formName: string
-  value: OasObject
+  value: OasObjectData
   zodFormModel: Stringable
 
   constructor({
@@ -148,7 +152,7 @@ export class FormContainerInner extends SchematicBase implements Stringable {
 type ToFormFieldsArgs = {
   context: GenerateContext
   operationSettings: OperationSettings
-  formValue: OasObject
+  formValue: OasObjectData
 }
 
 const toFormFields = ({
@@ -169,7 +173,7 @@ const toFormFields = ({
   return fields
 }
 
-const toFormName = (operation: OasOperation) => {
+const toFormName = (operation: OasOperationData) => {
   const verb = match(operation.method)
     .with('post', () => 'Create')
     .with('put', () => 'Update')
@@ -180,7 +184,7 @@ const toFormName = (operation: OasOperation) => {
 
 type ToBodySchemaValueArgs = {
   context: GenerateContext
-  operation: OasOperation
+  operation: OasOperationData
 }
 
 const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {

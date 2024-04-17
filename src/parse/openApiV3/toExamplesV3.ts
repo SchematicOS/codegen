@@ -1,4 +1,4 @@
-import type { OasExample, OasExampleRef } from '@schematicos/types'
+import type { OasExampleData, OasExampleRefData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
@@ -15,7 +15,7 @@ type ToExampleSimpleV3Args = {
 
 export const toExampleSimpleV3 = ({
   example
-}: ToExampleSimpleV3Args): OasExample | OasExampleRef => {
+}: ToExampleSimpleV3Args): OasExampleData | OasExampleRefData => {
   return {
     schematicType: 'example',
     value: example
@@ -39,7 +39,7 @@ export const toExamplesV3 = ({
   trail,
   context
 }: ToExamplesV3Args):
-  | Record<string, OasExample | OasExampleRef>
+  | Record<string, OasExampleData | OasExampleRefData>
   | undefined => {
   if (example && examples) {
     context.unexpectedValue({
@@ -78,7 +78,7 @@ export const toExampleV3 = ({
   example,
   trail,
   context
-}: ToExampleV3Args): OasExample | OasExampleRef => {
+}: ToExampleV3Args): OasExampleData | OasExampleRefData => {
   if (isRef(example)) {
     return toRefV31({ ref: example, refType: 'example', trail, context })
   }

@@ -1,9 +1,9 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type {
-  OasObject,
-  OasSchema,
-  OasSchemaRef,
+  OasObjectData,
+  OasSchemaData,
+  OasSchemaRefData,
   Stringable
 } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
@@ -12,11 +12,11 @@ import { Key } from 'generate/elements/Key.ts'
 type ZodObjectProps = {
   context: GenerateContext
   destinationPath: string
-  value: OasObject
+  value: OasObjectData
 }
 
 export class ZodObject extends SchematicBase implements Stringable {
-  value: OasObject
+  value: OasObjectData
   recordProperties: ZodRecord | null
   objectProperties: ZodObjectProperties | null
 
@@ -69,12 +69,12 @@ export class ZodObject extends SchematicBase implements Stringable {
 type ZodObjectPropertiesArgs = {
   context: GenerateContext
   destinationPath: string
-  properties: Record<string, OasSchema | OasSchemaRef>
-  required: OasObject['required']
+  properties: Record<string, OasSchemaData | OasSchemaRefData>
+  required: OasObjectData['required']
 }
 
 class ZodObjectProperties extends SchematicBase implements Stringable {
-  properties: Record<string, OasSchema | OasSchemaRef>
+  properties: Record<string, OasSchemaData | OasSchemaRefData>
   required: string[]
 
   private constructor({
@@ -111,11 +111,11 @@ class ZodObjectProperties extends SchematicBase implements Stringable {
 type ZodRecordArgs = {
   context: GenerateContext
   destinationPath: string
-  value: true | OasSchema | OasSchemaRef | Record<string, never>
+  value: true | OasSchemaData | OasSchemaRefData | Record<string, never>
 }
 
 class ZodRecord extends SchematicBase implements Stringable {
-  value: true | OasSchema | OasSchemaRef | Record<string, never>
+  value: true | OasSchemaData | OasSchemaRefData | Record<string, never>
 
   private constructor({ context, destinationPath, value }: ZodRecordArgs) {
     super({ context })

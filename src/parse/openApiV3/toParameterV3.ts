@@ -1,9 +1,9 @@
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type {
-  OasParameter,
+  OasParameterData,
   OasParameterLocation,
-  OasParameterRef
+  OasParameterRefData
 } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { toExamplesV3 } from './toExamplesV3.ts'
@@ -28,7 +28,7 @@ export const toParameterListV3 = ({
   parameters,
   trail,
   context
-}: ToParameterListV3Args): (OasParameter | OasParameterRef)[] => {
+}: ToParameterListV3Args): (OasParameterData | OasParameterRefData)[] => {
   return parameters.map((parameter, index) =>
     toParameterV3({ parameter, trail: trail.add(`[${index}]`), context })
   )
@@ -47,7 +47,10 @@ export const toParametersV3 = ({
   parameters,
   trail,
   context
-}: ToParametersV3Args): Record<string, OasParameter | OasParameterRef> => {
+}: ToParametersV3Args): Record<
+  string,
+  OasParameterData | OasParameterRefData
+> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
       return [
@@ -68,7 +71,7 @@ const toParameterV3 = ({
   parameter,
   trail,
   context
-}: ToParameterV3Args): OasParameter | OasParameterRef => {
+}: ToParameterV3Args): OasParameterData | OasParameterRefData => {
   if (isRef(parameter)) {
     return toRefV31({ ref: parameter, refType: 'parameter', trail, context })
   }

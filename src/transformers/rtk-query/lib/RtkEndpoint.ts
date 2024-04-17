@@ -6,17 +6,18 @@ import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import type { Definition } from 'generate/elements/Definition.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { OasOperation, Stringable } from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
 import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
+import type { OasOperationData } from '@schematicos/types'
 
 export type RtkEndpointArgs = {
   context: GenerateContext
   operationSettings: OperationSettings
-  operation: OasOperation
+  operation: OasOperationData
 }
 
 export class RtkEndpoint extends SchematicBase implements Stringable {
-  operation: OasOperation
+  operation: OasOperationData
   operationSettings: OperationSettings
 
   endpointResponse: Definition

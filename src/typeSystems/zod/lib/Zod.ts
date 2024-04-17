@@ -2,8 +2,8 @@ import { ZodString } from './ZodString.ts'
 import { ZodArray } from './ZodArray.ts'
 import { match } from 'ts-pattern'
 import type {
-  OasSchemaRef,
-  OasSchema,
+  OasSchemaRefData,
+  OasSchemaData,
   OasVoid,
   Stringable
 } from '@schematicos/types'
@@ -18,7 +18,7 @@ import { Import } from 'generate/elements/Import.ts'
 
 export class Zod extends SchematicBase implements Stringable {
   destinationPath: string
-  value: OasSchema | OasVoid | OasSchemaRef
+  value: OasSchemaData | OasVoid | OasSchemaRefData
   required: boolean | undefined
 
   private constructor({
@@ -55,7 +55,7 @@ export class Zod extends SchematicBase implements Stringable {
 type ToChildrenArgs = {
   context: GenerateContext
   destinationPath: string
-  value: OasSchema | OasVoid | OasSchemaRef
+  value: OasSchemaData | OasVoid | OasSchemaRefData
   required: boolean | undefined
 }
 

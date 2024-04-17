@@ -1,10 +1,10 @@
-import type { OasRequestBody } from '@schematicos/types'
+import type { OasRequestBodyData } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 
 type ToRequestBodyV3Args = {
-  fields: Omit<OasRequestBody, 'schematicType'>
+  fields: Omit<OasRequestBodyData, 'schematicType'>
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -12,7 +12,7 @@ type ToRequestBodyV3Args = {
 
 export class RequestBody extends OasBase {
   schematicType: 'requestBody' = 'requestBody'
-  fields: Omit<OasRequestBody, 'schematicType'>
+  fields: Omit<OasRequestBodyData, 'schematicType'>
 
   private constructor({
     fields,

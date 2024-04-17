@@ -1,6 +1,6 @@
 import type {
   PrettierConfigType,
-  OasRoot,
+  OasDocumentData,
   SettingsType
 } from '@schematicos/types'
 import * as prettier from 'prettier/standalone'
@@ -13,9 +13,10 @@ import { ContextData } from './context/ContextData.ts'
 import type { TypeSystem, Transformer } from './types.ts'
 import { Identifier } from './elements/Identifier.ts'
 import { Definition } from './elements/Definition.ts'
+import type { Document } from 'parse/elements/Document.ts'
 
 type GenerateArgs = {
-  schemaModel: OasRoot
+  schemaModel: Document
   settingsConfig?: SettingsType
   prettierConfig?: PrettierConfigType
   transformers: Transformer[]

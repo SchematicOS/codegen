@@ -4,14 +4,14 @@ import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
-import type { OasOperation, OasSchema } from '@schematicos/types'
+import type { OasOperationData, OasSchemaData } from '@schematicos/types'
 import { oasVoidValue } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
 
 type ToEndpointArgArgs = {
   context: GenerateContext
   destinationPath: string
-  operation: OasOperation
+  operation: OasOperationData
 }
 
 export const toEndpointArg = ({
@@ -52,7 +52,7 @@ export const toEndpointArg = ({
 
   console.log('Required parameters: ', parametersRequired)
 
-  const value: OasSchema = {
+  const value: OasSchemaData = {
     schematicType: 'schema', // TODO if there is no body and params, this should be void. Currently it is an empty object
     type: 'object',
     required: parametersRequired.concat(body ? 'body' : []),
@@ -71,7 +71,7 @@ export const toEndpointArg = ({
 }
 
 type ToBodySchemaArgs = {
-  operation: OasOperation
+  operation: OasOperationData
   context: GenerateContext
 }
 
@@ -90,7 +90,7 @@ const toBodySchema = ({ operation, context }: ToBodySchemaArgs) => {
 }
 
 type ToParametersByNameArgs = {
-  operation: OasOperation
+  operation: OasOperationData
   context: GenerateContext
 }
 

@@ -1,10 +1,10 @@
-import type { OasTag } from '@schematicos/types'
+import type { OasTagData } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 
 type ToTagV3Args = {
-  fields: Omit<OasTag, 'schematicType'>
+  fields: Omit<OasTagData, 'schematicType'>
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -12,7 +12,7 @@ type ToTagV3Args = {
 
 export class Tag extends OasBase {
   schematicType: 'tag' = 'tag'
-  fields: Omit<OasTag, 'schematicType'>
+  fields: Omit<OasTagData, 'schematicType'>
 
   private constructor({ fields, trail, skipped, context }: ToTagV3Args) {
     super({ trail, skipped, context })

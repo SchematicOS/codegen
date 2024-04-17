@@ -1,24 +1,24 @@
 import { Identifier } from 'generate/elements/Identifier.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
-import type { OasSchemaRef, Stringable } from '@schematicos/types'
+import type { OasSchemaRefData, Stringable } from '@schematicos/types'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 
 type ZodRefProps = {
   context: GenerateContext
   destinationPath: string
-  ref: OasSchemaRef
+  ref: OasSchemaRefData
 }
 
 type ZodRefConstructorProps = {
   context: GenerateContext
   destinationPath: string
-  ref: OasSchemaRef
+  ref: OasSchemaRefData
   identifier: Identifier
 }
 
 export class ZodRef extends SchematicBase implements Stringable {
   destinationPath: string
-  ref: OasSchemaRef
+  ref: OasSchemaRefData
   identifier: Identifier
 
   private constructor({
