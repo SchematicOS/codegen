@@ -16,7 +16,7 @@ import { Definition } from './elements/Definition.ts'
 
 type GenerateArgs = {
   schemaModel: OasRoot
-  settingsConfig: SettingsType
+  settingsConfig?: SettingsType
   prettierConfig?: PrettierConfigType
   transformers: Transformer[]
   typeSystem: TypeSystem
@@ -24,7 +24,7 @@ type GenerateArgs = {
 
 export const generate = async ({
   schemaModel,
-  settingsConfig,
+  settingsConfig = {},
   prettierConfig,
   transformers,
   typeSystem

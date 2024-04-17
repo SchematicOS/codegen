@@ -8,8 +8,8 @@ import { join } from 'path'
 type RunArgs = {
   schema: string
   schemaFormat: 'json' | 'yaml'
-  settingsConfig: SettingsType
-  prettierConfig: PrettierConfigType
+  settingsConfig?: SettingsType
+  prettierConfig?: PrettierConfigType
 }
 
 export const run = async ({

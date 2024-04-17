@@ -71,19 +71,9 @@ const main = (inputArgs: string[]) => {
 
   const settingsConfig = readFile<SettingsType>(settingsPath)
 
-  if (!settingsConfig) {
-    console.error(`Could not read settings from "${settingsPath}"`)
-    return
-  }
-
   const prettierPath = resolve(directory, prettier)
 
   const prettierConfig = readFile<PrettierConfigType>(prettierPath)
-
-  if (!prettierConfig) {
-    console.error(`Could not read prettier config from "${prettierPath}"`)
-    return
-  }
 
   run({
     schema: schemaContent,
