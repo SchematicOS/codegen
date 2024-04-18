@@ -1,12 +1,7 @@
 import { ZodString } from './ZodString.ts'
 import { ZodArray } from './ZodArray.ts'
 import { match } from 'ts-pattern'
-import type {
-  OasSchemaRefData,
-  OasSchemaData,
-  OasVoid,
-  Stringable
-} from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
 import { ZodRef } from './ZodRef.ts'
 import { ZodObject } from './ZodObject.ts'
 import { ZodUnion } from './ZodUnion.ts'
@@ -15,10 +10,13 @@ import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { TypeSystemArgs } from 'generate/types.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
 import { Import } from 'generate/elements/Import.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasVoid } from 'parse/elements/schema/Void.ts'
 
 export class Zod extends SchematicBase implements Stringable {
   destinationPath: string
-  value: OasSchemaData | OasVoid | OasSchemaRefData
+  value: OasSchema | OasRef<'schema'> | OasVoid
   required: boolean | undefined
 
   private constructor({
@@ -55,7 +53,7 @@ export class Zod extends SchematicBase implements Stringable {
 type ToChildrenArgs = {
   context: GenerateContext
   destinationPath: string
-  value: OasSchemaData | OasVoid | OasSchemaRefData
+  value: OasSchema | OasRef<'schema'> | OasVoid
   required: boolean | undefined
 }
 
@@ -96,8 +94,6 @@ const toChildren = ({
     .with({ type: 'string' }, mathed => {
       return ZodString.create({ value: mathed })
     })
-    .with({ type: 'void' }, () => `z.void()`)
-    .with({ type: 'null' }, () => `z.null()`)
     .with({ type: 'unknown' }, () => `z.unknown()`)
     .otherwise(matched => {
       console.log(`Unhandled value type: ${matched}`)
@@ -115,12 +111,12 @@ const toChildren = ({
 }
 
 type OptionalArgs = {
-  required?: boolean
+  required: boolean | undefined
   value: Stringable
 }
 
 class Optional implements Stringable {
-  required?: boolean
+  required: boolean | undefined
   value: Stringable
 
   private constructor({ required, value }: OptionalArgs) {

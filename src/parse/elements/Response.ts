@@ -1,13 +1,14 @@
-import type { OasHeaderRefData } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { OasHeader } from 'parse/elements/Header.ts'
 import type { OasMediaType } from 'parse/elements/MediaType.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 export type ResponseFields = {
   description: string | undefined
-  headers: Record<string, OasHeader | OasHeaderRefData> | undefined
+  headers: Record<string, OasHeader | OasRef<'header'>> | undefined
   content: Record<string, OasMediaType> | undefined
 }
 
@@ -42,5 +43,11 @@ export class OasResponse extends OasBase {
 
   get content() {
     return this.fields.content
+  }
+
+  toSchema(
+    mediaType: string = 'application/json'
+  ): OasSchema | OasRef<'schema'> | undefined {
+    return this.fields.content?.[mediaType]?.schema
   }
 }

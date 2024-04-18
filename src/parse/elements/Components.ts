@@ -1,13 +1,4 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type {
-  OasExampleRefData,
-  OasHeaderRefData,
-  OasParameterRefData,
-  OasRequestBodyRefData,
-  OasResponseRefData,
-  OasSchemaData,
-  OasSchemaRefData
-} from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { OasResponse } from 'parse/elements/Response.ts'
@@ -15,14 +6,16 @@ import type { OasParameter } from 'parse/elements/Parameter.ts'
 import type { OasExample } from 'parse/elements/Example.ts'
 import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { OasHeader } from 'parse/elements/Header.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 export type ComponentsFields = {
-  models?: Record<string, OasSchemaData | OasSchemaRefData>
-  responses?: Record<string, OasResponse | OasResponseRefData>
-  parameters?: Record<string, OasParameter | OasParameterRefData>
-  examples?: Record<string, OasExample | OasExampleRefData>
-  requestBodies?: Record<string, OasRequestBody | OasRequestBodyRefData>
-  headers?: Record<string, OasHeader | OasHeaderRefData>
+  models?: Record<string, OasSchema | OasRef<'schema'>>
+  responses?: Record<string, OasResponse | OasRef<'response'>>
+  parameters?: Record<string, OasParameter | OasRef<'parameter'>>
+  examples?: Record<string, OasExample | OasRef<'example'>>
+  requestBodies?: Record<string, OasRequestBody | OasRef<'requestBody'>>
+  headers?: Record<string, OasHeader | OasRef<'header'>>
 }
 
 type ToComponentsV3Args = {

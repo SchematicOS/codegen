@@ -1,17 +1,14 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type {
-  OasExampleData,
-  OasExampleRefData,
-  OasSchemaData,
-  OasSchemaRefData
-} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasExample } from 'parse/elements/Example.ts'
 
 export type MediaTypeFields = {
   mediaType: string
-  schema: OasSchemaData | OasSchemaRefData | undefined
-  examples: Record<string, OasExampleData | OasExampleRefData> | undefined
+  schema: OasSchema | OasRef<'schema'> | undefined
+  examples: Record<string, OasExample | OasRef<'example'>> | undefined
 }
 
 type ToMediaTypeV3Args = {

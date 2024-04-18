@@ -4,16 +4,11 @@ import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
-import type {
-  OasResponseRefData,
-  OasSchemaData,
-  OasSchemaRefData,
-  OasVoid
-} from '@schematicos/types'
-import { oasVoidValue } from '@schematicos/types'
-import { toSuccessResponse } from 'generate/helpers/toSuccessResponse.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasResponse } from 'parse/elements/Response.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import { OasVoid } from 'parse/elements/schema/Void.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 type ToOperationResponseArgs = {
   context: GenerateContext
@@ -41,7 +36,7 @@ export const toOperationResponse = ({
     context
   })
 
-  const successResponse = toSuccessResponse(operation)
+  const successResponse = operation.toSuccessResponse()
   const value = toResponseValue({ context, response: successResponse })
 
   return Definition.fromValue({
@@ -54,22 +49,22 @@ export const toOperationResponse = ({
 
 type ToResponseValue = {
   context: GenerateContext
-  response: OasResponse | OasResponseRefData | undefined
+  response: OasResponse | OasRef<'response'> | undefined
 }
 
 const toResponseValue = ({
   context,
   response
-}: ToResponseValue): OasSchemaData | OasSchemaRefData | OasVoid => {
+}: ToResponseValue): OasSchema | OasRef<'schema'> | OasVoid => {
   if (!response) {
-    return oasVoidValue
+    return OasVoid.fromFields()
   }
 
   const resolvedResponse = isRef(response)
     ? context.resolveRef(response)
     : response
 
-  const schema = resolvedResponse.content?.['application/json']?.schema
+  const schema = resolvedResponse.toSchema()
 
-  return schema ?? oasVoidValue
+  return schema ?? OasVoid.fromFields()
 }

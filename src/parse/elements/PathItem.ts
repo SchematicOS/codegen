@@ -1,13 +1,13 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasParameterRefData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type PathItemFields = {
   summary: string | undefined
   description: string | undefined
-  parameters: (OasParameter | OasParameterRefData)[] | undefined
+  parameters: (OasParameter | OasRef<'parameter'>)[] | undefined
 }
 
 type ToPathItemV3Args = {

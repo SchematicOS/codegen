@@ -3,7 +3,6 @@ import { toDiscriminatorV3 } from './toDiscriminatorV3.ts'
 import { toAdditionalPropertiesV3 } from './toAdditionalPropertiesV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
@@ -25,6 +24,8 @@ import type { IntegerFields } from 'parse/elements/schema/Integer.ts'
 import type { ArrayFields } from 'parse/elements/schema/Array.ts'
 import type { UnionFields } from 'parse/elements/schema/Union.ts'
 import type { IntersectionFields } from 'parse/elements/schema/Intersection.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
@@ -36,7 +37,7 @@ export const toSchemasV3 = ({
   schemas,
   trail,
   context
-}: ToSchemasV3Args): Record<string, OasSchemaData | OasSchemaRefData> => {
+}: ToSchemasV3Args): Record<string, OasSchema | OasRef<'schema'>> => {
   return Object.fromEntries(
     Object.entries(schemas).map(([key, schema]) => {
       return [
@@ -60,7 +61,7 @@ export const toOptionalSchemasV3 = ({
   trail,
   context
 }: ToOptionalSchemasV3Args):
-  | Record<string, OasSchemaData | OasSchemaRefData>
+  | Record<string, OasSchema | OasRef<'schema'>>
   | undefined => {
   if (!schemas) {
     return undefined
@@ -79,7 +80,7 @@ export const toSchemaV3 = ({
   schema,
   trail,
   context
-}: ToSchemaV3Args): OasSchemaData | OasSchemaRefData => {
+}: ToSchemaV3Args): OasSchema | OasRef<'schema'> => {
   if (isRef(schema)) {
     return toRefV31({ ref: schema, refType: 'schema', trail, context })
   }
@@ -245,7 +246,7 @@ export const toOptionalSchemaV3 = ({
   schema,
   trail,
   context
-}: ToOptionalSchemaV3Args): OasSchemaData | OasSchemaRefData | undefined => {
+}: ToOptionalSchemaV3Args): OasSchema | OasRef<'schema'> | undefined => {
   if (!schema) {
     return undefined
   }

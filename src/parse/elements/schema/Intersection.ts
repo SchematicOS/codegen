@@ -2,13 +2,14 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 import type { OasDiscriminator } from 'parse/elements/Discriminator.ts'
-import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 export type IntersectionFields = {
   title?: string
   description?: string
   discriminator?: OasDiscriminator
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
 }
 
 type ToIntersectionV3Args = {

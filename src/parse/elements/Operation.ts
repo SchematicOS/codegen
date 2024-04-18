@@ -1,16 +1,12 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import type {
-  OasResponseRefData,
-  Method,
-  OasParameterRefData,
-  OasRequestBodyRefData
-} from '@schematicos/types'
+import type { Method } from '@schematicos/types'
 import type { OasPathItem } from 'parse/elements/PathItem.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
 import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { OasResponse } from 'parse/elements/Response.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type OperationFields = {
   path: string
@@ -20,9 +16,9 @@ export type OperationFields = {
   summary: string | undefined
   tags: string[] | undefined
   description: string | undefined
-  parameters: (OasParameter | OasParameterRefData)[] | undefined
-  requestBody: OasRequestBody | OasRequestBodyRefData | undefined
-  responses: Record<string, OasResponse | OasResponseRefData>
+  parameters: (OasParameter | OasRef<'parameter'>)[] | undefined
+  requestBody: OasRequestBody | OasRef<'requestBody'> | undefined
+  responses: Record<string, OasResponse | OasRef<'response'>>
   deprecated: boolean | undefined
 }
 
@@ -47,7 +43,7 @@ export class OasOperation extends OasBase {
     return new OasOperation({ fields, trail, context, skipped })
   }
 
-  toSuccessResponse(): OasResponse | OasResponseRefData {
+  toSuccessResponse(): OasResponse | OasRef<'response'> {
     const { default: defaultResponse, ...httpCodeResponses } = this.responses
 
     const successCode = Object.keys(httpCodeResponses)

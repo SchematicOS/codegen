@@ -1,4 +1,3 @@
-import type { OasExampleRefData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
@@ -6,6 +5,7 @@ import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { OasExample } from 'parse/elements/Example.ts'
 import type { ExampleFields } from 'parse/elements/Example.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToExampleSimpleV3Args = {
   example: unknown
@@ -17,7 +17,7 @@ export const toExampleSimpleV3 = ({
   example,
   trail,
   context
-}: ToExampleSimpleV3Args): OasExample | OasExampleRefData => {
+}: ToExampleSimpleV3Args): OasExample | OasRef<'example'> => {
   const fields: ExampleFields = {
     value: example,
     summary: undefined,
@@ -44,7 +44,7 @@ export const toExamplesV3 = ({
   trail,
   context
 }: ToExamplesV3Args):
-  | Record<string, OasExample | OasExampleRefData>
+  | Record<string, OasExample | OasRef<'example'>>
   | undefined => {
   if (example && examples) {
     context.unexpectedValue({
@@ -83,7 +83,7 @@ export const toExampleV3 = ({
   example,
   trail,
   context
-}: ToExampleV3Args): OasExample | OasExampleRefData => {
+}: ToExampleV3Args): OasExample | OasRef<'example'> => {
   if (isRef(example)) {
     return toRefV31({ ref: example, refType: 'example', trail, context })
   }

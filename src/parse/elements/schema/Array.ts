@@ -1,20 +1,17 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type {
-  OasArrayData,
-  OasSchemaData,
-  OasSchemaRefData
-} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type ArrayFields = {
-  items: OasSchemaData | OasSchemaRefData
+  items: OasSchema | OasRef<'schema'>
   title?: string
   description?: string
 }
 
 type ToArrayV3Args = {
-  fields: Omit<OasArrayData, 'schematicType' | 'type'>
+  fields: ArrayFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -23,7 +20,7 @@ type ToArrayV3Args = {
 export class OasArray extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'array' = 'array'
-  fields: Omit<OasArrayData, 'schematicType' | 'type'>
+  fields: ArrayFields
 
   private constructor({ fields, trail, skipped, context }: ToArrayV3Args) {
     super({ trail, skipped, context })
@@ -37,5 +34,13 @@ export class OasArray extends OasBase {
 
   get items() {
     return this.fields.items
+  }
+
+  get title() {
+    return this.fields.title
+  }
+
+  get description() {
+    return this.fields.description
   }
 }

@@ -2,12 +2,12 @@ import { toRefV31 } from './toRefV31.ts'
 import { toHeadersV3 } from './toHeadersV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type { OasResponseRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { OasResponse } from 'parse/elements/Response.ts'
 import type { ResponseFields } from 'parse/elements/Response.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject
@@ -19,7 +19,7 @@ export const toResponsesV3 = ({
   responses,
   trail,
   context
-}: ToResponsesV3Args): Record<string, OasResponse | OasResponseRefData> => {
+}: ToResponsesV3Args): Record<string, OasResponse | OasRef<'response'>> => {
   return Object.fromEntries(
     Object.entries(responses).map(([key, value]) => {
       return [
@@ -41,7 +41,7 @@ export const toOptionalResponsesV3 = ({
   trail,
   context
 }: ToOptionalResponsesV3Args):
-  | Record<string, OasResponse | OasResponseRefData>
+  | Record<string, OasResponse | OasRef<'response'>>
   | undefined => {
   if (!responses) {
     return undefined
@@ -60,7 +60,7 @@ export const toResponseV3 = ({
   response,
   trail,
   context
-}: ToResponseV3Args): OasResponse | OasResponseRefData => {
+}: ToResponseV3Args): OasResponse | OasRef<'response'> => {
   if (isRef(response)) {
     return toRefV31({ ref: response, refType: 'response', trail, context })
   }

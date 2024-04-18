@@ -1,20 +1,21 @@
 import type { EntityType } from '../languages/typescript/EntityType.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { GenerateContext } from './context/GenerateContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
-import type {
-  OasSchemaData,
-  OasSchemaRefData,
-  OasVoid,
-  Stringable,
-  OasComponentType,
-  OasRefData
-} from '@schematicos/types'
+import type { Stringable, OasRefData } from '@schematicos/types'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasResponse } from 'parse/elements/Response.ts'
+import type { OasParameter } from 'parse/elements/Parameter.ts'
+import type { OasExample } from 'parse/elements/Example.ts'
+import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
+import type { OasHeader } from 'parse/elements/Header.ts'
+import type { OasVoid } from 'parse/elements/schema/Void.ts'
 
 export type TypeSystemArgs = {
   context: GenerateContext
   destinationPath: string
-  value: OasSchemaData | OasVoid | OasSchemaRefData
-  required?: boolean
+  value: OasSchema | OasRef<'schema'> | OasVoid
+  required: boolean | undefined
 }
 
 export type TypeSystemFn = ({
@@ -53,6 +54,14 @@ export type Transformer = {
   id: string
   transform: TransformerFn
 }
+
+type OasComponentType =
+  | OasSchema
+  | OasResponse
+  | OasParameter
+  | OasExample
+  | OasRequestBody
+  | OasHeader
 
 export type RefToResolved<T extends OasRefData> = Extract<
   OasComponentType,

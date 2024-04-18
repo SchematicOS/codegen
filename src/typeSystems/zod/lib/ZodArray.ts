@@ -1,14 +1,12 @@
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
-import type {
-  OasSchemaData,
-  OasSchemaRefData,
-  Stringable
-} from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 type ZodArrayArgs = {
   context: GenerateContext
   destinationPath: string
-  items: OasSchemaData | OasSchemaRefData
+  items: OasSchema | OasRef<'schema'>
 }
 
 export class ZodArray implements Stringable {

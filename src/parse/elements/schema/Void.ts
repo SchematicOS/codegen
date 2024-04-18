@@ -2,35 +2,35 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import { Trail } from 'parse/lib/Trail.ts'
 import { ParseContext } from 'parse/lib/ParseContext.ts'
 
-export type UnknownFields = {
+export type VoidFields = {
   title?: string
   description?: string
 }
 
-type ToUnknownV3Args = {
-  fields: UnknownFields
+type ToVoidV3Args = {
+  fields: VoidFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
 }
 
-export class OasUnknown extends OasBase {
+export class OasVoid extends OasBase {
   schematicType: 'schema' = 'schema'
-  type: 'unknown' = 'unknown'
-  fields: UnknownFields
+  type: 'void' = 'void'
+  fields: VoidFields
 
-  private constructor({ fields, trail, skipped, context }: ToUnknownV3Args) {
+  private constructor({ fields, trail, skipped, context }: ToVoidV3Args) {
     super({ trail, skipped, context })
 
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToUnknownV3Args) {
-    return new OasUnknown({ fields, trail, context, skipped })
+  static create({ fields, trail, context, skipped }: ToVoidV3Args) {
+    return new OasVoid({ fields, trail, context, skipped })
   }
 
-  static fromFields(fields: UnknownFields = {}) {
-    return new OasUnknown({
+  static fromFields(fields: VoidFields = {}) {
+    return new OasVoid({
       fields,
       trail: Trail.create(),
       context: ParseContext.create(),

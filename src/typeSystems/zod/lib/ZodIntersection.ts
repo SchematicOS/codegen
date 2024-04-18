@@ -1,20 +1,18 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
-import type {
-  OasSchemaRefData,
-  OasSchemaData,
-  Stringable
-} from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
 import { isRef } from 'generate/helpers/ref.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 type ZodIntersectionArgs = {
   context: GenerateContext
   destinationPath: string
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
 }
 
 export class ZodIntersection extends SchematicBase implements Stringable {
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
   allObjects: boolean
 
   private constructor({
@@ -62,7 +60,7 @@ export class ZodIntersection extends SchematicBase implements Stringable {
 type ToChildrenArgs = {
   context: GenerateContext
   destinationPath: string
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
 }
 
 const toChildren = ({

@@ -1,22 +1,19 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
-import type {
-  OasDiscriminatorData,
-  OasSchemaRefData,
-  OasSchemaData,
-  Stringable
-} from '@schematicos/types'
+import type { OasDiscriminatorData, Stringable } from '@schematicos/types'
 import { isRef } from 'generate/helpers/ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ZodUnionArgs = {
   context: GenerateContext
   destinationPath: string
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
   discriminator?: OasDiscriminatorData
 }
 
 export class ZodUnion extends SchematicBase implements Stringable {
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
   discriminator?: OasDiscriminatorData
 
   private constructor({
@@ -49,12 +46,12 @@ export class ZodUnion extends SchematicBase implements Stringable {
 type ToChildrenArgs = {
   context: GenerateContext
   destinationPath: string
-  members: (OasSchemaData | OasSchemaRefData)[]
+  members: (OasSchema | OasRef<'schema'>)[]
 }
 
 const toChildren = ({ context, destinationPath, members }: ToChildrenArgs) => {
   return members
-    .filter((member): member is OasSchemaData => !isRef(member))
+    .filter((member): member is OasSchema => !isRef(member))
     .map(member => {
       return context.toTypeSystem({
         destinationPath,

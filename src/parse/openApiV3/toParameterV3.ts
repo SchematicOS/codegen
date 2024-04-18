@@ -1,9 +1,6 @@
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type {
-  OasParameterLocation,
-  OasParameterRefData
-} from '@schematicos/types'
+import type { OasParameterLocation } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'
@@ -12,6 +9,7 @@ import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { OasParameter } from 'parse/elements/Parameter.ts'
 import type { ParameterFields } from 'parse/elements/Parameter.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 const isLocationV3 = (location: string): location is OasParameterLocation => {
   return ['query', 'header', 'path', 'cookie'].includes(location)
@@ -30,7 +28,7 @@ export const toParameterListV3 = ({
   trail,
   context
 }: ToParameterListV3Args):
-  | (OasParameter | OasParameterRefData)[]
+  | (OasParameter | OasRef<'parameter'>)[]
   | undefined => {
   if (!parameters) {
     return undefined
@@ -54,7 +52,7 @@ export const toParametersV3 = ({
   parameters,
   trail,
   context
-}: ToParametersV3Args): Record<string, OasParameter | OasParameterRefData> => {
+}: ToParametersV3Args): Record<string, OasParameter | OasRef<'parameter'>> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
       return [
@@ -78,7 +76,7 @@ export const toOptionalParametersV3 = ({
   trail,
   context
 }: ToOptionalParametersV3Args):
-  | Record<string, OasParameter | OasParameterRefData>
+  | Record<string, OasParameter | OasRef<'parameter'>>
   | undefined => {
   if (!parameters) {
     return undefined
@@ -97,7 +95,7 @@ const toParameterV3 = ({
   parameter,
   trail,
   context
-}: ToParameterV3Args): OasParameter | OasParameterRefData => {
+}: ToParameterV3Args): OasParameter | OasRef<'parameter'> => {
   if (isRef(parameter)) {
     return toRefV31({ ref: parameter, refType: 'parameter', trail, context })
   }

@@ -3,12 +3,12 @@ import { toRefV31 } from './toRefV31.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type { OasHeaderRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { OasHeader } from 'parse/elements/Header.ts'
 import type { HeaderFields } from 'parse/elements/Header.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToHeadersV3Args = {
   headers:
@@ -23,7 +23,7 @@ export const toHeadersV3 = ({
   trail,
   context
 }: ToHeadersV3Args):
-  | Record<string, OasHeader | OasHeaderRefData>
+  | Record<string, OasHeader | OasRef<'header'>>
   | undefined => {
   if (!headers) {
     return undefined
@@ -49,7 +49,7 @@ const toHeaderV3 = ({
   header,
   trail,
   context
-}: ToHeaderV3Args): OasHeader | OasHeaderRefData => {
+}: ToHeaderV3Args): OasHeader | OasRef<'header'> => {
   if (isRef(header)) {
     return toRefV31({ ref: header, refType: 'header', trail, context })
   }

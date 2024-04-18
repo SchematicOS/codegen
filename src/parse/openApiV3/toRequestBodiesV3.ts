@@ -1,5 +1,4 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { OasRequestBodyRefData } from '@schematicos/types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
@@ -7,6 +6,7 @@ import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
 import { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { RequestBodyFields } from 'parse/elements/RequestBody.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToRequestBodyV3Args = {
   requestBody:
@@ -21,7 +21,7 @@ export const toRequestBodyV3 = ({
   requestBody,
   trail,
   context
-}: ToRequestBodyV3Args): OasRequestBody | OasRequestBodyRefData | undefined => {
+}: ToRequestBodyV3Args): OasRequestBody | OasRef<'requestBody'> | undefined => {
   if (!requestBody) {
     return undefined
   }
@@ -68,7 +68,7 @@ export const toRequestBodiesV3 = ({
   trail,
   context
 }: ToRequestBodiesV3Args):
-  | Record<string, OasRequestBody | OasRequestBodyRefData>
+  | Record<string, OasRequestBody | OasRef<'requestBody'>>
   | undefined => {
   if (!requestBodies) {
     return undefined

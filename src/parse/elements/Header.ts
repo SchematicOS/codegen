@@ -1,21 +1,18 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type {
-  OasExampleData,
-  OasExampleRefData,
-  OasSchemaData,
-  OasSchemaRefData
-} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { OasMediaType } from 'parse/elements/MediaType.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasExample } from 'parse/elements/Example.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 export type HeaderFields = {
   description: string | undefined
   required: boolean | undefined
   deprecated: boolean | undefined
   allowEmptyValue: boolean | undefined
-  schema: OasSchemaData | OasSchemaRefData | undefined
-  examples: Record<string, OasExampleData | OasExampleRefData> | undefined
+  schema: OasSchema | OasRef<'schema'> | undefined
+  examples: Record<string, OasExample | OasRef<'example'>> | undefined
   content: Record<string, OasMediaType> | undefined
 }
 

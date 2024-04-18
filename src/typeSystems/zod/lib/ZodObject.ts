@@ -1,22 +1,20 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
-import type {
-  OasObjectData,
-  OasSchemaData,
-  OasSchemaRefData,
-  Stringable
-} from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
 import { Key } from 'generate/elements/Key.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasObject } from 'parse/elements/schema/Object.ts'
 
 type ZodObjectProps = {
   context: GenerateContext
   destinationPath: string
-  value: OasObjectData
+  value: OasObject
 }
 
 export class ZodObject extends SchematicBase implements Stringable {
-  value: OasObjectData
+  value: OasObject
   recordProperties: ZodRecord | null
   objectProperties: ZodObjectProperties | null
 
@@ -69,12 +67,12 @@ export class ZodObject extends SchematicBase implements Stringable {
 type ZodObjectPropertiesArgs = {
   context: GenerateContext
   destinationPath: string
-  properties: Record<string, OasSchemaData | OasSchemaRefData>
-  required: OasObjectData['required']
+  properties: Record<string, OasSchema | OasRef<'schema'>>
+  required: OasObject['required']
 }
 
 class ZodObjectProperties extends SchematicBase implements Stringable {
-  properties: Record<string, OasSchemaData | OasSchemaRefData>
+  properties: Record<string, OasSchema | OasRef<'schema'>>
   required: string[]
 
   private constructor({
@@ -111,11 +109,11 @@ class ZodObjectProperties extends SchematicBase implements Stringable {
 type ZodRecordArgs = {
   context: GenerateContext
   destinationPath: string
-  value: true | OasSchemaData | OasSchemaRefData | Record<string, never>
+  value: true | OasSchema | OasRef<'schema'>
 }
 
 class ZodRecord extends SchematicBase implements Stringable {
-  value: true | OasSchemaData | OasSchemaRefData | Record<string, never>
+  value: true | OasSchema | OasRef<'schema'>
 
   private constructor({ context, destinationPath, value }: ZodRecordArgs) {
     super({ context })

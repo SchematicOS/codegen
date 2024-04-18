@@ -5,10 +5,11 @@ import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
-import type { OasObjectData, Stringable } from '@schematicos/types'
+import type { Stringable } from '@schematicos/types'
 import camelCase from 'lodash-es/camelCase.js'
 import { match } from 'ts-pattern'
 import type { OasOperation } from 'parse/elements/Operation.ts'
+import type { OasObject } from 'parse/elements/schema/Object.ts'
 
 type FormContainerArgs = {
   context: GenerateContext
@@ -19,13 +20,13 @@ type FormContainerArgs = {
 type FormContainerConstructorArgs = {
   context: GenerateContext
   operation: OasOperation
-  value: OasObjectData
+  value: OasObject
   operationSettings: OperationSettings
 }
 
 export class FormContainer extends SchematicBase implements Stringable {
   formName: string
-  value: OasObjectData
+  value: OasObject
   zodFormModel: Stringable
   operationSettings: OperationSettings
 
@@ -123,13 +124,13 @@ export class FormContainer extends SchematicBase implements Stringable {
 type FormContainerInnerArgs = {
   context: GenerateContext
   formName: string
-  value: OasObjectData
+  value: OasObject
   zodFormModel: Stringable
 }
 
 export class FormContainerInner extends SchematicBase implements Stringable {
   formName: string
-  value: OasObjectData
+  value: OasObject
   zodFormModel: Stringable
 
   constructor({
@@ -149,7 +150,7 @@ export class FormContainerInner extends SchematicBase implements Stringable {
 type ToFormFieldsArgs = {
   context: GenerateContext
   operationSettings: OperationSettings
-  formValue: OasObjectData
+  formValue: OasObject
 }
 
 const toFormFields = ({
