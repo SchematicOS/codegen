@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'core/lib/Trail.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasExample } from 'parse/elements/Example.ts'
@@ -14,7 +14,7 @@ export type MediaTypeFields = {
 type ToMediaTypeV3Args = {
   fields: MediaTypeFields
   trail: Trail
-  context: ParseContext
+  context: CoreContext
   skipped: Record<string, unknown>
 }
 

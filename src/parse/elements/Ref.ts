@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { OasRefData } from '@schematicos/types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 
 export type RefFields<T extends OasRefData['refType']> = {
@@ -13,7 +13,7 @@ export type RefFields<T extends OasRefData['refType']> = {
 type ToRefV3Args<T extends OasRefData['refType']> = {
   fields: RefFields<T>
   trail: Trail
-  context: ParseContext
+  context: CoreContext
   skipped: Record<string, unknown>
 }
 

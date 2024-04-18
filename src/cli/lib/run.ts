@@ -8,6 +8,8 @@ import type { OasDocument } from 'parse/elements/Document.ts'
 import { Reporter } from 'core/lib/Reporter.ts'
 import type { ReportArgs } from 'core/lib/Reporter.ts'
 import { LogStore } from 'core/lib/LogStore.ts'
+import { ParseContext } from 'core/lib/ParseContext.ts'
+import { CoreContext } from 'core/lib/CoreContext.ts'
 
 type RunArgs = {
   schema: string
@@ -31,10 +33,17 @@ export const run = async ({
     destination: (log: ReportArgs) => logStore.addLog(log)
   })
 
+  const context = ParseContext.create({ reporter })
+
+  const coreContext = CoreContext.create({
+    phase: { type: 'parse', context },
+    reporter
+  })
+
   const schemaModel: OasDocument = await parse({
     schemaDocument: schema,
     schemaFormat,
-    reporter
+    context: coreContext
   })
 
   if (!schemaModel.openapi.startsWith('3.0.')) {

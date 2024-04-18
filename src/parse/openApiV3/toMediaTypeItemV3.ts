@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import type { Trail } from 'core/lib/Trail.ts'
@@ -10,7 +10,7 @@ type ToMediaTypeItemV3Args = {
   mediaTypeItem: OpenAPIV3.MediaTypeObject
   mediaType: string
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toMediaTypeItemV3 = ({
@@ -39,7 +39,7 @@ export const toMediaTypeItemV3 = ({
 type ToMediaTypeItemsV3Args = {
   content: Record<string, OpenAPIV3.MediaTypeObject>
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toMediaTypeItemsV3 = ({
@@ -65,7 +65,7 @@ export const toMediaTypeItemsV3 = ({
 type ToOptionalMediaTypeItemsV3Args = {
   content: Record<string, OpenAPIV3.MediaTypeObject> | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOptionalMediaTypeItemsV3 = ({

@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import { OasPathItem } from 'parse/elements/PathItem.ts'
@@ -8,7 +8,7 @@ import type { PathItemFields } from 'parse/elements/PathItem.ts'
 type ToPathItemV3Args = {
   pathItem: OpenAPIV3.PathItemObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toPathItemV3 = ({

@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import { OasTag } from 'parse/elements/Tag.ts'
 import type { TagFields } from 'parse/elements/Tag.ts'
@@ -7,7 +7,7 @@ import type { TagFields } from 'parse/elements/Tag.ts'
 type ToTagsV3Args = {
   tags: OpenAPIV3.TagObject[] | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toTagsV3 = ({

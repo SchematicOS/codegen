@@ -1,5 +1,5 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 
 export type DiscriminatorFields = {
@@ -10,7 +10,7 @@ type ToDiscriminatorV3Args = {
   fields: DiscriminatorFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasDiscriminator extends OasBase {

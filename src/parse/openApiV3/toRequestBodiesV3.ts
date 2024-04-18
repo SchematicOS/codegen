@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'core/lib/Trail.ts'
@@ -14,7 +14,7 @@ type ToRequestBodyV3Args = {
     | OpenAPIV3.RequestBodyObject
     | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toRequestBodyV3 = ({
@@ -60,7 +60,7 @@ type ToRequestBodiesV3Args = {
     | Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.RequestBodyObject>
     | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toRequestBodiesV3 = ({

@@ -1,6 +1,6 @@
 import { toRefV31 } from './toRefV31.ts'
 import { toHeadersV3 } from './toHeadersV3.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'core/lib/Trail.ts'
@@ -12,7 +12,7 @@ import type { OasRef } from 'parse/elements/Ref.ts'
 type ToResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toResponsesV3 = ({
@@ -33,7 +33,7 @@ export const toResponsesV3 = ({
 type ToOptionalResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOptionalResponsesV3 = ({
@@ -53,7 +53,7 @@ export const toOptionalResponsesV3 = ({
 type ToResponseV3Args = {
   response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toResponseV3 = ({

@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'core/lib/Trail.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 export type BooleanFields = {
   title?: string
@@ -11,7 +11,7 @@ type ToBooleanV3Args = {
   fields: BooleanFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasBoolean extends OasBase {

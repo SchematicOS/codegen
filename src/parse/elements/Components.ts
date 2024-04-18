@@ -1,4 +1,4 @@
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import type { OasResponse } from 'parse/elements/Response.ts'
@@ -22,7 +22,7 @@ type ToComponentsV3Args = {
   fields: ComponentsFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasComponents extends OasBase {

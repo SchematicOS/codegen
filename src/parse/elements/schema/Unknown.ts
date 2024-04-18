@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import { Trail } from 'core/lib/Trail.ts'
-import { ParseContext } from 'core/lib/ParseContext.ts'
+import { CoreContext } from 'core/lib/CoreContext.ts'
 
 export type UnknownFields = {
   title?: string
@@ -11,7 +11,7 @@ type ToUnknownV3Args = {
   fields: UnknownFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasUnknown extends OasBase {
@@ -33,7 +33,7 @@ export class OasUnknown extends OasBase {
     return new OasUnknown({
       fields,
       trail: Trail.create(),
-      context: ParseContext.create(),
+      context: CoreContext.create(),
       skipped: {}
     })
   }

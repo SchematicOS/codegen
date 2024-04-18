@@ -1,7 +1,7 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { OasContactData, OasLicenseData } from '@schematicos/types'
 import type { Trail } from 'core/lib/Trail.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 export type InfoFields = {
   title: string
@@ -15,7 +15,7 @@ export type InfoFields = {
 type ToInfoV3Args = {
   fields: InfoFields
   trail: Trail
-  context: ParseContext
+  context: CoreContext
   skipped: Record<string, unknown>
 }
 

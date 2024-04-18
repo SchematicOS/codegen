@@ -1,4 +1,4 @@
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type { OasParameterLocation } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
@@ -20,7 +20,7 @@ type ToParameterListV3Args = {
     | (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[]
     | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toParameterListV3 = ({
@@ -45,7 +45,7 @@ type ToParametersV3Args = {
     OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
   >
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toParametersV3 = ({
@@ -68,7 +68,7 @@ type ToOptionalParametersV3Args = {
     | Record<string, OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject>
     | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOptionalParametersV3 = ({
@@ -88,7 +88,7 @@ export const toOptionalParametersV3 = ({
 type ToParameterV3Args = {
   parameter: OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 const toParameterV3 = ({

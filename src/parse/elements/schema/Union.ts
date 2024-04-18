@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'core/lib/Trail.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasDiscriminator } from 'parse/elements/Discriminator.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
@@ -16,7 +16,7 @@ type ToUnionV3Args = {
   fields: UnionFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasUnion extends OasBase {

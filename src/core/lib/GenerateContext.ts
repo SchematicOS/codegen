@@ -8,7 +8,7 @@ import type { OasRefData, Stringable } from '@schematicos/types'
 import { P, match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
-import { Import } from '../../generate/elements/Import.ts'
+import type { Import } from '../../generate/elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from '../../generate/settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
@@ -60,39 +60,6 @@ export class GenerateContext {
 
   static create(args: ConstructorArgs) {
     return new GenerateContext(args)
-  }
-
-  render(): Record<string, string> {
-    if (this.contextData.rendering) {
-      throw new Error('Render already in progress')
-    }
-
-    this.contextData.rendering = true
-
-    const fileEntries = Array.from(this.files.entries()).map(
-      ([destination, file]): [string, string] => {
-        const imports = Array.from(file.imports.entries()).map(
-          ([module, importNamesSet]) => {
-            return Import.create(module, Array.from(importNamesSet))
-          }
-        )
-
-        const fileContents = [
-          imports,
-          Array.from(file.definitions.values()),
-          file.content
-        ]
-          .filter((section): section is Stringable[] =>
-            Boolean(section?.length)
-          )
-          .map(section => section.join('\n'))
-          .join('\n\n')
-
-        return [destination, fileContents]
-      }
-    )
-
-    return Object.fromEntries(fileEntries)
   }
 
   getFile(filePath: string): FileContents {
@@ -258,10 +225,6 @@ export class GenerateContext {
       value,
       context: this
     })
-  }
-
-  unexpectedValue(message: string) {
-    console.log(message)
   }
 
   report({ level, phase, trail, message }: ReportArgs): void {

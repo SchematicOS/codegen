@@ -1,7 +1,7 @@
 import { toRefV31 } from './toRefV31.ts'
 import { toDiscriminatorV3 } from './toDiscriminatorV3.ts'
 import { toAdditionalPropertiesV3 } from './toAdditionalPropertiesV3.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
@@ -30,7 +30,7 @@ import type { OasRef } from 'parse/elements/Ref.ts'
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toSchemasV3 = ({
@@ -53,7 +53,7 @@ type ToOptionalSchemasV3Args = {
     | Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
     | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOptionalSchemasV3 = ({
@@ -73,7 +73,7 @@ export const toOptionalSchemasV3 = ({
 type ToSchemaV3Args = {
   schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toSchemaV3 = ({
@@ -251,7 +251,7 @@ export const toSchemaV3 = ({
 type ToOptionalSchemaV3Args = {
   schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOptionalSchemaV3 = ({

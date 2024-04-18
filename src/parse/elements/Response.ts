@@ -1,5 +1,5 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import type { OasHeader } from 'parse/elements/Header.ts'
 import type { OasMediaType } from 'parse/elements/MediaType.ts'
@@ -16,7 +16,7 @@ type ToResponseV3Args = {
   fields: ResponseFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasResponse extends OasBase {

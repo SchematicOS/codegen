@@ -1,4 +1,4 @@
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
@@ -10,7 +10,7 @@ import type { OasRef } from 'parse/elements/Ref.ts'
 type ToExampleSimpleV3Args = {
   example: unknown
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toExampleSimpleV3 = ({
@@ -34,7 +34,7 @@ export type ToExamplesV3Args = {
     | undefined
   exampleKey: string
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toExamplesV3 = ({
@@ -78,7 +78,7 @@ export const toExamplesV3 = ({
 type ToExampleV3Args = {
   example: OpenAPIV3.ExampleObject | OpenAPIV3.ReferenceObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toExampleV3 = ({

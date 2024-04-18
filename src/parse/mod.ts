@@ -15,23 +15,20 @@ import type {
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
 import { toDocumentV3 } from './openApiV3/parse.ts'
-import { ParseContext } from 'core/lib/ParseContext.ts'
 import { Trail } from 'core/lib/Trail.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
-import type { Reporter } from 'core/lib/Reporter.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 type ParsePayload = {
   schemaFormat: 'json' | 'yaml'
   schemaDocument: string
-  reporter: Reporter
+  context: CoreContext
 }
 
 export const parse = async ({
   schemaDocument,
-  reporter
+  context
 }: ParsePayload): Promise<OasDocument> => {
-  const context = ParseContext.create({ reporter })
-
   const { document, specVersion } = await parseSchema(schemaDocument)
 
   const trail = Trail.create({

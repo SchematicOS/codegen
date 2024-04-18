@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import { Trail } from 'core/lib/Trail.ts'
-import { ParseContext } from 'core/lib/ParseContext.ts'
+import { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 
@@ -16,7 +16,7 @@ type ToObjectV3Args = {
   fields: OasObjectFields
   trail: Trail
   skipped: Record<string, unknown>
-  context: ParseContext
+  context: CoreContext
 }
 
 export class OasObject extends OasBase {
@@ -38,7 +38,7 @@ export class OasObject extends OasBase {
     return new OasObject({
       fields,
       trail: Trail.create(),
-      context: ParseContext.create(),
+      context: CoreContext.create(),
       skipped: {}
     })
   }

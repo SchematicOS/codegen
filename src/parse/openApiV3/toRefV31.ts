@@ -1,6 +1,6 @@
 import type { OpenAPIV3_1 } from 'openapi-types'
 import type { OasRefData } from '@schematicos/types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import { OasRef } from 'parse/elements/Ref.ts'
 import type { RefFields } from 'parse/elements/Ref.ts'
@@ -9,7 +9,7 @@ type ToRefV31Args<T extends OasRefData['refType']> = {
   ref: OpenAPIV3_1.ReferenceObject
   refType: T
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toRefV31 = <T extends OasRefData['refType']>({

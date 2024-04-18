@@ -1,6 +1,6 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Method } from '@schematicos/types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
@@ -20,7 +20,7 @@ type ToOperationV3Args = {
   operation: OpenAPIV3.OperationObject
   operationInfo: OperationInfo
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOperationV3 = ({
@@ -74,7 +74,7 @@ export const toOperationV3 = ({
 type ToOperationsV3Args = {
   paths: OpenAPIV3.PathsObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toOperationsV3 = ({

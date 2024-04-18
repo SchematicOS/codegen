@@ -1,7 +1,7 @@
 import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { isRef } from '../util/isRef.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'core/lib/Trail.ts'
@@ -15,7 +15,7 @@ type ToHeadersV3Args = {
     | Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject>
     | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toHeadersV3 = ({
@@ -42,7 +42,7 @@ export const toHeadersV3 = ({
 type ToHeaderV3Args = {
   header: OpenAPIV3.ReferenceObject | OpenAPIV3.HeaderObject
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 const toHeaderV3 = ({

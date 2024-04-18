@@ -3,7 +3,7 @@ import { toHeadersV3 } from '../toHeadersV3.ts'
 import { toOptionalSchemasV3 } from '../toSchemasV3.ts'
 import { toOptionalParametersV3 } from '../toParameterV3.ts'
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { toExamplesV3 } from '../toExamplesV3.ts'
 import { toRequestBodiesV3 } from '../toRequestBodiesV3.ts'
 import type { Trail } from 'core/lib/Trail.ts'
@@ -13,7 +13,7 @@ import type { ComponentsFields } from 'parse/elements/Components.ts'
 type ToComponentsV3Args = {
   components: OpenAPIV3.ComponentsObject | undefined
   trail: Trail
-  context: ParseContext
+  context: CoreContext
 }
 
 export const toComponentsV3 = ({
