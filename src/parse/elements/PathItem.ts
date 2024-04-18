@@ -2,12 +2,12 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import type { OasParameterRefData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { Parameter } from 'parse/elements/Parameter.ts'
+import type { OasParameter } from 'parse/elements/Parameter.ts'
 
 export type PathItemFields = {
   summary: string | undefined
   description: string | undefined
-  parameters: (Parameter | OasParameterRefData)[] | undefined
+  parameters: (OasParameter | OasParameterRefData)[] | undefined
 }
 
 type ToPathItemV3Args = {
@@ -17,7 +17,7 @@ type ToPathItemV3Args = {
   context: ParseContext
 }
 
-export class PathItem extends OasBase {
+export class OasPathItem extends OasBase {
   schematicType: 'pathItem' = 'pathItem'
   fields: PathItemFields
 
@@ -28,7 +28,7 @@ export class PathItem extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToPathItemV3Args) {
-    return new PathItem({ fields, trail, context, skipped })
+    return new OasPathItem({ fields, trail, context, skipped })
   }
 
   get summary() {

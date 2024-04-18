@@ -3,7 +3,7 @@ import type { ParseContext } from '../lib/ParseContext.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { MediaType } from 'parse/elements/MediaType.ts'
+import { OasMediaType } from 'parse/elements/MediaType.ts'
 import type { MediaTypeFields } from 'parse/elements/MediaType.ts'
 
 type ToMediaTypeItemV3Args = {
@@ -18,7 +18,7 @@ export const toMediaTypeItemV3 = ({
   mediaType,
   trail,
   context
-}: ToMediaTypeItemV3Args): MediaType => {
+}: ToMediaTypeItemV3Args): OasMediaType => {
   const { schema, example, examples, ...skipped } = mediaTypeItem
 
   const fields: MediaTypeFields = {
@@ -33,7 +33,7 @@ export const toMediaTypeItemV3 = ({
     })
   }
 
-  return MediaType.create({ fields, trail, skipped, context })
+  return OasMediaType.create({ fields, trail, skipped, context })
 }
 
 type ToMediaTypeItemsV3Args = {
@@ -46,7 +46,7 @@ export const toMediaTypeItemsV3 = ({
   content,
   trail,
   context
-}: ToMediaTypeItemsV3Args): Record<string, MediaType> => {
+}: ToMediaTypeItemsV3Args): Record<string, OasMediaType> => {
   return Object.fromEntries(
     Object.entries(content).map(([mediaType, value]) => {
       return [
@@ -72,7 +72,9 @@ export const toOptionalMediaTypeItemsV3 = ({
   content,
   trail,
   context
-}: ToOptionalMediaTypeItemsV3Args): Record<string, MediaType> | undefined => {
+}: ToOptionalMediaTypeItemsV3Args):
+  | Record<string, OasMediaType>
+  | undefined => {
   if (!content) {
     return
   }

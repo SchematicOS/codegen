@@ -14,7 +14,7 @@ type ToUnknownV3Args = {
   context: ParseContext
 }
 
-export class UnknownOas extends OasBase {
+export class OasUnknown extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'unknown' = 'unknown'
   fields: UnknownFields
@@ -26,7 +26,7 @@ export class UnknownOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToUnknownV3Args) {
-    return new UnknownOas({ fields, trail, context, skipped })
+    return new OasUnknown({ fields, trail, context, skipped })
   }
 
   get title() {

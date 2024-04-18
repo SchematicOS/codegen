@@ -14,7 +14,7 @@ type ToBooleanV3Args = {
   context: ParseContext
 }
 
-export class BooleanOas extends OasBase {
+export class OasBoolean extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'boolean' = 'boolean'
   fields: BooleanFields
@@ -26,7 +26,7 @@ export class BooleanOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToBooleanV3Args) {
-    return new BooleanOas({ fields, trail, context, skipped })
+    return new OasBoolean({ fields, trail, context, skipped })
   }
 
   get title() {

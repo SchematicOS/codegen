@@ -1,11 +1,11 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import type { MediaType } from 'parse/elements/MediaType.ts'
+import type { OasMediaType } from 'parse/elements/MediaType.ts'
 
 export type RequestBodyFields = {
   description: string | undefined
-  content: Record<string, MediaType>
+  content: Record<string, OasMediaType>
   required: boolean | undefined
 }
 
@@ -16,7 +16,7 @@ type ToRequestBodyV3Args = {
   context: ParseContext
 }
 
-export class RequestBody extends OasBase {
+export class OasRequestBody extends OasBase {
   schematicType: 'requestBody' = 'requestBody'
   fields: RequestBodyFields
 
@@ -32,7 +32,7 @@ export class RequestBody extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToRequestBodyV3Args) {
-    return new RequestBody({ fields, trail, context, skipped })
+    return new OasRequestBody({ fields, trail, context, skipped })
   }
 
   get description() {

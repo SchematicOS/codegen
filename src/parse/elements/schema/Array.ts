@@ -20,7 +20,7 @@ type ToArrayV3Args = {
   context: ParseContext
 }
 
-export class ArrayOas extends OasBase {
+export class OasArray extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'array' = 'array'
   fields: Omit<OasArrayData, 'schematicType' | 'type'>
@@ -32,7 +32,7 @@ export class ArrayOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToArrayV3Args) {
-    return new ArrayOas({ fields, trail, context, skipped })
+    return new OasArray({ fields, trail, context, skipped })
   }
 
   get items() {

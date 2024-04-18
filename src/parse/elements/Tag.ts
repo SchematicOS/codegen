@@ -14,7 +14,7 @@ type ToTagV3Args = {
   context: ParseContext
 }
 
-export class Tag extends OasBase {
+export class OasTag extends OasBase {
   schematicType: 'tag' = 'tag'
   fields: TagFields
 
@@ -25,7 +25,7 @@ export class Tag extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToTagV3Args) {
-    return new Tag({ fields, trail, context, skipped })
+    return new OasTag({ fields, trail, context, skipped })
   }
 
   get name() {

@@ -2,12 +2,12 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { Discriminator } from 'parse/elements/Discriminator.ts'
+import type { OasDiscriminator } from 'parse/elements/Discriminator.ts'
 
 export type UnionFields = {
   title?: string
   description?: string
-  discriminator?: Discriminator
+  discriminator?: OasDiscriminator
   members: (OasSchemaData | OasSchemaRefData)[]
 }
 
@@ -18,7 +18,7 @@ type ToUnionV3Args = {
   context: ParseContext
 }
 
-export class Union extends OasBase {
+export class OasUnion extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'union' = 'union'
   fields: UnionFields
@@ -30,7 +30,7 @@ export class Union extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToUnionV3Args) {
-    return new Union({ fields, trail, context, skipped })
+    return new OasUnion({ fields, trail, context, skipped })
   }
 
   get title() {

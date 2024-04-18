@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Tag } from 'parse/elements/Tag.ts'
+import { OasTag } from 'parse/elements/Tag.ts'
 import type { TagFields } from 'parse/elements/Tag.ts'
 
 type ToTagsV3Args = {
@@ -14,7 +14,7 @@ export const toTagsV3 = ({
   tags,
   trail,
   context
-}: ToTagsV3Args): Tag[] | undefined => {
+}: ToTagsV3Args): OasTag[] | undefined => {
   if (!tags) {
     return undefined
   }
@@ -27,7 +27,7 @@ export const toTagsV3 = ({
       description
     }
 
-    return Tag.create({
+    return OasTag.create({
       fields,
       trail,
       context,

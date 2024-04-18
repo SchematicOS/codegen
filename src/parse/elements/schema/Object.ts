@@ -3,7 +3,7 @@ import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 
-export type ObjectOasFields = {
+export type OasObjectFields = {
   title?: string
   description?: string
   default?: Record<string, unknown>
@@ -13,16 +13,16 @@ export type ObjectOasFields = {
 }
 
 type ToObjectV3Args = {
-  fields: ObjectOasFields
+  fields: OasObjectFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
 }
 
-export class ObjectOas extends OasBase {
+export class OasObject extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'object' = 'object'
-  fields: ObjectOasFields
+  fields: OasObjectFields
 
   private constructor({ fields, trail, skipped, context }: ToObjectV3Args) {
     super({ trail, skipped, context })
@@ -31,7 +31,7 @@ export class ObjectOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToObjectV3Args) {
-    return new ObjectOas({ fields, trail, context, skipped })
+    return new OasObject({ fields, trail, context, skipped })
   }
 
   get properties() {

@@ -7,7 +7,7 @@ import type { ParseContext } from 'parse/lib/ParseContext.ts'
 import { toExamplesV3 } from '../toExamplesV3.ts'
 import { toRequestBodiesV3 } from '../toRequestBodiesV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Components } from 'parse/elements/Components.ts'
+import { OasComponents } from 'parse/elements/Components.ts'
 import type { ComponentsFields } from 'parse/elements/Components.ts'
 
 type ToComponentsV3Args = {
@@ -20,7 +20,7 @@ export const toComponentsV3 = ({
   components,
   trail,
   context
-}: ToComponentsV3Args): Components | undefined => {
+}: ToComponentsV3Args): OasComponents | undefined => {
   if (!components) {
     return undefined
   }
@@ -65,5 +65,5 @@ export const toComponentsV3 = ({
     headers: toHeadersV3({ headers, trail: trail.add('headers'), context })
   }
 
-  return Components.create({ fields, trail, context, skipped })
+  return OasComponents.create({ fields, trail, context, skipped })
 }

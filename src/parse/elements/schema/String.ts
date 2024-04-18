@@ -17,7 +17,7 @@ type ToStringV3Args = {
   context: ParseContext
 }
 
-export class StringOas extends OasBase {
+export class OasString extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'string' = 'string'
   fields: StringFields
@@ -29,7 +29,7 @@ export class StringOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToStringV3Args) {
-    return new StringOas({ fields, trail, context, skipped })
+    return new OasString({ fields, trail, context, skipped })
   }
 
   get title() {

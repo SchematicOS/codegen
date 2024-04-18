@@ -14,7 +14,7 @@ type ToNumberV3Args = {
   context: ParseContext
 }
 
-export class NumberOas extends OasBase {
+export class OasNumber extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'number' = 'number'
   fields: NumberFields
@@ -26,7 +26,7 @@ export class NumberOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToNumberV3Args) {
-    return new NumberOas({ fields, trail, context, skipped })
+    return new OasNumber({ fields, trail, context, skipped })
   }
 
   get title() {

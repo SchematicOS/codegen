@@ -5,7 +5,7 @@ import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
-import { RequestBody } from 'parse/elements/RequestBody.ts'
+import { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { RequestBodyFields } from 'parse/elements/RequestBody.ts'
 
 type ToRequestBodyV3Args = {
@@ -21,7 +21,7 @@ export const toRequestBodyV3 = ({
   requestBody,
   trail,
   context
-}: ToRequestBodyV3Args): RequestBody | OasRequestBodyRefData | undefined => {
+}: ToRequestBodyV3Args): OasRequestBody | OasRequestBodyRefData | undefined => {
   if (!requestBody) {
     return undefined
   }
@@ -47,7 +47,7 @@ export const toRequestBodyV3 = ({
     required
   }
 
-  return RequestBody.create({
+  return OasRequestBody.create({
     fields,
     trail,
     skipped,
@@ -68,7 +68,7 @@ export const toRequestBodiesV3 = ({
   trail,
   context
 }: ToRequestBodiesV3Args):
-  | Record<string, RequestBody | OasRequestBodyRefData>
+  | Record<string, OasRequestBody | OasRequestBodyRefData>
   | undefined => {
   if (!requestBodies) {
     return undefined

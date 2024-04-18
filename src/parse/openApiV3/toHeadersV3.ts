@@ -7,7 +7,7 @@ import type { OasHeaderRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
-import { Header } from 'parse/elements/Header.ts'
+import { OasHeader } from 'parse/elements/Header.ts'
 import type { HeaderFields } from 'parse/elements/Header.ts'
 
 type ToHeadersV3Args = {
@@ -22,7 +22,9 @@ export const toHeadersV3 = ({
   headers,
   trail,
   context
-}: ToHeadersV3Args): Record<string, Header | OasHeaderRefData> | undefined => {
+}: ToHeadersV3Args):
+  | Record<string, OasHeader | OasHeaderRefData>
+  | undefined => {
   if (!headers) {
     return undefined
   }
@@ -47,7 +49,7 @@ const toHeaderV3 = ({
   header,
   trail,
   context
-}: ToHeaderV3Args): Header | OasHeaderRefData => {
+}: ToHeaderV3Args): OasHeader | OasHeaderRefData => {
   if (isRef(header)) {
     return toRefV31({ ref: header, refType: 'header', trail, context })
   }
@@ -84,5 +86,5 @@ const toHeaderV3 = ({
     })
   }
 
-  return Header.create({ fields, trail, skipped, context })
+  return OasHeader.create({ fields, trail, skipped, context })
 }

@@ -4,7 +4,7 @@ import { generate } from 'generate/mod.ts'
 import { writeFile } from './writeFile.ts'
 import generateModules from './transfomers.ts'
 import { join } from 'path'
-import type { Document } from 'parse/elements/Document.ts'
+import type { OasDocument } from 'parse/elements/Document.ts'
 
 type RunArgs = {
   schema: string
@@ -19,7 +19,7 @@ export const run = async ({
   settingsConfig,
   prettierConfig
 }: RunArgs) => {
-  const schemaModel: Document = await parseContent({
+  const schemaModel: OasDocument = await parseContent({
     schemaDocument: schema,
     schemaFormat
   })

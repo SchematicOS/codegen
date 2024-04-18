@@ -13,7 +13,7 @@ type ToDiscriminatorV3Args = {
   context: ParseContext
 }
 
-export class Discriminator extends OasBase {
+export class OasDiscriminator extends OasBase {
   schematicType: 'discriminator' = 'discriminator'
   fields: DiscriminatorFields
 
@@ -29,7 +29,7 @@ export class Discriminator extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToDiscriminatorV3Args) {
-    return new Discriminator({ fields, trail, context, skipped })
+    return new OasDiscriminator({ fields, trail, context, skipped })
   }
 
   get propertyName() {

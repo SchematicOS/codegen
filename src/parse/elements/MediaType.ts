@@ -2,7 +2,6 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import type {
   OasExampleData,
   OasExampleRefData,
-  OasMediaTypeData,
   OasSchemaData,
   OasSchemaRefData
 } from '@schematicos/types'
@@ -22,7 +21,7 @@ type ToMediaTypeV3Args = {
   skipped: Record<string, unknown>
 }
 
-export class MediaType extends OasBase {
+export class OasMediaType extends OasBase {
   schematicType: 'mediaType' = 'mediaType'
   fields: MediaTypeFields
 
@@ -33,7 +32,7 @@ export class MediaType extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToMediaTypeV3Args) {
-    return new MediaType({ fields, trail, context, skipped })
+    return new OasMediaType({ fields, trail, context, skipped })
   }
 
   get mediaType() {

@@ -4,7 +4,7 @@ import { toTagsV3 } from './toTagsV3.ts'
 import { toOperationsV3 } from './toOperationsV3.ts'
 import { toComponentsV3 } from './components/toComponentsV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Document } from 'parse/elements/Document.ts'
+import { OasDocument } from 'parse/elements/Document.ts'
 import { toInfoV3 } from 'parse/openApiV3/toInfoV3.ts'
 import type { DocumentFields } from 'parse/elements/Document.ts'
 
@@ -18,7 +18,7 @@ export const toDocumentV3 = ({
   document,
   trail,
   context
-}: ToDocumentV3Args): Document => {
+}: ToDocumentV3Args): OasDocument => {
   const { openapi, info, paths, components, tags, ...skipped } = document
 
   const fields: DocumentFields = {
@@ -37,5 +37,5 @@ export const toDocumentV3 = ({
     tags: toTagsV3({ tags, trail: trail.add('tags'), context })
   }
 
-  return Document.create({ fields, trail, context, skipped })
+  return OasDocument.create({ fields, trail, context, skipped })
 }

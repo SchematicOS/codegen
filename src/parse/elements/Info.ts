@@ -19,7 +19,7 @@ type ToInfoV3Args = {
   skipped: Record<string, unknown>
 }
 
-export class Info extends OasBase {
+export class OasInfo extends OasBase {
   schematicType: 'info' = 'info'
   fields: InfoFields
 
@@ -30,7 +30,7 @@ export class Info extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToInfoV3Args) {
-    return new Info({ fields, trail, context, skipped })
+    return new OasInfo({ fields, trail, context, skipped })
   }
 
   get title() {

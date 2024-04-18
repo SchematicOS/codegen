@@ -2,7 +2,7 @@ import type { OpenAPIV3 } from 'openapi-types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { PathItem } from 'parse/elements/PathItem.ts'
+import { OasPathItem } from 'parse/elements/PathItem.ts'
 import type { PathItemFields } from 'parse/elements/PathItem.ts'
 
 type ToPathItemV3Args = {
@@ -15,7 +15,7 @@ export const toPathItemV3 = ({
   pathItem,
   trail,
   context
-}: ToPathItemV3Args): PathItem => {
+}: ToPathItemV3Args): OasPathItem => {
   const { summary, description, parameters, ...skipped } = pathItem
 
   const fields: PathItemFields = {
@@ -28,5 +28,5 @@ export const toPathItemV3 = ({
     })
   }
 
-  return PathItem.create({ fields, trail, context, skipped })
+  return OasPathItem.create({ fields, trail, context, skipped })
 }

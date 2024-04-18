@@ -4,7 +4,7 @@ import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Example } from 'parse/elements/Example.ts'
+import { OasExample } from 'parse/elements/Example.ts'
 import type { ExampleFields } from 'parse/elements/Example.ts'
 
 type ToExampleSimpleV3Args = {
@@ -17,14 +17,14 @@ export const toExampleSimpleV3 = ({
   example,
   trail,
   context
-}: ToExampleSimpleV3Args): Example | OasExampleRefData => {
+}: ToExampleSimpleV3Args): OasExample | OasExampleRefData => {
   const fields: ExampleFields = {
     value: example,
     summary: undefined,
     description: undefined
   }
 
-  return Example.create({ fields, trail, skipped: {}, context })
+  return OasExample.create({ fields, trail, skipped: {}, context })
 }
 
 export type ToExamplesV3Args = {
@@ -44,7 +44,7 @@ export const toExamplesV3 = ({
   trail,
   context
 }: ToExamplesV3Args):
-  | Record<string, Example | OasExampleRefData>
+  | Record<string, OasExample | OasExampleRefData>
   | undefined => {
   if (example && examples) {
     context.unexpectedValue({
@@ -83,7 +83,7 @@ export const toExampleV3 = ({
   example,
   trail,
   context
-}: ToExampleV3Args): Example | OasExampleRefData => {
+}: ToExampleV3Args): OasExample | OasExampleRefData => {
   if (isRef(example)) {
     return toRefV31({ ref: example, refType: 'example', trail, context })
   }
@@ -96,5 +96,5 @@ export const toExampleV3 = ({
     value
   }
 
-  return Example.create({ fields, trail, skipped, context })
+  return OasExample.create({ fields, trail, skipped, context })
 }

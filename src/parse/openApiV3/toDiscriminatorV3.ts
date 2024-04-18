@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Discriminator } from 'parse/elements/Discriminator.ts'
+import { OasDiscriminator } from 'parse/elements/Discriminator.ts'
 import type { DiscriminatorFields } from 'parse/elements/Discriminator.ts'
 
 type ToDiscriminatorV3Args = {
@@ -14,7 +14,7 @@ export const toDiscriminatorV3 = ({
   discriminator,
   trail,
   context
-}: ToDiscriminatorV3Args): Discriminator | undefined => {
+}: ToDiscriminatorV3Args): OasDiscriminator | undefined => {
   if (!discriminator) {
     return undefined
   }
@@ -25,7 +25,7 @@ export const toDiscriminatorV3 = ({
     propertyName
   }
 
-  return Discriminator.create({
+  return OasDiscriminator.create({
     fields,
     trail,
     context,

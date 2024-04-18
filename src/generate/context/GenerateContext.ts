@@ -8,7 +8,7 @@ import { Import } from '../elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
-import type { Document } from 'parse/elements/Document.ts'
+import type { OasDocument } from 'parse/elements/Document.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -260,7 +260,7 @@ export class GenerateContext {
     console.log(args)
   }
 
-  get schemaModel(): Document {
+  get schemaModel(): OasDocument {
     return this.contextData.schemaModel
   }
 

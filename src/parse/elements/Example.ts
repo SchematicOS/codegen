@@ -15,7 +15,7 @@ type ToExampleV3Args = {
   skipped: Record<string, unknown>
 }
 
-export class Example extends OasBase {
+export class OasExample extends OasBase {
   schematicType: 'example' = 'example'
   fields: ExampleFields
 
@@ -26,7 +26,7 @@ export class Example extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToExampleV3Args) {
-    return new Example({ fields, trail, context, skipped })
+    return new OasExample({ fields, trail, context, skipped })
   }
 
   get summary() {

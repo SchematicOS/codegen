@@ -18,11 +18,11 @@ import type { ParsePayload } from '@schematicos/types'
 import { toDocumentV3 } from '../openApiV3/parse.ts'
 import { ParseContext } from './ParseContext.ts'
 import { Trail } from 'parse/lib/Trail.ts'
-import type { Document } from 'parse/elements/Document.ts'
+import type { OasDocument } from 'parse/elements/Document.ts'
 
 export const parseContent = async (
   payload: ParsePayload
-): Promise<Document> => {
+): Promise<OasDocument> => {
   const context = ParseContext.create()
 
   const { document, specVersion } = await parseSchema(payload)
@@ -36,7 +36,7 @@ export const parseContent = async (
 
       throw new Error('OpenAPI v2 is not supported yet')
     })
-    .with(SpecVersion.OAS3_0, (): Document => {
+    .with(SpecVersion.OAS3_0, (): OasDocument => {
       return toDocumentV3({
         document: document.parsed as OpenAPIV3.Document,
         trail: Trail.create(),

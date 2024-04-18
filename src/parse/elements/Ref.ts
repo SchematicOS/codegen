@@ -17,7 +17,7 @@ type ToRefV3Args<T extends OasRefData['refType']> = {
   skipped: Record<string, unknown>
 }
 
-export class Ref<T extends OasRefData['refType']> extends OasBase {
+export class OasRef<T extends OasRefData['refType']> extends OasBase {
   schematicType: 'ref' = 'ref'
   fields: RefFields<T>
 
@@ -33,7 +33,7 @@ export class Ref<T extends OasRefData['refType']> extends OasBase {
     context,
     skipped
   }: ToRefV3Args<T>) {
-    return new Ref({ fields, trail, context, skipped })
+    return new OasRef({ fields, trail, context, skipped })
   }
 
   get $ref() {

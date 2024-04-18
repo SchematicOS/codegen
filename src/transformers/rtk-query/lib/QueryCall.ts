@@ -5,16 +5,16 @@ import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
 import { KeyValues } from 'generate/elements/KeyValues.ts'
 import type { GenerateContext } from 'generate/context/GenerateContext.ts'
-import type { Operation } from 'parse/elements/Operation.ts'
+import type { OasOperation } from 'parse/elements/Operation.ts'
 
 type QueryCallProps = {
   queryArg: string
-  operation: Operation
+  operation: OasOperation
   context: GenerateContext
 }
 
 export class QueryCall extends SchematicBase implements Stringable {
-  operation: Operation
+  operation: OasOperation
   queryArg: string
   properties: KeyValues
 
@@ -41,7 +41,7 @@ export class QueryCall extends SchematicBase implements Stringable {
 }
 
 type ToPropertiesArgs = {
-  operation: Operation
+  operation: OasOperation
   queryArg: string
   context: GenerateContext
 }
@@ -88,7 +88,7 @@ const toProperties = ({
 }
 
 type ToPathTemplateArgs = {
-  operation: Operation
+  operation: OasOperation
   queryArg: string
 }
 

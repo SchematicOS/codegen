@@ -5,15 +5,15 @@ import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Operation } from 'parse/elements/Operation.ts'
+import { OasOperation } from 'parse/elements/Operation.ts'
 import type { OperationFields } from 'parse/elements/Operation.ts'
 import { toPathItemV3 } from 'parse/openApiV3/toPathItemV3.ts'
-import type { PathItem } from 'parse/elements/PathItem.ts'
+import type { OasPathItem } from 'parse/elements/PathItem.ts'
 
 type OperationInfo = {
   method: Method
   path: string
-  pathItem: PathItem
+  pathItem: OasPathItem
 }
 
 type ToOperationV3Args = {
@@ -28,7 +28,7 @@ export const toOperationV3 = ({
   operationInfo,
   trail,
   context
-}: ToOperationV3Args): Operation => {
+}: ToOperationV3Args): OasOperation => {
   const { method, path, pathItem } = operationInfo
   const {
     operationId,
@@ -68,7 +68,7 @@ export const toOperationV3 = ({
     deprecated
   }
 
-  return Operation.create({ fields, trail, context, skipped })
+  return OasOperation.create({ fields, trail, context, skipped })
 }
 
 type ToOperationsV3Args = {
@@ -81,7 +81,7 @@ export const toOperationsV3 = ({
   paths,
   trail,
   context
-}: ToOperationsV3Args): Operation[] => {
+}: ToOperationsV3Args): OasOperation[] => {
   return Object.entries(paths).flatMap(([path, pathItem]) => {
     if (!pathItem) {
       return []
@@ -133,6 +133,6 @@ export const toOperationsV3 = ({
           context
         })
       })
-      .filter((item): item is Operation => Boolean(item))
+      .filter((item): item is OasOperation => Boolean(item))
   })
 }

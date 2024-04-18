@@ -10,7 +10,7 @@ import { toRefV31 } from './toRefV31.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from 'parse/openApiV3/toMediaTypeItemV3.ts'
-import { Parameter } from 'parse/elements/Parameter.ts'
+import { OasParameter } from 'parse/elements/Parameter.ts'
 import type { ParameterFields } from 'parse/elements/Parameter.ts'
 
 const isLocationV3 = (location: string): location is OasParameterLocation => {
@@ -29,7 +29,9 @@ export const toParameterListV3 = ({
   parameters,
   trail,
   context
-}: ToParameterListV3Args): (Parameter | OasParameterRefData)[] | undefined => {
+}: ToParameterListV3Args):
+  | (OasParameter | OasParameterRefData)[]
+  | undefined => {
   if (!parameters) {
     return undefined
   }
@@ -52,7 +54,7 @@ export const toParametersV3 = ({
   parameters,
   trail,
   context
-}: ToParametersV3Args): Record<string, Parameter | OasParameterRefData> => {
+}: ToParametersV3Args): Record<string, OasParameter | OasParameterRefData> => {
   return Object.fromEntries(
     Object.entries(parameters).map(([key, value]) => {
       return [
@@ -76,7 +78,7 @@ export const toOptionalParametersV3 = ({
   trail,
   context
 }: ToOptionalParametersV3Args):
-  | Record<string, Parameter | OasParameterRefData>
+  | Record<string, OasParameter | OasParameterRefData>
   | undefined => {
   if (!parameters) {
     return undefined
@@ -95,7 +97,7 @@ const toParameterV3 = ({
   parameter,
   trail,
   context
-}: ToParameterV3Args): Parameter | OasParameterRefData => {
+}: ToParameterV3Args): OasParameter | OasParameterRefData => {
   if (isRef(parameter)) {
     return toRefV31({ ref: parameter, refType: 'parameter', trail, context })
   }
@@ -140,5 +142,5 @@ const toParameterV3 = ({
     })
   }
 
-  return Parameter.create({ fields, trail, skipped, context })
+  return OasParameter.create({ fields, trail, skipped, context })
 }

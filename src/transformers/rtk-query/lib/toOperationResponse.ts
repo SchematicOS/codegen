@@ -12,12 +12,12 @@ import type {
 } from '@schematicos/types'
 import { oasVoidValue } from '@schematicos/types'
 import { toSuccessResponse } from 'generate/helpers/toSuccessResponse.ts'
-import type { Operation } from 'parse/elements/Operation.ts'
-import type { Response } from 'parse/elements/Response.ts'
+import type { OasOperation } from 'parse/elements/Operation.ts'
+import type { OasResponse } from 'parse/elements/Response.ts'
 
 type ToOperationResponseArgs = {
   context: GenerateContext
-  operation: Operation
+  operation: OasOperation
   destinationPath: string
 }
 
@@ -54,7 +54,7 @@ export const toOperationResponse = ({
 
 type ToResponseValue = {
   context: GenerateContext
-  response: Response | OasResponseRefData | undefined
+  response: OasResponse | OasResponseRefData | undefined
 }
 
 const toResponseValue = ({

@@ -1,10 +1,10 @@
 import type { OasResponseRefData } from '@schematicos/types'
-import type { Operation } from 'parse/elements/Operation.ts'
-import type { Response } from 'parse/elements/Response.ts'
+import type { OasOperation } from 'parse/elements/Operation.ts'
+import type { OasResponse } from 'parse/elements/Response.ts'
 
 export const toSuccessResponse = (
-  operation: Operation
-): Response | OasResponseRefData => {
+  operation: OasOperation
+): OasResponse | OasResponseRefData => {
   const { responses } = operation
 
   const { default: defaultResponse, ...httpCodeResponses } = responses

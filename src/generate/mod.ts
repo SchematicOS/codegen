@@ -13,10 +13,10 @@ import { ContextData } from './context/ContextData.ts'
 import type { TypeSystem, Transformer } from './types.ts'
 import { Identifier } from './elements/Identifier.ts'
 import { Definition } from './elements/Definition.ts'
-import type { Document } from 'parse/elements/Document.ts'
+import type { OasDocument } from 'parse/elements/Document.ts'
 
 type GenerateArgs = {
-  schemaModel: Document
+  schemaModel: OasDocument
   settingsConfig?: SettingsType
   prettierConfig?: PrettierConfigType
   transformers: Transformer[]

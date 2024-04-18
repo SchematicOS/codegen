@@ -10,19 +10,19 @@ import type {
 } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
-import type { Response } from 'parse/elements/Response.ts'
-import type { Parameter } from 'parse/elements/Parameter.ts'
-import type { Example } from 'parse/elements/Example.ts'
-import type { RequestBody } from 'parse/elements/RequestBody.ts'
-import type { Header } from 'parse/elements/Header.ts'
+import type { OasResponse } from 'parse/elements/Response.ts'
+import type { OasParameter } from 'parse/elements/Parameter.ts'
+import type { OasExample } from 'parse/elements/Example.ts'
+import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
+import type { OasHeader } from 'parse/elements/Header.ts'
 
 export type ComponentsFields = {
   models?: Record<string, OasSchemaData | OasSchemaRefData>
-  responses?: Record<string, Response | OasResponseRefData>
-  parameters?: Record<string, Parameter | OasParameterRefData>
-  examples?: Record<string, Example | OasExampleRefData>
-  requestBodies?: Record<string, RequestBody | OasRequestBodyRefData>
-  headers?: Record<string, Header | OasHeaderRefData>
+  responses?: Record<string, OasResponse | OasResponseRefData>
+  parameters?: Record<string, OasParameter | OasParameterRefData>
+  examples?: Record<string, OasExample | OasExampleRefData>
+  requestBodies?: Record<string, OasRequestBody | OasRequestBodyRefData>
+  headers?: Record<string, OasHeader | OasHeaderRefData>
 }
 
 type ToComponentsV3Args = {
@@ -32,7 +32,7 @@ type ToComponentsV3Args = {
   context: ParseContext
 }
 
-export class Components extends OasBase {
+export class OasComponents extends OasBase {
   schematicType: 'components' = 'components'
   fields: ComponentsFields
 
@@ -43,7 +43,7 @@ export class Components extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToComponentsV3Args) {
-    return new Components({ fields, trail, context, skipped })
+    return new OasComponents({ fields, trail, context, skipped })
   }
 
   get models() {

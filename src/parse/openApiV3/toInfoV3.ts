@@ -2,7 +2,7 @@ import type { OasContactData, OasLicenseData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import { Info } from 'parse/elements/Info.ts'
+import { OasInfo } from 'parse/elements/Info.ts'
 import type { InfoFields } from 'parse/elements/Info.ts'
 
 type ToInfoV3Args = {
@@ -11,7 +11,7 @@ type ToInfoV3Args = {
   context: ParseContext
 }
 
-export const toInfoV3 = ({ info, trail, context }: ToInfoV3Args): Info => {
+export const toInfoV3 = ({ info, trail, context }: ToInfoV3Args): OasInfo => {
   const {
     title,
     description,
@@ -31,7 +31,7 @@ export const toInfoV3 = ({ info, trail, context }: ToInfoV3Args): Info => {
     version
   }
 
-  return Info.create({ fields, trail, skipped, context })
+  return OasInfo.create({ fields, trail, skipped, context })
 }
 
 const toLicense = (license: OpenAPIV3.LicenseObject): OasLicenseData => ({

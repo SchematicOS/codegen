@@ -14,7 +14,7 @@ type ToIntegerV3Args = {
   context: ParseContext
 }
 
-export class IntegerOas extends OasBase {
+export class OasInteger extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'integer' = 'integer'
   fields: IntegerFields
@@ -26,7 +26,7 @@ export class IntegerOas extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToIntegerV3Args) {
-    return new IntegerOas({ fields, trail, context, skipped })
+    return new OasInteger({ fields, trail, context, skipped })
   }
 
   get title() {

@@ -7,16 +7,16 @@ import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { Union } from 'parse/elements/schema/Union.ts'
-import { ObjectOas } from 'parse/elements/schema/Object.ts'
-import type { ObjectOasFields } from 'parse/elements/schema/Object.ts'
-import { ArrayOas } from 'parse/elements/schema/Array.ts'
-import { Intersection } from 'parse/elements/schema/Intersection.ts'
-import { IntegerOas } from 'parse/elements/schema/Integer.ts'
-import { NumberOas } from 'parse/elements/schema/Number.ts'
-import { BooleanOas } from 'parse/elements/schema/Boolean.ts'
-import { StringOas } from 'parse/elements/schema/String.ts'
-import { UnknownOas } from 'parse/elements/schema/Unknown.ts'
+import { OasUnion } from 'parse/elements/schema/Union.ts'
+import { OasObject } from 'parse/elements/schema/Object.ts'
+import type { OasObjectFields } from 'parse/elements/schema/Object.ts'
+import { OasArray } from 'parse/elements/schema/Array.ts'
+import { OasIntersection } from 'parse/elements/schema/Intersection.ts'
+import { OasInteger } from 'parse/elements/schema/Integer.ts'
+import { OasNumber } from 'parse/elements/schema/Number.ts'
+import { OasBoolean } from 'parse/elements/schema/Boolean.ts'
+import { OasString } from 'parse/elements/schema/String.ts'
+import { OasUnknown } from 'parse/elements/schema/Unknown.ts'
 import type { UnknownFields } from 'parse/elements/schema/Unknown.ts'
 import type { StringFields } from 'parse/elements/schema/String.ts'
 import type { BooleanFields } from 'parse/elements/schema/Boolean.ts'
@@ -101,7 +101,7 @@ export const toSchemaV3 = ({
         })
       }
 
-      return Union.create({ fields, trail, skipped, context })
+      return OasUnion.create({ fields, trail, skipped, context })
     })
     .with({ anyOf: P.array() }, matched => {
       const { anyOf, discriminator, title, description, ...skipped } = matched
@@ -119,7 +119,7 @@ export const toSchemaV3 = ({
         )
       }
 
-      return Union.create({ fields, trail, skipped, context })
+      return OasUnion.create({ fields, trail, skipped, context })
     })
     .with({ allOf: P.array() }, matched => {
       const { allOf, discriminator, title, description, ...skipped } = matched
@@ -137,7 +137,7 @@ export const toSchemaV3 = ({
         )
       }
 
-      return Intersection.create({ fields, trail, skipped, context })
+      return OasIntersection.create({ fields, trail, skipped, context })
     })
     .with({ type: 'object' }, matched => {
       const {
@@ -150,7 +150,7 @@ export const toSchemaV3 = ({
         ...skipped
       } = matched
 
-      const fields: ObjectOasFields = {
+      const fields: OasObjectFields = {
         title,
         description,
         properties: toOptionalSchemasV3({
@@ -166,7 +166,7 @@ export const toSchemaV3 = ({
         })
       }
 
-      return ObjectOas.create({ fields, trail, skipped, context })
+      return OasObject.create({ fields, trail, skipped, context })
     })
     .with({ type: 'array' }, matched => {
       const { type: _type, items, title, description, ...skipped } = matched
@@ -181,7 +181,7 @@ export const toSchemaV3 = ({
         })
       }
 
-      return ArrayOas.create({ fields, trail, skipped, context })
+      return OasArray.create({ fields, trail, skipped, context })
     })
     .with({ type: 'integer' }, matched => {
       const { type: _type, title, description, ...skipped } = matched
@@ -191,7 +191,7 @@ export const toSchemaV3 = ({
         description
       }
 
-      return IntegerOas.create({ fields, trail, skipped, context })
+      return OasInteger.create({ fields, trail, skipped, context })
     })
     .with({ type: 'number' }, matched => {
       const { type: _type, title, description, ...skipped } = matched
@@ -201,7 +201,7 @@ export const toSchemaV3 = ({
         description
       }
 
-      return NumberOas.create({ fields, trail, skipped, context })
+      return OasNumber.create({ fields, trail, skipped, context })
     })
     .with({ type: 'boolean' }, matched => {
       const { type: _type, title, description, ...skipped } = matched
@@ -211,7 +211,7 @@ export const toSchemaV3 = ({
         description
       }
 
-      return BooleanOas.create({ fields, trail, skipped, context })
+      return OasBoolean.create({ fields, trail, skipped, context })
     })
     .with({ type: 'string' }, matched => {
       const { type: _type, title, description, ...skipped } = matched
@@ -221,7 +221,7 @@ export const toSchemaV3 = ({
         description
       }
 
-      return StringOas.create({ fields, trail, skipped, context })
+      return OasString.create({ fields, trail, skipped, context })
     })
     .otherwise(matched => {
       const { type: _type, title, description, ...skipped } = matched
@@ -231,7 +231,7 @@ export const toSchemaV3 = ({
         description
       }
 
-      return UnknownOas.create({ fields, trail, skipped, context })
+      return OasUnknown.create({ fields, trail, skipped, context })
     })
 }
 

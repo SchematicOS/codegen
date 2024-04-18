@@ -7,22 +7,22 @@ import type {
   OasParameterRefData,
   OasRequestBodyRefData
 } from '@schematicos/types'
-import type { PathItem } from 'parse/elements/PathItem.ts'
-import type { Parameter } from 'parse/elements/Parameter.ts'
-import type { RequestBody } from 'parse/elements/RequestBody.ts'
-import type { Response } from 'parse/elements/Response.ts'
+import type { OasPathItem } from 'parse/elements/PathItem.ts'
+import type { OasParameter } from 'parse/elements/Parameter.ts'
+import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
+import type { OasResponse } from 'parse/elements/Response.ts'
 
 export type OperationFields = {
   path: string
   method: Method
-  pathItem: PathItem
+  pathItem: OasPathItem
   operationId: string | undefined
   summary: string | undefined
   tags: string[] | undefined
   description: string | undefined
-  parameters: (Parameter | OasParameterRefData)[] | undefined
-  requestBody: RequestBody | OasRequestBodyRefData | undefined
-  responses: Record<string, Response | OasResponseRefData>
+  parameters: (OasParameter | OasParameterRefData)[] | undefined
+  requestBody: OasRequestBody | OasRequestBodyRefData | undefined
+  responses: Record<string, OasResponse | OasResponseRefData>
   deprecated: boolean | undefined
 }
 
@@ -33,7 +33,7 @@ type ToOperationV3Args = {
   skipped: Record<string, unknown>
 }
 
-export class Operation extends OasBase {
+export class OasOperation extends OasBase {
   schematicType: 'operation' = 'operation'
   fields: OperationFields
 
@@ -44,10 +44,10 @@ export class Operation extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToOperationV3Args) {
-    return new Operation({ fields, trail, context, skipped })
+    return new OasOperation({ fields, trail, context, skipped })
   }
 
-  toSuccessResponse(): Response | OasResponseRefData {
+  toSuccessResponse(): OasResponse | OasResponseRefData {
     const { default: defaultResponse, ...httpCodeResponses } = this.responses
 
     const successCode = Object.keys(httpCodeResponses)

@@ -8,7 +8,7 @@ import type {
 } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { MediaType } from 'parse/elements/MediaType.ts'
+import type { OasMediaType } from 'parse/elements/MediaType.ts'
 
 export type ParameterFields = {
   name: string
@@ -19,7 +19,7 @@ export type ParameterFields = {
   allowEmptyValue: boolean | undefined
   schema: OasSchemaData | OasSchemaRefData | undefined
   examples: Record<string, OasExampleData | OasExampleRefData> | undefined
-  content: Record<string, MediaType> | undefined
+  content: Record<string, OasMediaType> | undefined
 }
 
 type ToParameterV3Args = {
@@ -29,7 +29,7 @@ type ToParameterV3Args = {
   context: ParseContext
 }
 
-export class Parameter extends OasBase {
+export class OasParameter extends OasBase {
   schematicType: 'parameter' = 'parameter'
   fields: ParameterFields
 
@@ -40,7 +40,7 @@ export class Parameter extends OasBase {
   }
 
   static create({ fields, trail, context, skipped }: ToParameterV3Args) {
-    return new Parameter({ fields, trail, context, skipped })
+    return new OasParameter({ fields, trail, context, skipped })
   }
 
   get name() {
