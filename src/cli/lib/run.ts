@@ -7,21 +7,22 @@ import { join } from 'path'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import { Reporter } from 'core/lib/Reporter.ts'
 import type { ReportArgs } from 'core/lib/Reporter.ts'
+import { LogStore } from 'core/lib/LogStore.ts'
 
 type RunArgs = {
   schema: string
   project: string
   schemaFormat: 'json' | 'yaml'
-  settingsConfig?: SettingsType
-  prettierConfig?: PrettierConfigType
+  settings?: SettingsType
+  prettier?: PrettierConfigType
 }
 
 export const run = async ({
   schema,
   project,
   schemaFormat,
-  settingsConfig,
-  prettierConfig
+  settings,
+  prettier
 }: RunArgs) => {
   const logStore = new LogStore()
 
@@ -44,8 +45,8 @@ export const run = async ({
 
   const artifactsMap = await generate({
     schemaModel,
-    settingsConfig,
-    prettierConfig,
+    settings,
+    prettier,
     reporter,
     transformers,
     typeSystem
@@ -60,60 +61,15 @@ export const run = async ({
     })
   })
 
-  const { logs, operations } = logStore.getLogs()
+  const { logs, operations } = logStore.generateOutput()
 
   writeFile({
-    content: logs.join('\n'),
+    content: logs,
     resolvedPath: join('./.schematic', project, 'logs', 'logs.txt')
   })
 
   writeFile({
-    content: Object.entries(operations).reduce((acc, [operation, logs]) => {
-      acc += `${operation}\n${logs.join('\n')}\n\n`
-      return acc
-    }, ''),
+    content: operations,
     resolvedPath: join('./.schematic', project, 'logs', 'operations.txt')
   })
-}
-
-class LogStore {
-  logs: string[] = []
-  operations: Record<string, string[]> = {}
-
-  addLog({ level, phase, trail, message }: ReportArgs) {
-    const fullLog = `${level
-      .toUpperCase()
-      .padEnd(6)} [${phase.toUpperCase()}]  ${trail.toString()} - ${message}`
-
-    this.logs.push(fullLog)
-
-    const { apiPath, method } = trail
-
-    if (apiPath && method) {
-      const operationId = `${trail.method?.toUpperCase()} ${trail.apiPath}`
-
-      if (!this.operations[operationId]) {
-        this.operations[operationId] = []
-      }
-
-      const subMethodPath = `${trail.toSubMethodTrail().toString()}`
-
-      const pathAndMessage = subMethodPath
-        ? `${subMethodPath} - ${message}`
-        : message
-
-      const subMethodLog = `${level
-        .toUpperCase()
-        .padEnd(6)} [${phase.toUpperCase()}]  ${pathAndMessage}`
-
-      this.operations[operationId].push(subMethodLog)
-    }
-  }
-
-  getLogs() {
-    return {
-      logs: this.logs,
-      operations: this.operations
-    }
-  }
 }

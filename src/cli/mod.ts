@@ -47,20 +47,19 @@ function printHelp(): void {
 }
 
 const main = (inputArgs: string[]) => {
-  const { help, project, schema, settings, prettier } =
-    parseArguments(inputArgs)
+  const args = parseArguments(inputArgs)
 
   // If help flag enabled, print help.
-  if (help) {
+  if (args.help) {
     printHelp()
     Deno.exit(0)
   }
 
-  const schemaFormat = schema.endsWith('.json') ? 'json' : 'yaml'
+  const schemaFormat = args.schema.endsWith('.json') ? 'json' : 'yaml'
 
-  const directory = join('./.schematic', project, 'config')
+  const directory = join('./.schematic', args.project, 'config')
 
-  const schemaPath = resolve(directory, schema)
+  const schemaPath = resolve(directory, args.schema)
 
   const schemaContent = readFile<string>(schemaPath)
 
@@ -69,20 +68,20 @@ const main = (inputArgs: string[]) => {
     return
   }
 
-  const settingsPath = resolve(directory, settings)
+  const settingsPath = resolve(directory, args.settings)
 
-  const settingsConfig = readFile<SettingsType>(settingsPath)
+  const settings = readFile<SettingsType>(settingsPath)
 
-  const prettierPath = resolve(directory, prettier)
+  const prettierPath = resolve(directory, args.prettier)
 
-  const prettierConfig = readFile<PrettierConfigType>(prettierPath)
+  const prettier = readFile<PrettierConfigType>(prettierPath)
 
   run({
     schema: schemaContent,
-    project,
+    project: args.project,
     schemaFormat,
-    settingsConfig,
-    prettierConfig
+    settings,
+    prettier
   })
 }
 

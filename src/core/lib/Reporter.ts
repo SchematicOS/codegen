@@ -1,4 +1,5 @@
 import type { Trail } from './Trail.ts'
+import type { PhaseType } from 'core/lib/types.ts'
 
 type ReporterArgs = {
   destination: (args: ReportArgs) => void
@@ -34,8 +35,6 @@ export class Reporter {
     return LOG_LEVELS[level] >= LOG_LEVELS[this.logLevel]
   }
 }
-
-type PhaseType = 'parse' | 'group' | 'render'
 
 type LogLevel = keyof typeof LOG_LEVELS
 

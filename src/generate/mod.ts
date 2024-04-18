@@ -1,5 +1,5 @@
 import type { PrettierConfigType, SettingsType } from '@schematicos/types'
-import * as prettier from 'prettier/standalone'
+import { format } from 'prettier/standalone'
 import typescript from 'prettier/plugins/typescript'
 import estree from 'prettier/plugins/estree'
 import invariant from 'tiny-invariant'
@@ -14,8 +14,8 @@ import type { Reporter } from 'core/lib/Reporter.ts'
 
 type GenerateArgs = {
   schemaModel: OasDocument
-  settingsConfig?: SettingsType
-  prettierConfig?: PrettierConfigType
+  settings?: SettingsType
+  prettier?: PrettierConfigType
   transformers: Transformer[]
   typeSystem: TypeSystem
   reporter: Reporter
@@ -23,13 +23,13 @@ type GenerateArgs = {
 
 export const generate = async ({
   schemaModel,
-  settingsConfig = {},
-  prettierConfig,
+  settings: s = {},
+  prettier,
   transformers,
   typeSystem,
   reporter
 }: GenerateArgs): Promise<Record<string, string>> => {
-  const settings = Settings.create(settingsConfig)
+  const settings = Settings.create(s)
 
   const contextData = new ContextData({
     files: new Map(),
@@ -73,26 +73,26 @@ export const generate = async ({
 
   const artifactsMap = context.render()
 
-  if (!prettierConfig) {
+  if (!prettier) {
     return artifactsMap
   }
 
-  return await prettifyArtifacts(artifactsMap, prettierConfig)
+  return await prettifyArtifacts(artifactsMap, prettier)
 }
 
 export const prettifyArtifacts = async (
   artifactsMap: Record<string, string>,
-  prettierConfig?: PrettierConfigType
+  prettier?: PrettierConfigType
 ): Promise<Record<string, string>> => {
-  if (!prettierConfig) {
+  if (!prettier) {
     return artifactsMap
   }
 
   const artifactPromises = Object.values(artifactsMap).map(artifact => {
-    return prettier.format(artifact, {
+    return format(artifact, {
       parser: 'typescript',
       plugins: [estree, typescript],
-      ...prettierConfig
+      ...prettier
     })
   })
 
