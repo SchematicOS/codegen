@@ -90,7 +90,7 @@ class LogStore {
     const { apiPath, method } = trail
 
     if (apiPath && method) {
-      const operationId = `${trail.apiPath} ${trail.method?.toUpperCase()}`
+      const operationId = `${trail.method?.toUpperCase()} ${trail.apiPath}`
 
       if (!this.operations[operationId]) {
         this.operations[operationId] = []
