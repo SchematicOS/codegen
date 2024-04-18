@@ -54,7 +54,7 @@ export const toComponentsV3 = ({
       examples,
       example: undefined,
       exampleKey: 'TEMP',
-      trail,
+      trail: trail.add('examples'),
       context
     }),
     requestBodies: toRequestBodiesV3({

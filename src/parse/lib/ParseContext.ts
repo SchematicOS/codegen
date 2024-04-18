@@ -1,5 +1,6 @@
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
+import get from 'npm:lodash-es/get.js'
 
 export type NotImplementedArgs =
   | {
@@ -20,9 +21,13 @@ type UnsupportedSection = {
   message?: string
 }
 export class ParseContext {
+  matched: number
+  noMatched: number
   unsupportedSections: UnsupportedSection[]
 
   private constructor() {
+    this.matched = 0
+    this.noMatched = 0
     this.unsupportedSections = []
   }
 
@@ -40,15 +45,38 @@ export class ParseContext {
             value: JSON.stringify(value, undefined, 2)
           })
 
+          const lookupUpData = get(trail.document, trail.add(key).toString())
+          const stringifiedLookedUpData = JSON.stringify(
+            lookupUpData,
+            undefined,
+            2
+          )
+
+          const actualStringifiedData = JSON.stringify(value, undefined, 2)
+
           // console.log(
-          //   `Not implemented in ${trail}: ${key} (${JSON.stringify(value, undefined, 2)})`
+          //   `Not implemented in ${trail.add(key)}: (${actualStringifiedData})`
           // )
+
+          if (stringifiedLookedUpData !== actualStringifiedData) {
+            console.log(
+              `NO MATCH: ${trail.add(
+                key
+              )}: GOT(${stringifiedLookedUpData}) EXPECTED(${actualStringifiedData})`
+            )
+            this.noMatched++
+          } else {
+            this.matched++
+          }
+
+          console.log('Matched:', this.matched)
+          console.log('No Matched:', this.noMatched)
         })
       })
       .with({ message: P._ }, ({ trail, message }) => {
         this.unsupportedSections.push({ trail, message })
 
-        // console.log(`Not implemented: ${trail} (${message})`)
+        console.log(`Not implemented: ${trail} (${message})`)
       })
       .exhaustive()
   }

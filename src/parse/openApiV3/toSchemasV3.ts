@@ -92,11 +92,15 @@ export const toSchemaV3 = ({
       const fields: UnionFields = {
         title,
         description,
-        discriminator: toDiscriminatorV3({ discriminator, trail, context }),
-        members: oneOf.map(item => {
+        discriminator: toDiscriminatorV3({
+          discriminator,
+          trail: trail.add('oneOf').add('discriminator'),
+          context
+        }),
+        members: oneOf.map((item, index) => {
           return toSchemaV3({
             schema: item,
-            trail: trail.add('members'),
+            trail: trail.add('oneOf').add('members').add(`[${index}]`),
             context
           })
         })
@@ -112,11 +116,15 @@ export const toSchemaV3 = ({
         description,
         discriminator: toDiscriminatorV3({
           discriminator,
-          trail: trail.add('discriminator'),
+          trail: trail.add('oneOf').add('discriminator'),
           context
         }),
-        members: anyOf.map(item =>
-          toSchemaV3({ schema: item, trail: trail.add('members'), context })
+        members: anyOf.map((item, index) =>
+          toSchemaV3({
+            schema: item,
+            trail: trail.add('oneOf').add('members').add(`[${index}]`),
+            context
+          })
         )
       }
 
@@ -130,11 +138,15 @@ export const toSchemaV3 = ({
         description,
         discriminator: toDiscriminatorV3({
           discriminator,
-          trail: trail.add('discriminator'),
+          trail: trail.add('allOf').add('discriminator'),
           context
         }),
-        members: allOf.map(item =>
-          toSchemaV3({ schema: item, trail: trail.add('members'), context })
+        members: allOf.map((item, index) =>
+          toSchemaV3({
+            schema: item,
+            trail: trail.add('allOf').add('members').add(`[${index}]`),
+            context
+          })
         )
       }
 

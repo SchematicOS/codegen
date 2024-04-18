@@ -1,4 +1,4 @@
-import { parseContent } from 'parse/lib/parseContent.ts'
+import { parseContent } from 'parse/mod.ts'
 import type { SettingsType, PrettierConfigType } from '@schematicos/types'
 import { generate } from 'generate/mod.ts'
 import { writeFile } from './writeFile.ts'
