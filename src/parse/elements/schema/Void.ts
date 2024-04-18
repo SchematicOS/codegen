@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import { Trail } from 'parse/lib/Trail.ts'
-import { ParseContext } from 'parse/lib/ParseContext.ts'
+import { Trail } from 'core/lib/Trail.ts'
+import { ParseContext } from 'core/lib/ParseContext.ts'
 
 export type VoidFields = {
   title?: string

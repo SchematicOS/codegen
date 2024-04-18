@@ -1,4 +1,4 @@
-import type { GenerateContext } from '../context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import { toRefName } from '../helpers/ref.ts'
 import { Import } from './Import.ts'
 import { normalize } from 'path'

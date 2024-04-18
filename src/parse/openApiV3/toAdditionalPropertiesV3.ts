@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from '../lib/ParseContext.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
 import { toSchemaV3 } from './toSchemasV3.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 
 type ToAdditionalPropertiesV3Args = {
   additionalProperties:

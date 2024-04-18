@@ -1,7 +1,4 @@
-import type {
-  GenerateContext,
-  RegisterArgs
-} from '../context/GenerateContext.ts'
+import type { GenerateContext, RegisterArgs } from 'core/lib/GenerateContext.ts'
 import { EMPTY } from '../constants.ts'
 import type { Stringable } from '@schematicos/types'
 

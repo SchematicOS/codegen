@@ -1,7 +1,7 @@
 import type { OpenAPIV3_1 } from 'openapi-types'
 import type { OasRefData } from '@schematicos/types'
-import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import { OasRef } from 'parse/elements/Ref.ts'
 import type { RefFields } from 'parse/elements/Ref.ts'
 

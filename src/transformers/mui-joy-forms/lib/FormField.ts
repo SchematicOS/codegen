@@ -1,4 +1,4 @@
-import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import { Import } from 'generate/elements/Import.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'

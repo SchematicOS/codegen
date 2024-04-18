@@ -4,7 +4,7 @@ import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
 import { KeyValues } from 'generate/elements/KeyValues.ts'
-import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 
 type QueryCallProps = {

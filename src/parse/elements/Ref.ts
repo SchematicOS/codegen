@@ -1,7 +1,7 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { OasRefData } from '@schematicos/types'
-import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 
 export type RefFields<T extends OasRefData['refType']> = {
   refType: T

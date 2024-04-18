@@ -1,6 +1,6 @@
 import type { EntityType } from '../languages/typescript/EntityType.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
-import type { GenerateContext } from './context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
 import type { Stringable, OasRefData } from '@schematicos/types'
 import type { OasRef } from 'parse/elements/Ref.ts'

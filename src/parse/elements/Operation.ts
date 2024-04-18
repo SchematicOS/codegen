@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { ParseContext } from '../lib/ParseContext.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import type { Method } from '@schematicos/types'
 import type { OasPathItem } from 'parse/elements/PathItem.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'

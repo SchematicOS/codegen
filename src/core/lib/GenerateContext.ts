@@ -1,12 +1,16 @@
-import { isRef, toRefName } from '../helpers/ref.ts'
-import type { TypeSystemArgs, RefToResolved, TypeSystem } from '../types.ts'
+import { isRef, toRefName } from '../../generate/helpers/ref.ts'
+import type {
+  TypeSystemArgs,
+  RefToResolved,
+  TypeSystem
+} from '../../generate/types.ts'
 import type { OasRefData, Stringable } from '@schematicos/types'
 import { P, match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
-import { Import } from '../elements/Import.ts'
+import { Import } from '../../generate/elements/Import.ts'
 import { normalize } from 'path'
-import type { Settings } from '../settings/Settings.ts'
+import type { Settings } from '../../generate/settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { ReportArgs } from 'core/lib/Reporter.ts'

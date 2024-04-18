@@ -1,8 +1,8 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from '../lib/ParseContext.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import { toExamplesV3 } from './toExamplesV3.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import { OasMediaType } from 'parse/elements/MediaType.ts'
 import type { MediaTypeFields } from 'parse/elements/MediaType.ts'
 

@@ -1,8 +1,8 @@
-import type { ParseContext } from '../lib/ParseContext.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import { isRef } from '../util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import { OasExample } from 'parse/elements/Example.ts'
 import type { ExampleFields } from 'parse/elements/Example.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
@@ -47,7 +47,9 @@ export const toExamplesV3 = ({
   | Record<string, OasExample | OasRef<'example'>>
   | undefined => {
   if (example && examples) {
-    context.unexpectedValue({
+    context.report({
+      phase: 'group',
+      level: 'warn',
       trail,
       message: `Both example and examples are defined for ${exampleKey}`
     })

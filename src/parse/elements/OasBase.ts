@@ -1,5 +1,5 @@
-import type { Trail } from 'parse/lib/Trail.ts'
-import type { ParseContext } from 'parse/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
 
 type OasBaseArgs = {
   trail: Trail

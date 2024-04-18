@@ -1,6 +1,6 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from '../lib/ParseContext.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import { OasDiscriminator } from 'parse/elements/Discriminator.ts'
 import type { DiscriminatorFields } from 'parse/elements/Discriminator.ts'
 

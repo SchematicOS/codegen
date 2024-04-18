@@ -1,5 +1,5 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import type { Stringable } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
 import { Key } from 'generate/elements/Key.ts'

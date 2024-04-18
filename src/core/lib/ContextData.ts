@@ -1,6 +1,6 @@
 import type { FileContents } from './GenerateContext.ts'
-import type { Settings } from '../settings/Settings.ts'
-import type { TypeSystem } from '../types.ts'
+import type { Settings } from '../../generate/settings/Settings.ts'
+import type { TypeSystem } from '../../generate/types.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 
 type ConstructorArgs = {

@@ -1,4 +1,4 @@
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { Trail } from './Trail.ts'
 
 type ReporterArgs = {
   destination: (args: ReportArgs) => void

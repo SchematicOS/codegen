@@ -1,5 +1,5 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import type { OasOperationData, Stringable } from '@schematicos/types'
 

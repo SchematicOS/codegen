@@ -1,7 +1,7 @@
 import type { OasContactData, OasLicenseData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
-import type { Trail } from 'parse/lib/Trail.ts'
-import type { ParseContext } from 'parse/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
 import { OasInfo } from 'parse/elements/Info.ts'
 import type { InfoFields } from 'parse/elements/Info.ts'
 

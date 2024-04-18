@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from '../lib/ParseContext.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import { OasPathItem } from 'parse/elements/PathItem.ts'
 import type { PathItemFields } from 'parse/elements/PathItem.ts'
 

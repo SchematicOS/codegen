@@ -1,6 +1,6 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParseContext } from '../lib/ParseContext.ts'
-import type { Trail } from 'parse/lib/Trail.ts'
+import type { ParseContext } from 'core/lib/ParseContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
 import { OasTag } from 'parse/elements/Tag.ts'
 import type { TagFields } from 'parse/elements/Tag.ts'
 

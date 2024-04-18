@@ -1,5 +1,5 @@
 import { FormField } from './FormField.ts'
-import type { GenerateContext } from 'generate/context/GenerateContext.ts'
+import type { GenerateContext } from 'core/lib/GenerateContext.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
