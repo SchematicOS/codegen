@@ -53,13 +53,6 @@ const toProperties = ({
 }: ToPropertiesArgs): KeyValues => {
   const { parameters = [], requestBody } = operation
 
-  const path = toPathTemplate({
-    operation,
-    queryArg
-  })
-
-  const method = operation.method.toUpperCase()
-
   const resolvedParameters = parameters.map(item => {
     return isRef(item) ? context.resolveRef(item) : item
   })
@@ -79,22 +72,10 @@ const toProperties = ({
   })
 
   return KeyValues.create({
-    path,
-    method,
+    path: operation.toPathTemplate(queryArg),
+    method: operation.method.toUpperCase(),
     params,
     headers,
     body: requestBody ? `${queryArg}.body` : EMPTY
   })
-}
-
-type ToPathTemplateArgs = {
-  operation: OasOperation
-  queryArg: string
-}
-
-const toPathTemplate = ({ operation, queryArg }: ToPathTemplateArgs) => {
-  return `\`${operation.path.replaceAll(
-    /{([^}]*)}/g,
-    '${' + queryArg + '.$1}'
-  )}\``
 }

@@ -38,9 +38,11 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
     this.operation = operation
     this.operationSettings = operationSettings
 
+    const destinationPath = operationSettings.getExportPath()
+
     this.endpointResponse = toOperationResponse({
       context,
-      destinationPath: operationSettings.getExportPath(),
+      destinationPath,
       operation
     })
 
@@ -52,7 +54,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
 
     this.endpointArg = toEndpointArg({
       context,
-      destinationPath: operationSettings.getExportPath(),
+      destinationPath,
       operation
     })
 
@@ -63,23 +65,13 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
     })
 
     this.register({
-      definition: this.endpointResponse,
-      destinationPath: this.endpointResponse.destinationPath
-    })
-
-    this.register({
-      definition: this.endpointResponseType,
-      destinationPath: this.endpointResponseType.destinationPath
-    })
-
-    this.register({
-      definition: this.endpointArg,
-      destinationPath: this.endpointArg.destinationPath
-    })
-
-    this.register({
-      definition: this.endpointArgType,
-      destinationPath: this.endpointArgType.destinationPath
+      definitions: [
+        this.endpointResponse,
+        this.endpointResponseType,
+        this.endpointArg,
+        this.endpointArgType
+      ],
+      destinationPath
     })
   }
 

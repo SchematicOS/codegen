@@ -54,6 +54,10 @@ export class OasOperation extends OasBase {
     return successCode ? httpCodeResponses[successCode] : defaultResponse
   }
 
+  toPathTemplate(queryArg: string) {
+    return `\`${this.path.replaceAll(/{([^}]*)}/g, '${' + queryArg + '.$1}')}\``
+  }
+
   get path() {
     return this.fields.path
   }

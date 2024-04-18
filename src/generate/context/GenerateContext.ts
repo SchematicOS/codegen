@@ -37,6 +37,10 @@ export type RegisterArgs =
       destinationPath: string
     }
   | {
+      definitions: Definition[]
+      destinationPath: string
+    }
+  | {
       content: Stringable
       destinationPath: string
     }
@@ -123,10 +127,13 @@ export class GenerateContext {
           }
         })
       })
+      .with({ definitions: P.nonNullable }, ({ definitions }) => {
+        definitions.forEach(definition => {
+          currentFile.definitions.set(`${definition.identifier}`, definition)
+        })
+      })
       .with({ definition: P.nonNullable }, ({ definition }) => {
-        const { identifier } = definition
-
-        currentFile.definitions.set(identifier.toString(), definition)
+        currentFile.definitions.set(`${definition.identifier}`, definition)
       })
       .with({ content: P.nonNullable }, ({ content }) => {
         currentFile.content.push(content)
