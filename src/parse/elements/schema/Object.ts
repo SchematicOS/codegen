@@ -4,12 +4,12 @@ import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 
 export type ObjectOasFields = {
-  title: string | undefined
-  description: string | undefined
-  default: Record<string, unknown> | undefined
-  properties: Record<string, OasSchemaData | OasSchemaRefData> | undefined
-  required: string[] | undefined
-  additionalProperties: boolean | OasSchemaData | OasSchemaRefData | undefined
+  title?: string
+  description?: string
+  default?: Record<string, unknown>
+  properties?: Record<string, OasSchemaData | OasSchemaRefData>
+  required?: string[]
+  additionalProperties?: boolean | OasSchemaData | OasSchemaRefData
 }
 
 type ToObjectV3Args = {

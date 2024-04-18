@@ -3,7 +3,7 @@ import { toComponentsV3 } from './toComponentsV3.ts'
 import { ParseContext } from 'parse/lib/ParseContext.ts'
 import { mockComponents } from 'parse/openApiV3/components/mock.ts'
 import { Trail } from 'parse/lib/Trail.ts'
-import type { OasComponentsData } from '@schematicos/types'
+import type { ComponentsFields } from 'parse/elements/Components.ts'
 
 Deno.test('OpenAPI v3 components parse', () => {
   const components = toComponentsV3({
@@ -12,7 +12,9 @@ Deno.test('OpenAPI v3 components parse', () => {
     context: ParseContext.create()
   })
 
-  const expected: Omit<OasComponentsData, 'schematicType'> = {
+  const expected: ComponentsFields = {
+    examples: undefined,
+    headers: undefined,
     models: {
       UpdateProjectRequest: {
         additionalProperties: undefined,

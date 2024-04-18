@@ -1,6 +1,17 @@
-import type { NotImplementedArgs, UnexpectedValueArgs } from './types.ts'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
+
+export type NotImplementedArgs =
+  | {
+      trail: Trail
+      skipped: Record<string, unknown>
+    }
+  | UnexpectedValueArgs
+
+export type UnexpectedValueArgs = {
+  trail: Trail
+  message: string
+}
 
 type UnsupportedSection = {
   trail: Trail

@@ -1,11 +1,6 @@
 import { isRef, toRefName } from '../helpers/ref.ts'
 import type { TypeSystemArgs, RefToResolved, TypeSystem } from '../types.ts'
-import type {
-  Method,
-  OasRefData,
-  OasDocumentData,
-  Stringable
-} from '@schematicos/types'
+import type { Method, OasRefData, Stringable } from '@schematicos/types'
 import { P, match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
@@ -13,7 +8,7 @@ import { Import } from '../elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
-import { Document } from 'parse/elements/Document.ts'
+import type { Document } from 'parse/elements/Document.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -154,7 +149,6 @@ export class GenerateContext {
 
     const resolved = match(arg.refType)
       .with('schema', () => c?.models?.[refName])
-      .with('pathItem', () => c?.pathItems?.[refName])
       .with('requestBody', () => c?.requestBodies?.[refName])
       .with('parameter', () => c?.parameters?.[refName])
       .with('response', () => c?.responses?.[refName])

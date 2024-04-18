@@ -1,5 +1,4 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
-import type { OasDocumentData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Tag } from 'parse/elements/Tag.ts'
@@ -22,7 +21,7 @@ type ToDocumentV3Args = {
   context: ParseContext
 }
 
-export class Document extends OasBase implements OasDocumentData {
+export class Document extends OasBase {
   schematicType: 'openapi' = 'openapi'
   fields: DocumentFields
 

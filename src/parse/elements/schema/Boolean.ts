@@ -1,10 +1,14 @@
-import type { OasBooleanData } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 
+export type BooleanFields = {
+  title?: string
+  description?: string
+}
+
 type ToBooleanV3Args = {
-  fields: Omit<OasBooleanData, 'schematicType' | 'type'>
+  fields: BooleanFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -13,7 +17,7 @@ type ToBooleanV3Args = {
 export class BooleanOas extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'boolean' = 'boolean'
-  fields: Omit<OasBooleanData, 'schematicType' | 'type'>
+  fields: BooleanFields
 
   private constructor({ fields, trail, skipped, context }: ToBooleanV3Args) {
     super({ trail, skipped, context })

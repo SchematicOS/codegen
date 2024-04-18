@@ -1,10 +1,13 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasDiscriminatorData } from '@schematicos/types'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 
+export type DiscriminatorFields = {
+  propertyName: string
+}
+
 type ToDiscriminatorV3Args = {
-  fields: Omit<OasDiscriminatorData, 'schematicType'>
+  fields: DiscriminatorFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -12,7 +15,7 @@ type ToDiscriminatorV3Args = {
 
 export class Discriminator extends OasBase {
   schematicType: 'discriminator' = 'discriminator'
-  fields: Omit<OasDiscriminatorData, 'schematicType'>
+  fields: DiscriminatorFields
 
   private constructor({
     fields,

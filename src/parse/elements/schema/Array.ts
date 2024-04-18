@@ -1,7 +1,17 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasArrayData } from '@schematicos/types'
+import type {
+  OasArrayData,
+  OasSchemaData,
+  OasSchemaRefData
+} from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
+
+export type ArrayFields = {
+  items: OasSchemaData | OasSchemaRefData
+  title?: string
+  description?: string
+}
 
 type ToArrayV3Args = {
   fields: Omit<OasArrayData, 'schematicType' | 'type'>

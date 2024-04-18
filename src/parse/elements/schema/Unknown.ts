@@ -1,10 +1,14 @@
-import type { OasUnknownData } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 
+export type UnknownFields = {
+  title?: string
+  description?: string
+}
+
 type ToUnknownV3Args = {
-  fields: Omit<OasUnknownData, 'schematicType' | 'type'>
+  fields: UnknownFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -13,7 +17,7 @@ type ToUnknownV3Args = {
 export class UnknownOas extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'unknown' = 'unknown'
-  fields: Omit<OasUnknownData, 'schematicType' | 'type'>
+  fields: UnknownFields
 
   private constructor({ fields, trail, skipped, context }: ToUnknownV3Args) {
     super({ trail, skipped, context })

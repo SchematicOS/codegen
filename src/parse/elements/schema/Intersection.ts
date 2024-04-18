@@ -1,10 +1,18 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import type { OasIntersectionData } from '@schematicos/types'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
+import type { Discriminator } from 'parse/elements/Discriminator.ts'
+import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
+
+export type IntersectionFields = {
+  title?: string
+  description?: string
+  discriminator?: Discriminator
+  members: (OasSchemaData | OasSchemaRefData)[]
+}
 
 type ToIntersectionV3Args = {
-  fields: Omit<OasIntersectionData, 'schematicType' | 'type'>
+  fields: IntersectionFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -13,7 +21,7 @@ type ToIntersectionV3Args = {
 export class Intersection extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'intersection' = 'intersection'
-  fields: Omit<OasIntersectionData, 'schematicType' | 'type'>
+  fields: IntersectionFields
 
   private constructor({
     fields,

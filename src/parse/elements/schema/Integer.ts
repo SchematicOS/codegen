@@ -1,10 +1,14 @@
-import type { OasIntegerData } from '@schematicos/types'
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'parse/lib/Trail.ts'
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 
+export type IntegerFields = {
+  title?: string
+  description?: string
+}
+
 type ToIntegerV3Args = {
-  fields: Omit<OasIntegerData, 'schematicType' | 'type'>
+  fields: IntegerFields
   trail: Trail
   skipped: Record<string, unknown>
   context: ParseContext
@@ -13,7 +17,7 @@ type ToIntegerV3Args = {
 export class IntegerOas extends OasBase {
   schematicType: 'schema' = 'schema'
   type: 'integer' = 'integer'
-  fields: Omit<OasIntegerData, 'schematicType' | 'type'>
+  fields: IntegerFields
 
   private constructor({ fields, trail, skipped, context }: ToIntegerV3Args) {
     super({ trail, skipped, context })

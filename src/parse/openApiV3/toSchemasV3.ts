@@ -3,17 +3,13 @@ import { toDiscriminatorV3 } from './toDiscriminatorV3.ts'
 import { toAdditionalPropertiesV3 } from './toAdditionalPropertiesV3.ts'
 import type { ParseContext } from '../lib/ParseContext.ts'
 import { isRef } from '../util/isRef.ts'
-import type {
-  OasSchemaData,
-  OasSchemaRefData,
-  OasStringData
-} from '@schematicos/types'
+import type { OasSchemaData, OasSchemaRefData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { match, P } from 'ts-pattern'
 import type { Trail } from 'parse/lib/Trail.ts'
-import { stripUndefined } from 'parse/util/stripUndefined.ts'
 import { Union } from 'parse/elements/schema/Union.ts'
-import { ObjectOas, ObjectOasFields } from 'parse/elements/schema/Object.ts'
+import { ObjectOas } from 'parse/elements/schema/Object.ts'
+import type { ObjectOasFields } from 'parse/elements/schema/Object.ts'
 import { ArrayOas } from 'parse/elements/schema/Array.ts'
 import { Intersection } from 'parse/elements/schema/Intersection.ts'
 import { IntegerOas } from 'parse/elements/schema/Integer.ts'
@@ -21,6 +17,14 @@ import { NumberOas } from 'parse/elements/schema/Number.ts'
 import { BooleanOas } from 'parse/elements/schema/Boolean.ts'
 import { StringOas } from 'parse/elements/schema/String.ts'
 import { UnknownOas } from 'parse/elements/schema/Unknown.ts'
+import type { UnknownFields } from 'parse/elements/schema/Unknown.ts'
+import type { StringFields } from 'parse/elements/schema/String.ts'
+import type { BooleanFields } from 'parse/elements/schema/Boolean.ts'
+import type { NumberFields } from 'parse/elements/schema/Number.ts'
+import type { IntegerFields } from 'parse/elements/schema/Integer.ts'
+import type { ArrayFields } from 'parse/elements/schema/Array.ts'
+import type { UnionFields } from 'parse/elements/schema/Union.ts'
+import type { IntersectionFields } from 'parse/elements/schema/Intersection.ts'
 
 type ToSchemasV3Args = {
   schemas: Record<string, OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject>
@@ -84,12 +88,10 @@ export const toSchemaV3 = ({
     .with({ oneOf: P.array() }, matched => {
       const { oneOf, discriminator, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
+      const fields: UnionFields = {
         title,
         description,
-        discriminator: discriminator
-          ? toDiscriminatorV3({ discriminator, trail, context })
-          : undefined,
+        discriminator: toDiscriminatorV3({ discriminator, trail, context }),
         members: oneOf.map(item => {
           return toSchemaV3({
             schema: item,
@@ -97,47 +99,43 @@ export const toSchemaV3 = ({
             context
           })
         })
-      })
+      }
 
       return Union.create({ fields, trail, skipped, context })
     })
     .with({ anyOf: P.array() }, matched => {
       const { anyOf, discriminator, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
+      const fields: UnionFields = {
         title,
         description,
-        discriminator: discriminator
-          ? toDiscriminatorV3({
-              discriminator,
-              trail: trail.add('discriminator'),
-              context
-            })
-          : undefined,
+        discriminator: toDiscriminatorV3({
+          discriminator,
+          trail: trail.add('discriminator'),
+          context
+        }),
         members: anyOf.map(item =>
           toSchemaV3({ schema: item, trail: trail.add('members'), context })
         )
-      })
+      }
 
       return Union.create({ fields, trail, skipped, context })
     })
     .with({ allOf: P.array() }, matched => {
       const { allOf, discriminator, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
+      const fields: IntersectionFields = {
         title,
         description,
-        discriminator: discriminator
-          ? toDiscriminatorV3({
-              discriminator,
-              trail: trail.add('discriminator'),
-              context
-            })
-          : undefined,
+        discriminator: toDiscriminatorV3({
+          discriminator,
+          trail: trail.add('discriminator'),
+          context
+        }),
         members: allOf.map(item =>
           toSchemaV3({ schema: item, trail: trail.add('members'), context })
         )
-      })
+      }
 
       return Intersection.create({ fields, trail, skipped, context })
     })
@@ -146,7 +144,6 @@ export const toSchemaV3 = ({
         type: _type,
         title,
         description,
-        default: defaultValue,
         properties,
         required,
         additionalProperties,
@@ -156,7 +153,6 @@ export const toSchemaV3 = ({
       const fields: ObjectOasFields = {
         title,
         description,
-        default: defaultValue,
         properties: toOptionalSchemasV3({
           schemas: properties,
           trail: trail.add('properties'),
@@ -173,80 +169,67 @@ export const toSchemaV3 = ({
       return ObjectOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'array' }, matched => {
-      const { type, items, ...skipped } = matched
+      const { type: _type, items, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
-        type: type,
+      const fields: ArrayFields = {
+        title,
+        description,
         items: toSchemaV3({
           schema: items,
           trail: trail.add('items'),
           context
         })
-      })
+      }
 
       return ArrayOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'integer' }, matched => {
-      const { type, title, description, ...skipped } = matched
+      const { type: _type, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
-        type,
+      const fields: IntegerFields = {
         title,
         description
-      })
+      }
 
       return IntegerOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'number' }, matched => {
-      const { type, title, description, ...skipped } = matched
+      const { type: _type, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
-        type,
+      const fields: NumberFields = {
         title,
         description
-      })
+      }
 
       return NumberOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'boolean' }, matched => {
       const { type: _type, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
+      const fields: BooleanFields = {
         title,
         description
-      })
+      }
 
       return BooleanOas.create({ fields, trail, skipped, context })
     })
     .with({ type: 'string' }, matched => {
-      const {
-        type,
-        title,
-        description,
-        pattern,
-        format,
-        enum: enums,
-        ...skipped
-      } = matched
+      const { type: _type, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
-        type,
+      const fields: StringFields = {
         title,
-        description,
-        pattern,
-        enums: enums as string[] | undefined,
-        format: format as OasStringData['format']
-      })
+        description
+      }
 
       return StringOas.create({ fields, trail, skipped, context })
     })
     .otherwise(matched => {
       const { type: _type, title, description, ...skipped } = matched
 
-      const fields = stripUndefined({
+      const fields: UnknownFields = {
         title,
         description
-      })
+      }
 
       return UnknownOas.create({ fields, trail, skipped, context })
     })

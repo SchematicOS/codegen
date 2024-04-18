@@ -1,6 +1,5 @@
 import type { ParseContext } from 'parse/lib/ParseContext.ts'
 import type {
-  OasComponentsData,
   OasExampleRefData,
   OasHeaderRefData,
   OasParameterRefData,
@@ -18,12 +17,12 @@ import type { RequestBody } from 'parse/elements/RequestBody.ts'
 import type { Header } from 'parse/elements/Header.ts'
 
 export type ComponentsFields = {
-  models: Record<string, OasSchemaData | OasSchemaRefData> | undefined
-  responses: Record<string, Response | OasResponseRefData> | undefined
-  parameters: Record<string, Parameter | OasParameterRefData> | undefined
-  examples: Record<string, Example | OasExampleRefData> | undefined
-  requestBodies: Record<string, RequestBody | OasRequestBodyRefData> | undefined
-  headers: Record<string, Header | OasHeaderRefData> | undefined
+  models?: Record<string, OasSchemaData | OasSchemaRefData>
+  responses?: Record<string, Response | OasResponseRefData>
+  parameters?: Record<string, Parameter | OasParameterRefData>
+  examples?: Record<string, Example | OasExampleRefData>
+  requestBodies?: Record<string, RequestBody | OasRequestBodyRefData>
+  headers?: Record<string, Header | OasHeaderRefData>
 }
 
 type ToComponentsV3Args = {
@@ -33,7 +32,7 @@ type ToComponentsV3Args = {
   context: ParseContext
 }
 
-export class Components extends OasBase implements OasComponentsData {
+export class Components extends OasBase {
   schematicType: 'components' = 'components'
   fields: ComponentsFields
 
