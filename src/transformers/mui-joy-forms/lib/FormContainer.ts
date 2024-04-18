@@ -75,13 +75,6 @@ export class FormContainer extends SchematicBase implements Stringable {
     const value = toBodySchemaValue({ context, operation })
 
     if (!value) {
-      context.report({
-        location: 'operation',
-        method: operation.method,
-        path: operation.path,
-        message: 'No body schema found'
-      })
-
       // @TODO: Would creating an object with an invalid status work better than returning undefined?
       return
     }
@@ -186,10 +179,16 @@ type ToBodySchemaValueArgs = {
 }
 
 const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {
-  const { requestBody, path, method } = operation
+  const { requestBody } = operation
 
   if (!requestBody) {
-    console.log(`${path} ${method} has no requestBody`)
+    context.report({
+      phase: 'group',
+      level: 'warn',
+      trail: operation.trail,
+      message: 'No requestBody found'
+    })
+
     return
   }
 
@@ -205,12 +204,23 @@ const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {
     .otherwise(() => undefined)
 
   if (!bodySchemaValue) {
-    console.log(`${path} ${method} has no body schema`)
+    context.report({
+      phase: 'group',
+      level: 'warn',
+      trail: operation.trail,
+      message: 'No body schema found'
+    })
     return
   }
 
   if (bodySchemaValue.type !== 'object') {
-    console.log(`${path} ${method} body schema is not an object`)
+    context.report({
+      phase: 'group',
+      level: 'warn',
+      trail: operation.trail,
+      message: 'Body schema is not an object'
+    })
+
     return
   }
 

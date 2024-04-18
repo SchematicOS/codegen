@@ -2,7 +2,8 @@
   "name": "@schematicos/codegen",
   "version": "0.0.1",
   "tasks": {
-    "types": "deno check **/*.ts"
+    "types": "deno check **/*.ts",
+    "generate": "deno run --allow-read --allow-write --allow-env src/cli/mod.ts -d=./.schematic/deno-subhosting"
   },
   "exports": {
     "./cli": "./src/cli/mod.ts"
@@ -20,6 +21,7 @@
     "parse/": "./src/parse/",
     "path": "jsr:@std/path@0.222.1",
     "prettier": "npm:prettier@3.2.5",
+    "core/": "./src/core/",
     "rtk-query/": "./src/transformers/rtk-query/",
     "tiny-invariant": "npm:tiny-invariant@1.3.3",
     "ts-pattern": "npm:ts-pattern@5.1.1",

@@ -13,9 +13,8 @@ export const writeFile = ({ content, resolvedPath }: WriteFileArgs) => {
       Deno.mkdirSync(dir, { recursive: true })
     }
 
-    console.log(`Writing file to ${resolvedPath}`)
-    const encoder = new TextEncoder();
-    const encoded = encoder.encode(content);
+    const encoder = new TextEncoder()
+    const encoded = encoder.encode(content)
 
     Deno.writeFileSync(resolvedPath, encoded)
   } catch (error) {

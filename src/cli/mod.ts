@@ -1,25 +1,25 @@
 import { parseArgs } from 'cli/parse-args'
 import { run } from './lib/run.ts'
-import { resolve } from 'path'
+import { join, resolve } from 'path'
 import { readFile } from './lib/readFile.ts'
 import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 
 const parseArguments = (args: string[]) => {
   const parsedArgs = parseArgs(args, {
     boolean: ['help'],
-    string: ['schema', 'settings', 'prettier', 'directory'],
+    string: ['schema', 'settings', 'prettier', 'project'],
     alias: {
       help: 'h',
       schema: 's',
       settings: 't',
-      prettier: 'p',
-      directory: 'd'
+      prettier: 'f',
+      project: 'p'
     },
     default: {
       schema: 'schema.json',
       settings: 'settings.json',
       prettier: 'prettier.json',
-      directory: '.schematic'
+      project: '.schematic'
     },
     stopEarly: false,
     '--': true
@@ -38,16 +38,16 @@ function printHelp(): void {
     "  -t, --settings            Path to settings file. Defaults to 'settings.json'"
   )
   console.log(
-    "  -p, --prettier            Path to prettier config file. Defaults to 'prettier.json'"
+    "  -f, --prettier            Path to prettier config file. Defaults to 'prettier.json'"
   )
   console.log(
-    "  -d, --directory           Directory containing schema and settings files. Defaults to './.schematic'"
+    "  -p, --project           Directory in './.schematic' containing schema and settings files. Defaults to 'petstore'"
   )
   console.log('  -h, --help                Display this help and exit')
 }
 
 const main = (inputArgs: string[]) => {
-  const { help, directory, schema, settings, prettier } =
+  const { help, project, schema, settings, prettier } =
     parseArguments(inputArgs)
 
   // If help flag enabled, print help.
@@ -57,6 +57,8 @@ const main = (inputArgs: string[]) => {
   }
 
   const schemaFormat = schema.endsWith('.json') ? 'json' : 'yaml'
+
+  const directory = join('./.schematic', project, 'config')
 
   const schemaPath = resolve(directory, schema)
 
@@ -77,6 +79,7 @@ const main = (inputArgs: string[]) => {
 
   run({
     schema: schemaContent,
+    project,
     schemaFormat,
     settingsConfig,
     prettierConfig

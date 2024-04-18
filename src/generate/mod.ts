@@ -1,8 +1,4 @@
-import type {
-  PrettierConfigType,
-  OasDocumentData,
-  SettingsType
-} from '@schematicos/types'
+import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 import * as prettier from 'prettier/standalone'
 import typescript from 'prettier/plugins/typescript'
 import estree from 'prettier/plugins/estree'
@@ -14,6 +10,7 @@ import type { TypeSystem, Transformer } from './types.ts'
 import { Identifier } from './elements/Identifier.ts'
 import { Definition } from './elements/Definition.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
+import type { Reporter } from 'core/lib/Reporter.ts'
 
 type GenerateArgs = {
   schemaModel: OasDocument
@@ -21,6 +18,7 @@ type GenerateArgs = {
   prettierConfig?: PrettierConfigType
   transformers: Transformer[]
   typeSystem: TypeSystem
+  reporter: Reporter
 }
 
 export const generate = async ({
@@ -28,9 +26,10 @@ export const generate = async ({
   settingsConfig = {},
   prettierConfig,
   transformers,
-  typeSystem
+  typeSystem,
+  reporter
 }: GenerateArgs): Promise<Record<string, string>> => {
-  const settings = new Settings(settingsConfig)
+  const settings = Settings.create(settingsConfig)
 
   const contextData = new ContextData({
     files: new Map(),
@@ -39,7 +38,7 @@ export const generate = async ({
     typeSystem
   })
 
-  const context = new GenerateContext({ data: contextData })
+  const context = GenerateContext.create({ data: contextData, reporter })
 
   transformers.forEach(({ id, transform }) => {
     transform({

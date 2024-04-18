@@ -7,6 +7,7 @@ type ConstructorArgs = {
   method?: string
   schemaRef?: string
   document?: OpenAPIV3.Document
+  subMethodIndex?: number
 }
 
 export class Trail implements Stringable {
@@ -15,19 +16,22 @@ export class Trail implements Stringable {
   method: string | undefined
   schemaRef: string | undefined
   document: OpenAPIV3.Document | undefined
+  subMethodIndex?: number
 
   private constructor({
     path = [],
     apiPath,
     method,
     schemaRef,
-    document
+    document,
+    subMethodIndex
   }: ConstructorArgs) {
     this.path = Array.isArray(path) ? path : [path]
     this.apiPath = apiPath
     this.method = method
     this.schemaRef = schemaRef
     this.document = document
+    this.subMethodIndex = subMethodIndex
   }
 
   static create({
@@ -35,9 +39,17 @@ export class Trail implements Stringable {
     apiPath,
     method,
     schemaRef,
-    document
+    document,
+    subMethodIndex
   }: ConstructorArgs = {}) {
-    return new Trail({ path, apiPath, method, schemaRef, document })
+    return new Trail({
+      path,
+      apiPath,
+      method,
+      schemaRef,
+      document,
+      subMethodIndex
+    })
   }
 
   add(path: string) {
@@ -46,7 +58,8 @@ export class Trail implements Stringable {
       apiPath: this.apiPath,
       method: this.method,
       schemaRef: this.schemaRef,
-      document: this.document
+      document: this.document,
+      subMethodIndex: this.subMethodIndex
     })
   }
 
@@ -56,7 +69,8 @@ export class Trail implements Stringable {
       apiPath,
       method: this.method,
       schemaRef: this.schemaRef,
-      document: this.document
+      document: this.document,
+      subMethodIndex: this.subMethodIndex
     })
   }
 
@@ -66,7 +80,8 @@ export class Trail implements Stringable {
       apiPath: this.apiPath,
       method,
       schemaRef: this.schemaRef,
-      document: this.document
+      document: this.document,
+      subMethodIndex: this.path.length + 1
     })
   }
 
@@ -76,7 +91,19 @@ export class Trail implements Stringable {
       apiPath: this.apiPath,
       method: this.method,
       schemaRef,
-      document: this.document
+      document: this.document,
+      subMethodIndex: this.subMethodIndex
+    })
+  }
+
+  toSubMethodTrail() {
+    return Trail.create({
+      path: this.path.slice(this.subMethodIndex),
+      apiPath: this.apiPath,
+      method: this.method,
+      schemaRef: this.schemaRef,
+      document: this.document,
+      subMethodIndex: 0
     })
   }
 

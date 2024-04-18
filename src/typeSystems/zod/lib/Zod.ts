@@ -91,6 +91,7 @@ const toChildren = ({
     .with({ type: 'number' }, () => `z.number()`)
     .with({ type: 'integer' }, () => `z.number().int()`)
     .with({ type: 'boolean' }, () => `z.boolean()`)
+    .with({ type: 'void' }, () => `z.void()`)
     .with({ type: 'string' }, mathed => {
       return ZodString.create({ value: mathed })
     })

@@ -1,210 +1,185 @@
+import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { default as FormLabel } from '@mui/joy/FormLabel'
 import { default as Input } from '@mui/joy/Input'
 import { default as FormControl } from '@mui/joy/FormControl'
 import { default as FormHelperText } from '@mui/joy/FormHelperText'
 import { default as React } from 'react'
-import { z } from 'zod'
 import { default as Box } from '@mui/joy/Box'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { default as Button } from '@mui/joy/Button'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const category = z
-  .object({ id: z.number().int().optional(), name: z.string().optional() })
-  .optional()
-export const tag = z
-  .object({ id: z.number().int().optional(), name: z.string().optional() })
-  .optional()
-export const pet = z
-  .object({
-    id: z.number().int().optional(),
-    name: z.string().optional(),
-    category: category.optional(),
-    photoUrls: z.array(z.string().optional()).optional(),
-    tags: z.array(tag.optional()).optional(),
-    status: z.enum(['available', 'pending', 'sold']).optional()
-  })
-  .optional()
-export const postApiPetResponse = pet.optional()
+export const category = z.object({
+  id: z.number().int().optional(),
+  name: z.string().optional()
+})
+export const tag = z.object({
+  id: z.number().int().optional(),
+  name: z.string().optional()
+})
+export const pet = z.object({
+  id: z.number().int().optional(),
+  name: z.string(),
+  category: category.optional(),
+  photoUrls: z.array(z.string()),
+  tags: z.array(tag).optional(),
+  /** pet status in the store */ status: z.string().optional()
+})
+export const postApiPetResponse = pet
 export type PostApiPetResponse = z.infer<typeof postApiPetResponse>
-export const postApiPetArgs = z.object({ body: pet.optional() }).optional()
-export const putApiPetResponse = pet.optional()
+export const postApiPetArgs = z.object({ body: pet })
+export const putApiPetResponse = pet
 export type PutApiPetResponse = z.infer<typeof putApiPetResponse>
-export const putApiPetArgs = z.object({ body: pet.optional() }).optional()
-export const getApiPetFindByStatusResponse = z.array(pet.optional()).optional()
+export const putApiPetArgs = z.object({ body: pet })
+export const getApiPetFindByStatusResponse = z.array(pet)
 export type GetApiPetFindByStatusResponse = z.infer<
   typeof getApiPetFindByStatusResponse
 >
-export const getApiPetFindByStatusArgs = z
-  .object({ status: z.enum(['available', 'pending', 'sold']).optional() })
-  .optional()
-export const getApiPetFindByTagsResponse = z.array(pet.optional()).optional()
+export const getApiPetFindByStatusArgs = z.object({
+  status: z.string().optional()
+})
+export const getApiPetFindByTagsResponse = z.array(pet)
 export type GetApiPetFindByTagsResponse = z.infer<
   typeof getApiPetFindByTagsResponse
 >
-export const getApiPetFindByTagsArgs = z
-  .object({ tags: z.array(z.string().optional()).optional() })
-  .optional()
-export const getApiPetPetIdResponse = pet.optional()
+export const getApiPetFindByTagsArgs = z.object({
+  tags: z.array(z.string()).optional()
+})
+export const getApiPetPetIdResponse = pet
 export type GetApiPetPetIdResponse = z.infer<typeof getApiPetPetIdResponse>
-export const getApiPetPetIdArgs = z
-  .object({ petId: z.number().int().optional() })
-  .optional()
-export const postApiPetPetIdResponse = z.void().optional()
+export const getApiPetPetIdArgs = z.object({ petId: z.number().int() })
+export const postApiPetPetIdResponse = z.void()
 export type PostApiPetPetIdResponse = z.infer<typeof postApiPetPetIdResponse>
-export const postApiPetPetIdArgs = z
-  .object({
-    petId: z.number().int().optional(),
-    name: z.string().optional(),
-    status: z.string().optional()
-  })
-  .optional()
-export const deleteApiPetPetIdResponse = z.void().optional()
+export const postApiPetPetIdArgs = z.object({
+  petId: z.number().int(),
+  name: z.string().optional(),
+  status: z.string().optional()
+})
+export const deleteApiPetPetIdResponse = z.void()
 export type DeleteApiPetPetIdResponse = z.infer<
   typeof deleteApiPetPetIdResponse
 >
-export const deleteApiPetPetIdArgs = z
-  .object({
-    api_key: z.string().optional(),
-    petId: z.number().int().optional()
-  })
-  .optional()
-export const apiResponse = z
-  .object({
-    code: z.number().int().optional(),
-    type: z.string().optional(),
-    message: z.string().optional()
-  })
-  .optional()
-export const postApiPetPetIdUploadImageResponse = apiResponse.optional()
+export const deleteApiPetPetIdArgs = z.object({
+  api_key: z.string().optional(),
+  petId: z.number().int()
+})
+export const apiResponse = z.object({
+  code: z.number().int().optional(),
+  type: z.string().optional(),
+  message: z.string().optional()
+})
+export const postApiPetPetIdUploadImageResponse = apiResponse
 export type PostApiPetPetIdUploadImageResponse = z.infer<
   typeof postApiPetPetIdUploadImageResponse
 >
-export const postApiPetPetIdUploadImageArgs = z
-  .object({
-    petId: z.number().int().optional(),
-    additionalMetadata: z.string().optional()
-  })
-  .optional()
-export const getApiStoreInventoryResponse = z
-  .record(z.string(), z.number().int().optional())
-  .optional()
+export const postApiPetPetIdUploadImageArgs = z.object({
+  petId: z.number().int(),
+  additionalMetadata: z.string().optional()
+})
+export const getApiStoreInventoryResponse = z.record(
+  z.string(),
+  z.number().int()
+)
 export type GetApiStoreInventoryResponse = z.infer<
   typeof getApiStoreInventoryResponse
 >
-export const getApiStoreInventoryArgs = z.void().optional()
-export const order = z
-  .object({
-    id: z.number().int().optional(),
-    petId: z.number().int().optional(),
-    quantity: z.number().int().optional(),
-    shipDate: z.string().optional(),
-    status: z.enum(['placed', 'approved', 'delivered']).optional(),
-    complete: z.boolean().optional()
-  })
-  .optional()
-export const postApiStoreOrderResponse = order.optional()
+export const getApiStoreInventoryArgs = z.void()
+export const order = z.object({
+  id: z.number().int().optional(),
+  petId: z.number().int().optional(),
+  quantity: z.number().int().optional(),
+  shipDate: z.string().optional(),
+  /** Order Status */ status: z.string().optional(),
+  complete: z.boolean().optional()
+})
+export const postApiStoreOrderResponse = order
 export type PostApiStoreOrderResponse = z.infer<
   typeof postApiStoreOrderResponse
 >
-export const postApiStoreOrderArgs = z
-  .object({ body: order.optional() })
-  .optional()
-export const getApiStoreOrderOrderIdResponse = order.optional()
+export const postApiStoreOrderArgs = z.object({ body: order })
+export const getApiStoreOrderOrderIdResponse = order
 export type GetApiStoreOrderOrderIdResponse = z.infer<
   typeof getApiStoreOrderOrderIdResponse
 >
-export const getApiStoreOrderOrderIdArgs = z
-  .object({ orderId: z.number().int().optional() })
-  .optional()
-export const deleteApiStoreOrderOrderIdResponse = z.void().optional()
+export const getApiStoreOrderOrderIdArgs = z.object({
+  orderId: z.number().int()
+})
+export const deleteApiStoreOrderOrderIdResponse = z.void()
 export type DeleteApiStoreOrderOrderIdResponse = z.infer<
   typeof deleteApiStoreOrderOrderIdResponse
 >
-export const deleteApiStoreOrderOrderIdArgs = z
-  .object({ orderId: z.number().int().optional() })
-  .optional()
-export const user = z
-  .object({
-    id: z.number().int().optional(),
-    username: z.string().optional(),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    email: z.string().optional(),
-    password: z.string().optional(),
-    phone: z.string().optional(),
-    userStatus: z.number().int().optional()
-  })
-  .optional()
-export const postApiUserResponse = user.optional()
+export const deleteApiStoreOrderOrderIdArgs = z.object({
+  orderId: z.number().int()
+})
+export const user = z.object({
+  id: z.number().int().optional(),
+  username: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.string().optional(),
+  password: z.string().optional(),
+  phone: z.string().optional(),
+  /** User Status */ userStatus: z.number().int().optional()
+})
+export const postApiUserResponse = user
 export type PostApiUserResponse = z.infer<typeof postApiUserResponse>
-export const postApiUserArgs = z.object({ body: user.optional() }).optional()
-export const postApiUserCreateWithListResponse = user.optional()
+export const postApiUserArgs = z.object({ body: user })
+export const postApiUserCreateWithListResponse = user
 export type PostApiUserCreateWithListResponse = z.infer<
   typeof postApiUserCreateWithListResponse
 >
-export const postApiUserCreateWithListArgs = z
-  .object({ body: z.array(user.optional()).optional() })
-  .optional()
-export const getApiUserLoginResponse = z.string().optional()
+export const postApiUserCreateWithListArgs = z.object({ body: z.array(user) })
+export const getApiUserLoginResponse = z.string()
 export type GetApiUserLoginResponse = z.infer<typeof getApiUserLoginResponse>
-export const getApiUserLoginArgs = z
-  .object({ username: z.string().optional(), password: z.string().optional() })
-  .optional()
-export const getApiUserLogoutResponse = z.void().optional()
+export const getApiUserLoginArgs = z.object({
+  username: z.string().optional(),
+  password: z.string().optional()
+})
+export const getApiUserLogoutResponse = z.void()
 export type GetApiUserLogoutResponse = z.infer<typeof getApiUserLogoutResponse>
-export const getApiUserLogoutArgs = z.void().optional()
-export const getApiUserUsernameResponse = user.optional()
+export const getApiUserLogoutArgs = z.void()
+export const getApiUserUsernameResponse = user
 export type GetApiUserUsernameResponse = z.infer<
   typeof getApiUserUsernameResponse
 >
-export const getApiUserUsernameArgs = z
-  .object({ username: z.string().optional() })
-  .optional()
-export const putApiUserUsernameResponse = z.void().optional()
+export const getApiUserUsernameArgs = z.object({ username: z.string() })
+export const putApiUserUsernameResponse = z.void()
 export type PutApiUserUsernameResponse = z.infer<
   typeof putApiUserUsernameResponse
 >
-export const putApiUserUsernameArgs = z
-  .object({ username: z.string().optional(), body: user.optional() })
-  .optional()
-export const deleteApiUserUsernameResponse = z.void().optional()
+export const putApiUserUsernameArgs = z.object({
+  username: z.string(),
+  body: user
+})
+export const deleteApiUserUsernameResponse = z.void()
 export type DeleteApiUserUsernameResponse = z.infer<
   typeof deleteApiUserUsernameResponse
 >
-export const deleteApiUserUsernameArgs = z
-  .object({ username: z.string().optional() })
-  .optional()
-export const address = z
-  .object({
-    street: z.string().optional(),
-    city: z.string().optional(),
-    state: z.string().optional(),
-    zip: z.string().optional()
-  })
-  .optional()
-export const customer = z
-  .object({
-    id: z.number().int().optional(),
-    username: z.string().optional(),
-    address: z.array(address.optional()).optional()
-  })
-  .optional()
+export const deleteApiUserUsernameArgs = z.object({ username: z.string() })
+export const address = z.object({
+  street: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zip: z.string().optional()
+})
+export const customer = z.object({
+  id: z.number().int().optional(),
+  username: z.string().optional(),
+  address: z.array(address).optional()
+})
 
 export const CreatePet = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
-      z
-        .object({
-          id: z.number().int().optional(),
-          name: z.string().optional(),
-          category: category.optional(),
-          photoUrls: z.array(z.string().optional()).optional(),
-          tags: z.array(tag.optional()).optional(),
-          status: z.enum(['available', 'pending', 'sold']).optional()
-        })
-        .optional()
+      z.object({
+        id: z.number().int().optional(),
+        name: z.string(),
+        category: category.optional(),
+        photoUrls: z.array(z.string()),
+        tags: z.array(tag).optional(),
+        /** pet status in the store */ status: z.string().optional()
+      })
     )
   })
 
@@ -312,16 +287,14 @@ export const CreatePet = () => {
 export const UpdatePet = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
-      z
-        .object({
-          id: z.number().int().optional(),
-          name: z.string().optional(),
-          category: category.optional(),
-          photoUrls: z.array(z.string().optional()).optional(),
-          tags: z.array(tag.optional()).optional(),
-          status: z.enum(['available', 'pending', 'sold']).optional()
-        })
-        .optional()
+      z.object({
+        id: z.number().int().optional(),
+        name: z.string(),
+        category: category.optional(),
+        photoUrls: z.array(z.string()),
+        tags: z.array(tag).optional(),
+        /** pet status in the store */ status: z.string().optional()
+      })
     )
   })
 
@@ -429,16 +402,14 @@ export const UpdatePet = () => {
 export const CreateStoreOrder = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
-      z
-        .object({
-          id: z.number().int().optional(),
-          petId: z.number().int().optional(),
-          quantity: z.number().int().optional(),
-          shipDate: z.string().optional(),
-          status: z.enum(['placed', 'approved', 'delivered']).optional(),
-          complete: z.boolean().optional()
-        })
-        .optional()
+      z.object({
+        id: z.number().int().optional(),
+        petId: z.number().int().optional(),
+        quantity: z.number().int().optional(),
+        shipDate: z.string().optional(),
+        /** Order Status */ status: z.string().optional(),
+        complete: z.boolean().optional()
+      })
     )
   })
 
@@ -546,18 +517,16 @@ export const CreateStoreOrder = () => {
 export const CreateUser = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
-      z
-        .object({
-          id: z.number().int().optional(),
-          username: z.string().optional(),
-          firstName: z.string().optional(),
-          lastName: z.string().optional(),
-          email: z.string().optional(),
-          password: z.string().optional(),
-          phone: z.string().optional(),
-          userStatus: z.number().int().optional()
-        })
-        .optional()
+      z.object({
+        id: z.number().int().optional(),
+        username: z.string().optional(),
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        email: z.string().optional(),
+        password: z.string().optional(),
+        phone: z.string().optional(),
+        /** User Status */ userStatus: z.number().int().optional()
+      })
     )
   })
 
@@ -691,18 +660,16 @@ export const CreateUser = () => {
 export const UpdateUserUsername = () => {
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(
-      z
-        .object({
-          id: z.number().int().optional(),
-          username: z.string().optional(),
-          firstName: z.string().optional(),
-          lastName: z.string().optional(),
-          email: z.string().optional(),
-          password: z.string().optional(),
-          phone: z.string().optional(),
-          userStatus: z.number().int().optional()
-        })
-        .optional()
+      z.object({
+        id: z.number().int().optional(),
+        username: z.string().optional(),
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        email: z.string().optional(),
+        password: z.string().optional(),
+        phone: z.string().optional(),
+        /** User Status */ userStatus: z.number().int().optional()
+      })
     )
   })
 

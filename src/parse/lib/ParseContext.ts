@@ -1,87 +1,21 @@
-import { match, P } from 'ts-pattern'
-import type { Trail } from 'parse/lib/Trail.ts'
-import get from 'npm:lodash-es/get.js'
+import type { ReportArgs, Reporter } from 'core/lib/Reporter.ts'
 
-export type NotImplementedArgs =
-  | {
-      trail: Trail
-      skipped: Record<string, unknown>
-    }
-  | UnexpectedValueArgs
-
-export type UnexpectedValueArgs = {
-  trail: Trail
-  message: string
+type ParseContextArgs = {
+  reporter?: Reporter | undefined
 }
 
-type UnsupportedSection = {
-  trail: Trail
-  key?: string
-  value?: string
-  message?: string
-}
 export class ParseContext {
-  matched: number
-  noMatched: number
-  unsupportedSections: UnsupportedSection[]
+  private reporter: Reporter | undefined
 
-  private constructor() {
-    this.matched = 0
-    this.noMatched = 0
-    this.unsupportedSections = []
+  private constructor({ reporter }: ParseContextArgs) {
+    this.reporter = reporter
   }
 
-  static create() {
-    return new ParseContext()
+  static create({ reporter }: ParseContextArgs = {}): ParseContext {
+    return new ParseContext({ reporter })
   }
 
-  notImplemented(args: NotImplementedArgs) {
-    match(args)
-      .with({ skipped: P._ }, ({ trail, skipped }) => {
-        Object.entries(skipped).forEach(([key, value]) => {
-          this.unsupportedSections.push({
-            trail,
-            key,
-            value: JSON.stringify(value, undefined, 2)
-          })
-
-          const lookupUpData = get(trail.document, trail.add(key).toString())
-          const stringifiedLookedUpData = JSON.stringify(
-            lookupUpData,
-            undefined,
-            2
-          )
-
-          const actualStringifiedData = JSON.stringify(value, undefined, 2)
-
-          // console.log(
-          //   `Not implemented in ${trail.add(key)}: (${actualStringifiedData})`
-          // )
-
-          if (stringifiedLookedUpData !== actualStringifiedData) {
-            console.log(
-              `NO MATCH: ${trail.add(
-                key
-              )}: GOT(${stringifiedLookedUpData}) EXPECTED(${actualStringifiedData})`
-            )
-            this.noMatched++
-          } else {
-            this.matched++
-          }
-
-          console.log('Matched:', this.matched)
-          console.log('No Matched:', this.noMatched)
-        })
-      })
-      .with({ message: P._ }, ({ trail, message }) => {
-        this.unsupportedSections.push({ trail, message })
-
-        console.log(`Not implemented: ${trail} (${message})`)
-      })
-      .exhaustive()
-  }
-
-  unexpectedValue({ trail, message }: UnexpectedValueArgs) {
-    console.log(`Unexpected value in ${trail}: ${message}`)
+  report({ level, phase, trail, message }: ReportArgs) {
+    this.reporter?.report({ level, phase, trail, message })
   }
 }

@@ -1,6 +1,6 @@
 import { isRef, toRefName } from '../helpers/ref.ts'
 import type { TypeSystemArgs, RefToResolved, TypeSystem } from '../types.ts'
-import type { Method, OasRefData, Stringable } from '@schematicos/types'
+import type { OasRefData, Stringable } from '@schematicos/types'
 import { P, match } from 'ts-pattern'
 import type { ContextData } from './ContextData.ts'
 import invariant from 'tiny-invariant'
@@ -9,6 +9,8 @@ import { normalize } from 'path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
+import type { ReportArgs } from 'core/lib/Reporter.ts'
+import type { Reporter } from 'core/lib/Reporter.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -22,7 +24,7 @@ export type ContentFn = (context: GenerateContext) => Stringable | undefined
 
 type ConstructorArgs = {
   data: ContextData
-  filePath?: string
+  reporter: Reporter
 }
 
 export type RegisterArgs =
@@ -39,30 +41,20 @@ export type RegisterArgs =
       destinationPath: string
     }
 
-type ReportArgs = {
-  message: string
-} & (
-  | {
-      location: 'operation'
-      method: Method
-      path: string
-    }
-  | {
-      location: 'schema'
-      ref: string
-    }
-)
-
 export class GenerateContext {
   private contextData: ContextData
+  private reporter: Reporter
 
-  constructor({ data }: ConstructorArgs) {
+  private constructor({ data, reporter }: ConstructorArgs) {
     this.contextData = data
+    this.reporter = reporter
+  }
+
+  static create(args: ConstructorArgs) {
+    return new GenerateContext(args)
   }
 
   render(): Record<string, string> {
-    console.log('Start rendering')
-
     if (this.contextData.rendering) {
       throw new Error('Render already in progress')
     }
@@ -220,21 +212,26 @@ export class GenerateContext {
     required,
     destinationPath
   }: Omit<TypeSystemArgs, 'context'>): Stringable {
+    // if value is a ref
     if (isRef(value)) {
+      // create a definition for it in its own source file
       const definition = Definition.fromRef({
         context: this,
         ref: value,
         destinationPath
       })
 
+      // and add it to outputs
+      this.register({ definition, destinationPath })
+
+      // if the ref is defined outside of the file where it is used
       if (definition.isImported()) {
+        // import it
         this.register({
           imports: [definition.identifier.toImport()],
           destinationPath
         })
       }
-
-      this.register({ definition, destinationPath })
     }
 
     return this.contextData.typeSystem.create({
@@ -256,8 +253,8 @@ export class GenerateContext {
     console.log(message)
   }
 
-  report(args: ReportArgs): void {
-    console.log(args)
+  report({ level, phase, trail, message }: ReportArgs): void {
+    this.reporter.report({ level, phase, trail, message })
   }
 
   get schemaModel(): OasDocument {

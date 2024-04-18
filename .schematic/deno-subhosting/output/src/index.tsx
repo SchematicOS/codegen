@@ -167,7 +167,7 @@ body: updateKvDatabaseRequest});
 export const getApiProjectsProjectIdResponse = project;
 export type GetApiProjectsProjectIdResponse = z.infer<typeof getApiProjectsProjectIdResponse>;
 export const getApiProjectsProjectIdArgs = z.object({projectId: z.string()});
-export const deleteApiProjectsProjectIdResponse = z.unknown();
+export const deleteApiProjectsProjectIdResponse = z.void();
 export type DeleteApiProjectsProjectIdResponse = z.infer<typeof deleteApiProjectsProjectIdResponse>;
 export const deleteApiProjectsProjectIdArgs = z.object({projectId: z.string()});
 export const updateProjectRequest = z.object({name: /** The name of the project to be updated to. This must be globally unique.
@@ -337,7 +337,7 @@ body: redeployRequest});
 export const getApiDeploymentsDeploymentIdResponse = deployment;
 export type GetApiDeploymentsDeploymentIdResponse = z.infer<typeof getApiDeploymentsDeploymentIdResponse>;
 export const getApiDeploymentsDeploymentIdArgs = z.object({deploymentId: deploymentId});
-export const deleteApiDeploymentsDeploymentIdResponse = z.unknown();
+export const deleteApiDeploymentsDeploymentIdResponse = z.void();
 export type DeleteApiDeploymentsDeploymentIdResponse = z.infer<typeof deleteApiDeploymentsDeploymentIdResponse>;
 export const deleteApiDeploymentsDeploymentIdArgs = z.object({deploymentId: deploymentId});
 export const buildLogsResponseEntry = z.object({level: z.string(),
@@ -414,26 +414,26 @@ body: createDomainRequest});
 export const getApiDomainsDomainIdResponse = domain;
 export type GetApiDomainsDomainIdResponse = z.infer<typeof getApiDomainsDomainIdResponse>;
 export const getApiDomainsDomainIdArgs = z.object({domainId: z.string()});
-export const deleteApiDomainsDomainIdResponse = z.unknown();
+export const deleteApiDomainsDomainIdResponse = z.void();
 export type DeleteApiDomainsDomainIdResponse = z.infer<typeof deleteApiDomainsDomainIdResponse>;
 export const deleteApiDomainsDomainIdArgs = z.object({domainId: z.string()});
 export const updateDomainAssociationRequest = z.object({deploymentId: deploymentId.optional()});
-export const patchApiDomainsDomainIdResponse = z.unknown();
+export const patchApiDomainsDomainIdResponse = z.void();
 export type PatchApiDomainsDomainIdResponse = z.infer<typeof patchApiDomainsDomainIdResponse>;
 export const patchApiDomainsDomainIdArgs = z.object({domainId: z.string(),
 body: updateDomainAssociationRequest});
-export const postApiDomainsDomainIdVerifyResponse = z.unknown();
+export const postApiDomainsDomainIdVerifyResponse = z.void();
 export type PostApiDomainsDomainIdVerifyResponse = z.infer<typeof postApiDomainsDomainIdVerifyResponse>;
 export const postApiDomainsDomainIdVerifyArgs = z.object({domainId: z.string()});
 export const addDomainCertificateRequest = z.object({privateKey: /** The PEM encoded private key for the TLS certificate */
 z.string(),
 certificateChain: /** The PRM encoded certificate chain for the TLS certificate */
 z.string()});
-export const postApiDomainsDomainIdCertificatesResponse = z.unknown();
+export const postApiDomainsDomainIdCertificatesResponse = z.void();
 export type PostApiDomainsDomainIdCertificatesResponse = z.infer<typeof postApiDomainsDomainIdCertificatesResponse>;
 export const postApiDomainsDomainIdCertificatesArgs = z.object({domainId: z.string(),
 body: addDomainCertificateRequest});
-export const postApiDomainsDomainIdCertificatesProvisionResponse = z.unknown();
+export const postApiDomainsDomainIdCertificatesProvisionResponse = z.void();
 export type PostApiDomainsDomainIdCertificatesProvisionResponse = z.infer<typeof postApiDomainsDomainIdCertificatesProvisionResponse>;
 export const postApiDomainsDomainIdCertificatesProvisionArgs = z.object({domainId: z.string()});
 export const cursorLinkHeader = /** Pagination links.

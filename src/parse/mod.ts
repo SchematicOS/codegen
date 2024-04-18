@@ -14,18 +14,25 @@ import type {
 } from 'npm:@redocly/openapi-core@1.11.0'
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
-import type { ParsePayload } from '@schematicos/types'
 import { toDocumentV3 } from './openApiV3/parse.ts'
 import { ParseContext } from './lib/ParseContext.ts'
 import { Trail } from 'parse/lib/Trail.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
+import type { Reporter } from 'core/lib/Reporter.ts'
 
-export const parseContent = async (
-  payload: ParsePayload
-): Promise<OasDocument> => {
-  const context = ParseContext.create()
+type ParsePayload = {
+  schemaFormat: 'json' | 'yaml'
+  schemaDocument: string
+  reporter: Reporter
+}
 
-  const { document, specVersion } = await parseSchema(payload)
+export const parse = async ({
+  schemaDocument,
+  reporter
+}: ParsePayload): Promise<OasDocument> => {
+  const context = ParseContext.create({ reporter })
+
+  const { document, specVersion } = await parseSchema(schemaDocument)
 
   const trail = Trail.create({
     document: document.parsed as OpenAPIV3.Document
@@ -33,7 +40,9 @@ export const parseContent = async (
 
   return match(specVersion)
     .with(SpecVersion.OAS2, () => {
-      context.notImplemented({
+      context.report({
+        level: 'error',
+        phase: 'parse',
         trail,
         message: 'OpenAPI v2 is not supported yet'
       })
@@ -48,7 +57,9 @@ export const parseContent = async (
       })
     })
     .with(SpecVersion.OAS3_1, () => {
-      context.notImplemented({
+      context.report({
+        level: 'error',
+        phase: 'parse',
         trail,
         message: 'OpenAPI v3.1 is not supported yet'
       })
@@ -56,7 +67,9 @@ export const parseContent = async (
       throw new Error('OpenAPI v3.1 is not supported yet')
     })
     .otherwise(() => {
-      context.notImplemented({
+      context.report({
+        level: 'error',
+        phase: 'parse',
         trail,
         message: `Unsupported spec version: ${specVersion}`
       })
@@ -66,7 +79,7 @@ export const parseContent = async (
 }
 
 export const parseSchema = async (
-  payload: ParsePayload
+  schemaDocument: string
 ): Promise<{
   document: {
     source: Source
@@ -80,7 +93,7 @@ export const parseSchema = async (
     extends: ['recommended']
   })
 
-  const source = stringifyYaml(payload.schemaDocument)
+  const source = stringifyYaml(schemaDocument)
 
   // you can also use JSON.stringify
 
