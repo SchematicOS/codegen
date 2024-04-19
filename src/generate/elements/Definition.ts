@@ -62,12 +62,10 @@ export class Definition extends SchematicBase implements Stringable {
       context
     })
 
-    const resolved = ref.resolveOnce()
-
     return Definition.fromValue({
       context,
       identifier,
-      value: resolved,
+      value: ref.resolveOnce(),
       destinationPath
     })
   }
