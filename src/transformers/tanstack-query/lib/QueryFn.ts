@@ -28,20 +28,3 @@ export class QueryFn extends SchematicBase implements Stringable {
     return `IMPLEMENT ME: QueryFn.toString()`
   }
 }
-
-export const temp = `
-const getDeploymentInfo = async (deploymentId: string) => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    deployments/info/{deploymentId},
-    {
-      method: 'GET'
-    }
-  )
-
-  if (error) {
-    throw error
-  }
-
-  return denoDeploymentModel.parse(data)
-}
-`

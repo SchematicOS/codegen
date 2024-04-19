@@ -995,3 +995,276 @@ export const injectedRtkApi = createApi({
   }),
   overrideExisting: false
 })
+
+const postApiPet = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(`/pet`, {
+    method: 'GET'
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return pet.parse(data)
+}
+
+const putApiPet = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(`/pet`, {
+    method: 'GET'
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return pet.parse(data)
+}
+
+const getApiPetFindByStatus = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/findByStatus`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.array(pet).parse(data)
+}
+
+const getApiPetFindByTags = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/findByTags`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.array(pet).parse(data)
+}
+
+const getApiPetPetId = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${temp.petId}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return pet.parse(data)
+}
+
+const postApiPetPetId = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${temp.petId}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+
+const deleteApiPetPetId = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${temp.petId}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+
+const postApiPetPetIdUploadImage = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${temp.petId}/uploadImage`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return apiResponse.parse(data)
+}
+
+const getApiStoreInventory = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/inventory`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.record(z.string(), z.number().int()).parse(data)
+}
+
+const postApiStoreOrder = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/order`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return order.parse(data)
+}
+
+const getApiStoreOrderOrderId = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/order/${temp.orderId}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return order.parse(data)
+}
+
+const deleteApiStoreOrderOrderId = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/order/${temp.orderId}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+
+const postApiUser = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(`/user`, {
+    method: 'GET'
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return user.parse(data)
+}
+
+const postApiUserCreateWithList = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/createWithList`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return user.parse(data)
+}
+
+const getApiUserLogin = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(`/user/login`, {
+    method: 'GET'
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return z.string().parse(data)
+}
+
+const getApiUserLogout = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/logout`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+
+const getApiUserUsername = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/${temp.username}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return user.parse(data)
+}
+
+const putApiUserUsername = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/${temp.username}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+
+const deleteApiUserUsername = async (deploymentId: string) => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/${temp.username}`,
+    {
+      method: 'GET'
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
