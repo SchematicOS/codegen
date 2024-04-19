@@ -16,8 +16,12 @@ export const generate = ({
   context
 }: GenerateArgs) => {
   transformers.forEach(({ id, transform }) => {
+    console.log(id)
+
     const transformerSettings = context.settings.getTransformerSettings(id)
     transform({ context, transformerSettings })
+
+    console.log('')
   })
 
   Object.entries(schemaModel.components?.models ?? {})

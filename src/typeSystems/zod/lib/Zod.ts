@@ -96,11 +96,7 @@ const toChildren = ({
       return ZodString.create({ value: mathed })
     })
     .with({ type: 'unknown' }, () => `z.unknown()`)
-    .otherwise(matched => {
-      console.log(`Unhandled value type: ${matched}`)
-
-      return `z.unknown()`
-    })
+    .exhaustive()
 
   return WithDescription.create({
     description: value?.description,

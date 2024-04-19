@@ -44,9 +44,9 @@ export const transform = ({
     })
 }
 
-const zodTypeSystem: Transformer = {
+const transformer: Transformer = {
   id: '@schematicos/mui-joy-forms',
   transform
 }
 
-export default zodTypeSystem
+export default transformer

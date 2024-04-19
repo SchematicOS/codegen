@@ -26,6 +26,6 @@ export class Endpoint extends SchematicBase implements Stringable {
   }
 
   toString(): string {
-    return `IMPLEMENT ME: Endpoint.toString()`
+    return `console.log("Endpoint")`
   }
 }

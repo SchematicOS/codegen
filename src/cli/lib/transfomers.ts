@@ -1,6 +1,7 @@
 import type { Transformer, TypeSystem } from 'generate/types.ts'
 import { default as t_1 } from 'mui-joy-forms/mod.ts'
 import { default as t_2 } from 'rtk-query/mod.ts'
+import { default as t_3 } from 'tanstack-query/mod.ts'
 import ts from 'zod/mod.ts'
 
 type Transformers = {
@@ -9,7 +10,7 @@ type Transformers = {
 }
 
 const transformers: Transformers = {
-  transformers: [t_1, t_2],
+  transformers: [t_1, t_2, t_3],
   typeSystem: ts
 }
 

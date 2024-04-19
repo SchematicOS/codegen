@@ -17,13 +17,9 @@ export const toOperationResponse = ({
   operation,
   destinationPath
 }: ToOperationResponseArgs) => {
-  const modelSettings = ModelSettings.create({
-    exportPath: destinationPath
-  })
-
   const identifier = Identifier.create({
     name: toResponseName(operation),
-    modelSettings,
+    modelSettings: ModelSettings.create({ exportPath: destinationPath }),
     type: context.typeSystemInfo.type,
     context
   })

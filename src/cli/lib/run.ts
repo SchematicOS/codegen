@@ -11,6 +11,7 @@ import { LogStore } from 'core/lib/LogStore.ts'
 import { ParseContext } from 'core/lib/ParseContext.ts'
 import { CoreContext } from 'core/lib/CoreContext.ts'
 import { Settings } from 'generate/settings/Settings.ts'
+import { Trail } from 'core/lib/Trail.ts'
 
 type RunArgs = {
   schema: string
@@ -39,7 +40,17 @@ export const run = async ({
     reporter
   })
 
+  context.info({
+    trail: Trail.create(),
+    message: 'Begin parsing phase'
+  })
+
   const schemaModel: OasDocument = await parse(schema, context)
+
+  context.info({
+    trail: Trail.create(),
+    message: 'Parsing phase complete'
+  })
 
   if (!schemaModel.openapi.startsWith('3.0.')) {
     throw new Error('Only OpenAPI v3 is supported')
@@ -53,7 +64,22 @@ export const run = async ({
     typeSystem
   })
 
+  context.info({
+    trail: Trail.create(),
+    message: 'Begin generate phase'
+  })
+
   generate({ schemaModel, transformers, context })
+
+  context.info({
+    trail: Trail.create(),
+    message: 'Generate phase complete'
+  })
+
+  context.info({
+    trail: Trail.create(),
+    message: 'Begin render phase'
+  })
 
   context.setupRenderPhase({
     files: context.files,
@@ -69,6 +95,11 @@ export const run = async ({
       content,
       resolvedPath
     })
+  })
+
+  context.info({
+    trail: Trail.create(),
+    message: 'Render phase complete'
   })
 
   const { logs, operations } = logStore.generateOutput()

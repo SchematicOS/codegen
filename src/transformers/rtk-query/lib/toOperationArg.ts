@@ -7,6 +7,8 @@ import { OasObject } from 'parse/elements/schema/Object.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 import { toArgsName } from 'generate/helpers/naming.ts'
 import isEmpty from 'lodash-es/isEmpty.js'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToEndpointArgArgs = {
   context: CoreContext
@@ -32,7 +34,7 @@ export const toEndpointArg = ({
 
   const body = operation.requestBody?.resolve().toSchema('application/json')
 
-  const { properties, required } = toQueryProperties(operation, Boolean(body))
+  const { properties, required } = toQueryProperties(operation, body)
 
   const value = isEmpty(properties)
     ? OasVoid.empty(context)
@@ -49,7 +51,10 @@ export const toEndpointArg = ({
   })
 }
 
-const toQueryProperties = (operation: OasOperation, hasBody: boolean) => {
+const toQueryProperties = (
+  operation: OasOperation,
+  body: OasSchema | OasRef<'schema'> | undefined
+) => {
   const parameters = operation.parameters ?? []
 
   const resolved = parameters.map(parameter => parameter.resolve())
@@ -57,13 +62,13 @@ const toQueryProperties = (operation: OasOperation, hasBody: boolean) => {
   // map property schemas by name
   const properties = resolved
     .map(parameter => [parameter.name, parameter.toSchema()])
-    .concat(hasBody ? [['body', 'body']] : [])
+    .concat(body ? [['body', body]] : [])
 
   // create list of required properties
   const required = resolved
     .filter(({ required }) => required)
     .map(({ name }) => name)
-    .concat(hasBody ? ['body'] : [])
+    .concat(body ? ['body'] : [])
 
   return {
     properties: Object.fromEntries(properties),

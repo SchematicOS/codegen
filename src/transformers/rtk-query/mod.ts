@@ -25,6 +25,7 @@ export const transform = ({
         operation.method.toUpperCase().padEnd(8),
         operation.path
       )
+
       return RtkEndpoint.create({
         context,
         operation,

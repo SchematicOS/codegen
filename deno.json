@@ -23,6 +23,7 @@
     "prettier": "npm:prettier@3.2.5",
     "core/": "./src/core/",
     "rtk-query/": "./src/transformers/rtk-query/",
+    "tanstack-query/": "./src/transformers/tanstack-query/",
     "tiny-invariant": "npm:tiny-invariant@1.3.3",
     "ts-pattern": "npm:ts-pattern@5.1.1",
     "typescript/": "./src/languages/typescript/",
