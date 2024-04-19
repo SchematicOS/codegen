@@ -4,9 +4,11 @@ import { EMPTY } from 'generate/constants.ts'
 import { KeyValues } from 'typescript/lib/KeyValues.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
-import { Key } from 'generate/elements/Key.ts'
-import { Property } from 'typescript/lib/Property.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
+import {
+  sanitiseKey,
+  sanitisePropertyName
+} from 'typescript/helpers/sanitise.ts'
 
 type QueryCallProps = {
   queryArg: string
@@ -78,10 +80,7 @@ const toKeyValues = (
   queryArg: string
 ) => {
   const mapped = parameters?.map(({ name }) => {
-    return `${Key.create(name)}: ${Property.create({
-      parentPath: queryArg,
-      property: name
-    })}`
+    return `${sanitiseKey(name)}: ${sanitisePropertyName(name, queryArg)}`
   })
 
   return mapped?.length ? `{\n${mapped.join(',\n')}\n}` : EMPTY

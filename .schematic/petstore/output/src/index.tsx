@@ -890,7 +890,7 @@ export const injectedRtkApi = createApi({
     getApiStoreInventory: build.query<
       GetApiStoreInventoryResponse,
       GetApiStoreInventoryResponse
-    >({ query: queryArg => ({ path: `/store/inventory`, method: GET }) }),
+    >({ query: () => ({ path: `/store/inventory`, method: GET }) }),
     postApiStoreOrder: build.mutation<
       PostApiStoreOrderResponse,
       PostApiStoreOrderResponse
@@ -954,7 +954,7 @@ export const injectedRtkApi = createApi({
     getApiUserLogout: build.query<
       GetApiUserLogoutResponse,
       GetApiUserLogoutResponse
-    >({ query: queryArg => ({ path: `/user/logout`, method: GET }) }),
+    >({ query: () => ({ path: `/user/logout`, method: GET }) }),
     getApiUserUsername: build.query<
       GetApiUserUsernameResponse,
       GetApiUserUsernameResponse
