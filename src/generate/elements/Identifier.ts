@@ -1,4 +1,4 @@
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { toRefName } from '../helpers/ref.ts'
 import { Import } from './Import.ts'
 import { normalize } from 'path'
@@ -11,12 +11,12 @@ type IdentifierArgs = {
   sourcePath: string
   modelSettings: ModelSettings
   type: EntityType
-  context: GenerateContext
+  context: CoreContext
 }
 
 type From$RefArgs = {
   $ref: string
-  context: GenerateContext
+  context: CoreContext
 }
 
 export class Identifier implements Stringable {
@@ -25,7 +25,7 @@ export class Identifier implements Stringable {
   sourcePath: string
   modelSettings: ModelSettings
   type: EntityType
-  context: GenerateContext
+  context: CoreContext
 
   private constructor({
     name,

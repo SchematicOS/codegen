@@ -1,10 +1,10 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import type { OasOperationData, Stringable } from '@schematicos/types'
 
 type QueryFnArgs = {
-  context: GenerateContext
+  context: CoreContext
   operation: OasOperationData
   settings: OperationSettings
 }

@@ -1,14 +1,15 @@
-import type { GenerateContext, RegisterArgs } from 'core/lib/GenerateContext.ts'
+import type { RegisterArgs } from 'core/lib/GenerateContext.ts'
 import { EMPTY } from '../constants.ts'
 import type { Stringable } from '@schematicos/types'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 type SchenmaticBaseArgs = {
-  context: GenerateContext
+  context: CoreContext
   children?: Stringable | Stringable[]
 }
 
 export class SchematicBase implements Stringable {
-  context: GenerateContext
+  context: CoreContext
   children: Stringable[] = []
 
   constructor({ context, children = [] }: SchenmaticBaseArgs) {

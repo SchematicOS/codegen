@@ -8,7 +8,7 @@ import { ZodUnion } from './ZodUnion.ts'
 import { ZodIntersection } from './ZodIntersection.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { TypeSystemArgs } from 'generate/types.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Import } from 'generate/elements/Import.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
@@ -51,7 +51,7 @@ export class Zod extends SchematicBase implements Stringable {
 }
 
 type ToChildrenArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   value: OasSchema | OasRef<'schema'> | OasVoid
   required: boolean | undefined

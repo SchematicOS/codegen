@@ -1,6 +1,6 @@
 import type { EntityType } from '../languages/typescript/EntityType.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
 import type { Stringable, OasRefData } from '@schematicos/types'
 import type { OasRef } from 'parse/elements/Ref.ts'
@@ -12,7 +12,7 @@ import type { OasHeader } from 'parse/elements/Header.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
 
 export type TypeSystemArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   value: OasSchema | OasRef<'schema'> | OasVoid
   required: boolean | undefined
@@ -26,7 +26,7 @@ export type TypeSystemFn = ({
 }: TypeSystemArgs) => Stringable
 
 export type InferTypeArgs = {
-  context: GenerateContext
+  context: CoreContext
   value: Stringable
 }
 
@@ -41,7 +41,7 @@ export type TypeSystem = {
 }
 
 export type TransformerArgs = {
-  context: GenerateContext
+  context: CoreContext
   transformerSettings: TransformerSettings
 }
 

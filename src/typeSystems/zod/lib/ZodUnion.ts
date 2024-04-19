@@ -1,12 +1,12 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasDiscriminatorData, Stringable } from '@schematicos/types'
 import { isRef } from 'generate/helpers/ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ZodUnionArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   members: (OasSchema | OasRef<'schema'>)[]
   discriminator?: OasDiscriminatorData
@@ -44,7 +44,7 @@ export class ZodUnion extends SchematicBase implements Stringable {
 }
 
 type ToChildrenArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   members: (OasSchema | OasRef<'schema'>)[]
 }

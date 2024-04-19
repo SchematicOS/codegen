@@ -1,5 +1,5 @@
 import { toArgsName } from './util.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
@@ -10,7 +10,7 @@ import { OasObject } from 'parse/elements/schema/Object.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 
 type ToEndpointArgArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   operation: OasOperation
 }
@@ -43,7 +43,7 @@ export const toEndpointArg = ({
     return Definition.fromValue({
       context,
       identifier,
-      value: OasVoid.fromFields(),
+      value: OasVoid.fromFields({ context }),
       destinationPath
     })
   }
@@ -52,11 +52,14 @@ export const toEndpointArg = ({
   const parametersRequired = parameterItems?.required || []
 
   const value = OasObject.fromFields({
-    required: parametersRequired.concat(body ? 'body' : []),
-    properties: {
-      ...parametersProperties,
-      ...(body ? { body } : {})
-    }
+    fields: {
+      required: parametersRequired.concat(body ? 'body' : []),
+      properties: {
+        ...parametersProperties,
+        ...(body ? { body } : {})
+      }
+    },
+    context
   })
 
   return Definition.fromValue({
@@ -69,7 +72,7 @@ export const toEndpointArg = ({
 
 type ToBodySchemaArgs = {
   operation: OasOperation
-  context: GenerateContext
+  context: CoreContext
 }
 
 const toBodySchema = ({ operation, context }: ToBodySchemaArgs) => {
@@ -88,7 +91,7 @@ const toBodySchema = ({ operation, context }: ToBodySchemaArgs) => {
 
 type ToParametersByNameArgs = {
   operation: OasOperation
-  context: GenerateContext
+  context: CoreContext
 }
 
 const toParametersByName = ({ operation, context }: ToParametersByNameArgs) => {

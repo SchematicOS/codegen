@@ -1,12 +1,12 @@
 import type { RtkEndpoint } from './RtkEndpoint.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { TransformerSettings } from 'generate/settings/TransformerSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
 import { Import } from 'generate/elements/Import.ts'
 
 type RtkQueryContainerProps = {
-  context: GenerateContext
+  context: CoreContext
   operations: RtkEndpoint[]
   transformerSettings: TransformerSettings
 }

@@ -1,13 +1,7 @@
 import { isRef, toRefName } from '../../generate/helpers/ref.ts'
-import type {
-  TypeSystemArgs,
-  RefToResolved,
-  TypeSystem
-} from '../../generate/types.ts'
+import type { RefToResolved, TypeSystem } from '../../generate/types.ts'
 import type { OasRefData, Stringable } from '@schematicos/types'
 import { P, match } from 'ts-pattern'
-import type { ContextData } from './ContextData.ts'
-import invariant from 'tiny-invariant'
 import type { Import } from '../../generate/elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from '../../generate/settings/Settings.ts'
@@ -15,6 +9,10 @@ import { Definition } from 'generate/elements/Definition.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { ReportArgs } from 'core/lib/Reporter.ts'
 import type { Reporter } from 'core/lib/Reporter.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasVoid } from 'parse/elements/schema/Void.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -24,10 +22,10 @@ export type FileContents = {
   content: Stringable[]
 }
 
-export type ContentFn = (context: GenerateContext) => Stringable | undefined
-
 type ConstructorArgs = {
-  data: ContextData
+  schemaModel: OasDocument
+  settings: Settings
+  typeSystem: TypeSystem
   reporter: Reporter
 }
 
@@ -49,12 +47,29 @@ export type RegisterArgs =
       destinationPath: string
     }
 
+export type ToTypeSystemArgs = {
+  value: OasSchema | OasRef<'schema'> | OasVoid
+  required: boolean | undefined
+  destinationPath: string
+}
+
 export class GenerateContext {
-  private contextData: ContextData
+  files: Map<string, FileContents>
+  schemaModel: OasDocument
+  settings: Settings
+  typeSystem: TypeSystem
   private reporter: Reporter
 
-  private constructor({ data, reporter }: ConstructorArgs) {
-    this.contextData = data
+  private constructor({
+    schemaModel,
+    settings,
+    typeSystem,
+    reporter
+  }: ConstructorArgs) {
+    this.files = new Map()
+    this.schemaModel = schemaModel
+    this.settings = settings
+    this.typeSystem = typeSystem
     this.reporter = reporter
   }
 
@@ -65,7 +80,7 @@ export class GenerateContext {
   getFile(filePath: string): FileContents {
     const normalisedPath = normalize(filePath)
 
-    const currentFile = this.contextData.files.get(normalisedPath)
+    const currentFile = this.files.get(normalisedPath)
 
     if (!currentFile) {
       return this.addFile(normalisedPath)
@@ -74,13 +89,7 @@ export class GenerateContext {
     return currentFile
   }
 
-  mutationEnabled(): boolean {
-    return !this.contextData.rendering
-  }
-
   register({ destinationPath, ...args }: RegisterArgs) {
-    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
-
     const currentFile = this.getFile(destinationPath)
 
     match(args)
@@ -113,7 +122,7 @@ export class GenerateContext {
   }
 
   resolveRefSingle<T extends OasRefData>(arg: T): RefToResolved<T> | T {
-    const c = this.contextData.schemaModel.components
+    const c = this.schemaModel.components
 
     const refName = toRefName(arg.$ref)
 
@@ -167,10 +176,8 @@ export class GenerateContext {
     return resolved as RefToResolved<T>
   }
 
-  private addFile(normalisedPath: string) {
-    invariant(this.mutationEnabled(), 'Cannot mutate files during rendering')
-
-    if (this.contextData.files.has(normalisedPath)) {
+  addFile(normalisedPath: string) {
+    if (this.files.has(normalisedPath)) {
       throw new Error(`File already exists: ${normalisedPath}`)
     }
 
@@ -180,21 +187,20 @@ export class GenerateContext {
       content: []
     }
 
-    this.contextData.files.set(normalisedPath, newFile)
+    this.files.set(normalisedPath, newFile)
 
     return newFile
   }
 
-  toTypeSystem({
-    value,
-    required,
-    destinationPath
-  }: Omit<TypeSystemArgs, 'context'>): Stringable {
+  toTypeSystem(
+    { value, required, destinationPath }: ToTypeSystemArgs,
+    coreContext: CoreContext
+  ): Stringable {
     // if value is a ref
     if (isRef(value)) {
       // create a definition for it in its own source file
       const definition = Definition.fromRef({
-        context: this,
+        context: coreContext,
         ref: value,
         destinationPath
       })
@@ -212,18 +218,18 @@ export class GenerateContext {
       }
     }
 
-    return this.contextData.typeSystem.create({
+    return this.typeSystem.create({
       value,
       required,
       destinationPath,
-      context: this
+      context: coreContext
     })
   }
 
-  toInferType(value: Stringable) {
-    return this.contextData.typeSystem.inferType({
+  toInferType(value: Stringable, coreContext: CoreContext) {
+    return this.typeSystem.inferType({
       value,
-      context: this
+      context: coreContext
     })
   }
 
@@ -231,21 +237,9 @@ export class GenerateContext {
     this.reporter.report({ level, phase, trail, message })
   }
 
-  get schemaModel(): OasDocument {
-    return this.contextData.schemaModel
-  }
-
-  get settings(): Settings {
-    return this.contextData.settings
-  }
-
   get typeSystemInfo(): Omit<TypeSystem, 'create'> {
-    const { create: _create, ...rest } = this.contextData.typeSystem
+    const { create: _create, ...rest } = this.typeSystem
 
     return rest
-  }
-
-  get files(): Map<string, FileContents> {
-    return this.contextData.files
   }
 }

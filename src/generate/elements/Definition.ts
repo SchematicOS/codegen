@@ -1,5 +1,5 @@
 import type { Stringable } from '@schematicos/types'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Identifier } from './Identifier.ts'
 import { SchematicBase } from './SchematicBase.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
@@ -7,20 +7,20 @@ import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
 
 type ConstructorArgs = {
-  context: GenerateContext
+  context: CoreContext
   children: Stringable
   identifier: Identifier
   destinationPath: string
 }
 
 type FromRefArgs = {
-  context: GenerateContext
+  context: CoreContext
   ref: OasRef<'schema'>
   destinationPath: string
 }
 
 type FromValueArgs = {
-  context: GenerateContext
+  context: CoreContext
   identifier: Identifier
   value: OasSchema | OasRef<'schema'> | OasVoid
   destinationPath: string

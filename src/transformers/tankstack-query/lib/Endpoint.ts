@@ -1,11 +1,11 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import type { Stringable } from '@schematicos/types'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 
 export type EndpointArgs = {
-  context: GenerateContext
+  context: CoreContext
   settings: OperationSettings
   operation: OasOperation
 }

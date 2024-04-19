@@ -1,5 +1,5 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Stringable } from '@schematicos/types'
 import isEmpty from 'lodash-es/isEmpty.js'
 import { Key } from 'generate/elements/Key.ts'
@@ -8,7 +8,7 @@ import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasObject } from 'parse/elements/schema/Object.ts'
 
 type ZodObjectProps = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   value: OasObject
 }
@@ -65,7 +65,7 @@ export class ZodObject extends SchematicBase implements Stringable {
 }
 
 type ZodObjectPropertiesArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   properties: Record<string, OasSchema | OasRef<'schema'>>
   required: OasObject['required']
@@ -107,7 +107,7 @@ class ZodObjectProperties extends SchematicBase implements Stringable {
 }
 
 type ZodRecordArgs = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   value: true | OasSchema | OasRef<'schema'>
 }

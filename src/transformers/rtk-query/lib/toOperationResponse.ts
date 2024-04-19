@@ -1,5 +1,5 @@
 import { toResponseName } from './util.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
@@ -11,7 +11,7 @@ import { OasVoid } from 'parse/elements/schema/Void.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 type ToOperationResponseArgs = {
-  context: GenerateContext
+  context: CoreContext
   operation: OasOperation
   destinationPath: string
 }
@@ -48,7 +48,7 @@ export const toOperationResponse = ({
 }
 
 type ToResponseValue = {
-  context: GenerateContext
+  context: CoreContext
   response: OasResponse | OasRef<'response'> | undefined
 }
 
@@ -57,7 +57,7 @@ const toResponseValue = ({
   response
 }: ToResponseValue): OasSchema | OasRef<'schema'> | OasVoid => {
   if (!response) {
-    return OasVoid.fromFields()
+    return OasVoid.fromFields({ context })
   }
 
   const resolvedResponse = isRef(response)
@@ -66,5 +66,5 @@ const toResponseValue = ({
 
   const schema = resolvedResponse.toSchema()
 
-  return schema ?? OasVoid.fromFields()
+  return schema ?? OasVoid.fromFields({ context })
 }

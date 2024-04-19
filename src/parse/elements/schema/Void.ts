@@ -1,10 +1,15 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import { Trail } from 'core/lib/Trail.ts'
-import { CoreContext } from 'core/lib/CoreContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 export type VoidFields = {
   title?: string
   description?: string
+}
+
+type FromFieldsArgs = {
+  fields?: VoidFields
+  context: CoreContext
 }
 
 type ToVoidV3Args = {
@@ -29,11 +34,11 @@ export class OasVoid extends OasBase {
     return new OasVoid({ fields, trail, context, skipped })
   }
 
-  static fromFields(fields: VoidFields = {}) {
+  static fromFields({ fields = {}, context }: FromFieldsArgs) {
     return new OasVoid({
       fields,
       trail: Trail.create(),
-      context: CoreContext.create(),
+      context,
       skipped: {}
     })
   }

@@ -4,13 +4,13 @@ import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
 import { KeyValues } from 'generate/elements/KeyValues.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 
 type QueryCallProps = {
   queryArg: string
   operation: OasOperation
-  context: GenerateContext
+  context: CoreContext
 }
 
 export class QueryCall extends SchematicBase implements Stringable {
@@ -43,7 +43,7 @@ export class QueryCall extends SchematicBase implements Stringable {
 type ToPropertiesArgs = {
   operation: OasOperation
   queryArg: string
-  context: GenerateContext
+  context: CoreContext
 }
 
 const toProperties = ({

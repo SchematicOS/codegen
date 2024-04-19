@@ -1,11 +1,11 @@
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Import } from 'generate/elements/Import.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
 
 type FormFieldArgs = {
-  context: GenerateContext
+  context: CoreContext
   operationSettings: OperationSettings
   fieldName: string
 }

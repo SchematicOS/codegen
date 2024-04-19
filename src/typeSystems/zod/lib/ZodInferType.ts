@@ -1,9 +1,9 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 type ZodInferTypeArgs = {
-  context: GenerateContext
+  context: CoreContext
   value: Stringable
 }
 

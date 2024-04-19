@@ -29,15 +29,6 @@ export class OasUnknown extends OasBase {
     return new OasUnknown({ fields, trail, context, skipped })
   }
 
-  static fromFields(fields: UnknownFields = {}) {
-    return new OasUnknown({
-      fields,
-      trail: Trail.create(),
-      context: CoreContext.create(),
-      skipped: {}
-    })
-  }
-
   get title() {
     return this.fields.title
   }

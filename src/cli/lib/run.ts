@@ -10,6 +10,7 @@ import type { ReportArgs } from 'core/lib/Reporter.ts'
 import { LogStore } from 'core/lib/LogStore.ts'
 import { ParseContext } from 'core/lib/ParseContext.ts'
 import { CoreContext } from 'core/lib/CoreContext.ts'
+import { Settings } from 'generate/settings/Settings.ts'
 
 type RunArgs = {
   schema: string
@@ -23,7 +24,7 @@ export const run = async ({
   schema,
   project,
   schemaFormat,
-  settings,
+  settings = {},
   prettier
 }: RunArgs) => {
   const logStore = new LogStore()
@@ -33,17 +34,17 @@ export const run = async ({
     destination: (log: ReportArgs) => logStore.addLog(log)
   })
 
-  const context = ParseContext.create({ reporter })
+  const parseContext = ParseContext.create({ reporter })
 
-  const coreContext = CoreContext.create({
-    phase: { type: 'parse', context },
+  const context = CoreContext.create({
+    phase: { type: 'parse', context: parseContext },
     reporter
   })
 
   const schemaModel: OasDocument = await parse({
     schemaDocument: schema,
     schemaFormat,
-    context: coreContext
+    context
   })
 
   if (!schemaModel.openapi.startsWith('3.0.')) {
@@ -52,14 +53,20 @@ export const run = async ({
 
   const { transformers, typeSystem } = generateModules
 
-  const artifactsMap = await generate({
+  context.setupGeneratePhase({
     schemaModel,
-    settings,
-    prettier,
-    reporter,
-    transformers,
+    settings: Settings.create(settings),
     typeSystem
   })
+
+  generate({ schemaModel, transformers, context })
+
+  context.setupRenderPhase({
+    files: context.files,
+    prettier
+  })
+
+  const artifactsMap = await context.render()
 
   Object.entries(artifactsMap).forEach(([filePath, content]) => {
     const resolvedPath = join('./.schematic', project, 'output', filePath)

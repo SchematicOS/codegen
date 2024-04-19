@@ -1,20 +1,21 @@
 import type { ParseContext } from 'core/lib/ParseContext.ts'
+import { GenerateContext } from 'core/lib/GenerateContext.ts'
 import type {
+  ToTypeSystemArgs,
   FileContents,
-  GenerateContext,
   RegisterArgs
 } from 'core/lib/GenerateContext.ts'
-import type { RenderContext } from 'core/lib/RenderContext.ts'
 import type { ReportArgs, Reporter } from 'core/lib/Reporter.ts'
 import { match } from 'ts-pattern'
-import type { OasRefData, Stringable } from '@schematicos/types'
 import type {
-  RefToResolved,
-  TypeSystem,
-  TypeSystemArgs
-} from 'generate/types.ts'
+  OasRefData,
+  PrettierConfigType,
+  Stringable
+} from '@schematicos/types'
+import type { RefToResolved, TypeSystem } from 'generate/types.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { Settings } from 'generate/settings/Settings.ts'
+import { RenderContext } from 'core/lib/RenderContext.ts'
 
 type SharedContext =
   | {
@@ -30,14 +31,25 @@ type SharedContext =
       context: RenderContext
     }
 
+type GenerateArgs = {
+  schemaModel: OasDocument
+  settings: Settings
+  typeSystem: TypeSystem
+}
+
 type CoreContextArgs = {
   phase: SharedContext
   reporter: Reporter
 }
 
+type RenderArgs = {
+  files: Map<string, FileContents>
+  prettier?: PrettierConfigType
+}
+
 export class CoreContext {
   reporter: Reporter
-  phase: SharedContext
+  private phase: SharedContext
 
   private constructor({ phase, reporter }: CoreContextArgs) {
     this.phase = phase
@@ -46,6 +58,27 @@ export class CoreContext {
 
   static create({ phase, reporter }: CoreContextArgs) {
     return new CoreContext({ phase, reporter })
+  }
+
+  setupGeneratePhase({ schemaModel, settings, typeSystem }: GenerateArgs) {
+    const generateContext = GenerateContext.create({
+      schemaModel,
+      settings,
+      typeSystem,
+      reporter: this.reporter
+    })
+
+    this.phase = { type: 'generate', context: generateContext }
+  }
+
+  setupRenderPhase({ files, prettier }: RenderArgs) {
+    const renderContext = RenderContext.create({
+      files,
+      prettier,
+      reporter: this.reporter
+    })
+
+    this.phase = { type: 'render', context: renderContext }
   }
 
   report({ level, phase, trail, message }: ReportArgs): void {
@@ -80,8 +113,8 @@ export class CoreContext {
       .exhaustive()
   }
 
-  render(): Record<string, string> {
-    return match(this.phase)
+  async render(): Promise<Record<string, string>> {
+    return await match(this.phase)
       .with({ type: 'generate' }, () => {
         throw new Error('Cannot render in parse phase')
       })
@@ -141,10 +174,10 @@ export class CoreContext {
     value,
     required,
     destinationPath
-  }: Omit<TypeSystemArgs, 'context'>): Stringable {
+  }: ToTypeSystemArgs): Stringable {
     return match(this.phase)
       .with({ type: 'generate' }, ({ context }) => {
-        return context.toTypeSystem({ value, required, destinationPath })
+        return context.toTypeSystem({ value, required, destinationPath }, this)
       })
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot access type system in parse phase')
@@ -158,7 +191,7 @@ export class CoreContext {
   toInferType(value: Stringable) {
     return match(this.phase)
       .with({ type: 'generate' }, ({ context }) => {
-        return context.toInferType(value)
+        return context.toInferType(value, this)
       })
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot access type system in parse phase')

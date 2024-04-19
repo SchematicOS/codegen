@@ -1,17 +1,17 @@
 import { Identifier } from 'generate/elements/Identifier.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Stringable } from '@schematicos/types'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ZodRefProps = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   ref: OasRef<'schema'>
 }
 
 type ZodRefConstructorProps = {
-  context: GenerateContext
+  context: CoreContext
   destinationPath: string
   ref: OasRef<'schema'>
   identifier: Identifier

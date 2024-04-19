@@ -2,7 +2,7 @@ import { toEndpointName, toEndpointType } from './util.ts'
 import { QueryCall } from './QueryCall.ts'
 import { toEndpointArg } from './toOperationArg.ts'
 import { toOperationResponse } from './toOperationResponse.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Definition } from 'generate/elements/Definition.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
@@ -11,7 +11,7 @@ import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 
 export type RtkEndpointArgs = {
-  context: GenerateContext
+  context: CoreContext
   operationSettings: OperationSettings
   operation: OasOperation
 }

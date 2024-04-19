@@ -1,5 +1,5 @@
 import { FormField } from './FormField.ts'
-import type { GenerateContext } from 'core/lib/GenerateContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
@@ -12,13 +12,13 @@ import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasObject } from 'parse/elements/schema/Object.ts'
 
 type FormContainerArgs = {
-  context: GenerateContext
+  context: CoreContext
   operation: OasOperation
   operationSettings: OperationSettings
 }
 
 type FormContainerConstructorArgs = {
-  context: GenerateContext
+  context: CoreContext
   operation: OasOperation
   value: OasObject
   operationSettings: OperationSettings
@@ -115,7 +115,7 @@ export class FormContainer extends SchematicBase implements Stringable {
 }
 
 type FormContainerInnerArgs = {
-  context: GenerateContext
+  context: CoreContext
   formName: string
   value: OasObject
   zodFormModel: Stringable
@@ -141,7 +141,7 @@ export class FormContainerInner extends SchematicBase implements Stringable {
 }
 
 type ToFormFieldsArgs = {
-  context: GenerateContext
+  context: CoreContext
   operationSettings: OperationSettings
   formValue: OasObject
 }
@@ -174,7 +174,7 @@ const toFormName = (operation: OasOperation) => {
 }
 
 type ToBodySchemaValueArgs = {
-  context: GenerateContext
+  context: CoreContext
   operation: OasOperation
 }
 

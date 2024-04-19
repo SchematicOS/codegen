@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import { Trail } from 'core/lib/Trail.ts'
-import { CoreContext } from 'core/lib/CoreContext.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 
@@ -10,6 +10,11 @@ export type OasObjectFields = {
   properties?: Record<string, OasSchema | OasRef<'schema'>>
   required: string[] | undefined
   additionalProperties?: boolean | OasSchema | OasRef<'schema'>
+}
+
+type FromFieldsArgs = {
+  fields: OasObjectFields
+  context: CoreContext
 }
 
 type ToObjectV3Args = {
@@ -34,11 +39,11 @@ export class OasObject extends OasBase {
     return new OasObject({ fields, trail, context, skipped })
   }
 
-  static fromFields(fields: OasObjectFields) {
+  static fromFields({ fields, context }: FromFieldsArgs) {
     return new OasObject({
       fields,
       trail: Trail.create(),
-      context: CoreContext.create(),
+      context,
       skipped: {}
     })
   }
