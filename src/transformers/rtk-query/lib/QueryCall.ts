@@ -1,6 +1,5 @@
 import type { Stringable } from '@schematicos/types'
 import { toParamsArgs } from './toParamsArgs.ts'
-import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
 import { KeyValues } from 'typescript/lib/KeyValues.ts'
@@ -26,8 +25,7 @@ export class QueryCall extends SchematicBase implements Stringable {
 
     this.properties = toProperties({
       operation,
-      queryArg,
-      context
+      queryArg
     })
   }
 
@@ -43,18 +41,13 @@ export class QueryCall extends SchematicBase implements Stringable {
 type ToPropertiesArgs = {
   operation: OasOperation
   queryArg: string
-  context: CoreContext
 }
 
-const toProperties = ({
-  operation,
-  queryArg,
-  context
-}: ToPropertiesArgs): KeyValues => {
+const toProperties = ({ operation, queryArg }: ToPropertiesArgs): KeyValues => {
   const { parameters = [], requestBody } = operation
 
-  const resolvedParameters = parameters.map(item => {
-    return isRef(item) ? context.resolveRef(item) : item
+  const resolvedParameters = parameters.map(parameter => {
+    return parameter.resolve()
   })
 
   const params = toParamsArgs({

@@ -3,7 +3,6 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
-import { isRef } from 'generate/helpers/ref.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import type { Stringable } from '@schematicos/types'
 import camelCase from 'lodash-es/camelCase.js'
@@ -183,26 +182,22 @@ const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {
 
   if (!requestBody) {
     return context.warn({
-      phase: 'group',
       trail: operation.trail,
       message: 'No requestBody found'
     })
   }
 
-  const { content } = isRef(requestBody)
-    ? context.resolveRef(requestBody)
-    : requestBody
+  const { content } = requestBody.resolve()
 
   const bodySchema = content['application/json']?.schema
 
   const bodySchemaValue = match(bodySchema)
     .with({ schematicType: 'schema' }, matched => matched)
-    .with({ schematicType: 'ref' }, matched => context.resolveRef(matched))
+    .with({ schematicType: 'ref' }, matched => matched.resolve())
     .otherwise(() => undefined)
 
   if (!bodySchemaValue) {
     return context.warn({
-      phase: 'group',
       trail: operation.trail,
       message: 'No body schema found'
     })
@@ -210,7 +205,6 @@ const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {
 
   if (bodySchemaValue.type !== 'object') {
     return context.warn({
-      phase: 'group',
       trail: operation.trail,
       message: 'Body schema is not an object'
     })

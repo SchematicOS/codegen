@@ -2,7 +2,6 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
-import { isRef } from 'generate/helpers/ref.ts'
 import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasObject } from 'parse/elements/schema/Object.ts'
@@ -35,9 +34,9 @@ export const toEndpointArg = ({
     context
   })
 
-  const body = toBodySchema({ operation, context })
+  const body = toBodySchema(operation)
 
-  const parameterItems = toParametersByName({ operation, context })
+  const parameterItems = toParametersByName(operation)
 
   if (!body && !parameterItems) {
     return Definition.fromValue({
@@ -70,31 +69,19 @@ export const toEndpointArg = ({
   })
 }
 
-type ToBodySchemaArgs = {
-  operation: OasOperation
-  context: CoreContext
-}
-
-const toBodySchema = ({ operation, context }: ToBodySchemaArgs) => {
+const toBodySchema = (operation: OasOperation) => {
   const { requestBody } = operation
 
   if (!requestBody) {
     return
   }
 
-  const { content } = isRef(requestBody)
-    ? context.resolveRef(requestBody)
-    : requestBody
+  const { content } = requestBody.resolve()
 
   return content['application/json']?.schema
 }
 
-type ToParametersByNameArgs = {
-  operation: OasOperation
-  context: CoreContext
-}
-
-const toParametersByName = ({ operation, context }: ToParametersByNameArgs) => {
+const toParametersByName = (operation: OasOperation) => {
   const { parameters } = operation
 
   if (!parameters || isEmpty(parameters)) {
@@ -102,9 +89,7 @@ const toParametersByName = ({ operation, context }: ToParametersByNameArgs) => {
   }
 
   const nameRequiredSchema = parameters.map(parameter => {
-    const { name, required, schema } = isRef(parameter)
-      ? context.resolveRef(parameter)
-      : parameter
+    const { name, required, schema } = parameter.resolve()
 
     return { name, required, schema }
   })

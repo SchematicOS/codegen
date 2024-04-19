@@ -21,7 +21,6 @@ export class OasBase {
   logSkippedFields(skipped: Record<string, unknown>) {
     Object.entries(skipped).forEach(([key, value]) => {
       this.context.warn({
-        phase: 'parse',
         trail: this.trail.add(key),
         message: `Property not yet implemented. Please request from support if needed - ${JSON.stringify(
           value

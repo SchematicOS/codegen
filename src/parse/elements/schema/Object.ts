@@ -67,4 +67,12 @@ export class OasObject extends OasBase {
   get additionalProperties() {
     return this.fields.additionalProperties
   }
+
+  isRef(): this is OasRef<'schema'> {
+    return false
+  }
+
+  resolve() {
+    return this
+  }
 }

@@ -43,4 +43,12 @@ export class OasArray extends OasBase {
   get description() {
     return this.fields.description
   }
+
+  isRef(): this is OasRef<'schema'> {
+    return false
+  }
+
+  resolve() {
+    return this
+  }
 }

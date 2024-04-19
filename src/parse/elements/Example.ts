@@ -1,6 +1,7 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type ExampleFields = {
   summary: string | undefined
@@ -39,5 +40,13 @@ export class OasExample extends OasBase {
 
   get value() {
     return this.fields.value
+  }
+
+  isRef(): this is OasRef<'example'> {
+    return false
+  }
+
+  resolve() {
+    return this
   }
 }

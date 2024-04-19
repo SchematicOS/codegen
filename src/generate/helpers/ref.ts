@@ -1,3 +1,4 @@
+import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasRefData } from '@schematicos/types'
 
 export const toRefName = ($ref: string): string => {
@@ -11,7 +12,9 @@ export const toRefName = ($ref: string): string => {
   return refName
 }
 
-export const isRef = (arg: unknown): arg is OasRefData => {
+export const isRef = <T extends OasRefData['refType']>(
+  arg: unknown
+): arg is OasRef<T> => {
   if (!arg) {
     return false
   }

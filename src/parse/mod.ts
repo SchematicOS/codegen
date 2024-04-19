@@ -32,7 +32,6 @@ export const parse = async (
   return match(specVersion)
     .with(SpecVersion.OAS2, () => {
       context.error({
-        phase: 'parse',
         trail,
         message: 'OpenAPI v2 is not supported yet'
       })
@@ -46,14 +45,12 @@ export const parse = async (
     })
     .with(SpecVersion.OAS3_1, () => {
       context.error({
-        phase: 'parse',
         trail,
         message: 'OpenAPI v3.1 is not supported yet'
       })
     })
     .otherwise(() => {
       context.error({
-        phase: 'parse',
         trail,
         message: `Unsupported spec version: ${specVersion}`
       })

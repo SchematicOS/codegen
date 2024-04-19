@@ -49,4 +49,12 @@ export class OasUnion extends OasBase {
   get members() {
     return this.fields.members
   }
+
+  isRef(): this is OasRef<'schema'> {
+    return false
+  }
+
+  resolve() {
+    return this
+  }
 }

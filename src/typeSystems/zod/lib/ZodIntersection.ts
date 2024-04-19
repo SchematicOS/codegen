@@ -1,7 +1,6 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Stringable } from '@schematicos/types'
-import { isRef } from 'generate/helpers/ref.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 
@@ -25,12 +24,7 @@ export class ZodIntersection extends SchematicBase implements Stringable {
     this.members = members
 
     this.allObjects = members.every(member => {
-      if (isRef(member)) {
-        const resolved = context.resolveRef(member)
-        return resolved.type === 'object'
-      } else {
-        return member.type === 'object'
-      }
+      return member.resolve().type === 'object'
     })
 
     this.children = toChildren({ context, destinationPath, members })

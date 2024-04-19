@@ -45,6 +45,14 @@ export class OasResponse extends OasBase {
     return this.fields.content
   }
 
+  isRef(): this is OasRef<'response'> {
+    return false
+  }
+
+  resolve() {
+    return this
+  }
+
   toSchema(
     mediaType: string = 'application/json'
   ): OasSchema | OasRef<'schema'> | undefined {

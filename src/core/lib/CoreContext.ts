@@ -7,16 +7,11 @@ import type {
 } from 'core/lib/GenerateContext.ts'
 import type { ReportArgs, Reporter } from 'core/lib/Reporter.ts'
 import { match } from 'ts-pattern'
-import type {
-  OasRefData,
-  PrettierConfigType,
-  Stringable
-} from '@schematicos/types'
-import type { RefToResolved, TypeSystem } from 'generate/types.ts'
+import type { PrettierConfigType, Stringable } from '@schematicos/types'
+import type { TypeSystem } from 'generate/types.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { Settings } from 'generate/settings/Settings.ts'
 import { RenderContext } from 'core/lib/RenderContext.ts'
-import invariant from 'tiny-invariant'
 
 type SharedContext =
   | {
@@ -24,7 +19,7 @@ type SharedContext =
       context: ParseContext
     }
   | {
-      type: 'generate'
+      type: 'group'
       context: GenerateContext
     }
   | {
@@ -69,7 +64,7 @@ export class CoreContext {
       reporter: this.reporter
     })
 
-    this.phase = { type: 'generate', context: generateContext }
+    this.phase = { type: 'group', context: generateContext }
   }
 
   setupRenderPhase({ files, prettier }: RenderArgs) {
@@ -82,27 +77,27 @@ export class CoreContext {
     this.phase = { type: 'render', context: renderContext }
   }
 
-  private report({ level, phase, trail, message }: ReportArgs) {
-    this.reporter.report({ level, phase, trail, message })
+  private report({ level, trail, message }: Omit<ReportArgs, 'phase'>) {
+    this.reporter.report({ level, phase: this.phase.type, trail, message })
   }
 
-  error(args: Omit<ReportArgs, 'level'>): never {
+  error(args: Omit<ReportArgs, 'level' | 'phase'>): never {
     this.report({ ...args, level: 'error' })
 
     throw new Error(args.message)
   }
 
-  info(args: Omit<ReportArgs, 'level'>): void {
+  info(args: Omit<ReportArgs, 'level' | 'phase'>): void {
     this.report({ ...args, level: 'info' })
   }
 
-  warn(args: Omit<ReportArgs, 'level'>): void {
+  warn(args: Omit<ReportArgs, 'level' | 'phase'>): void {
     this.report({ ...args, level: 'warn' })
   }
 
   register({ destinationPath, ...args }: RegisterArgs) {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
+      .with({ type: 'group' }, ({ context }) => {
         return context.register({ destinationPath, ...args })
       })
       .with({ type: 'parse' }, () => {
@@ -116,7 +111,7 @@ export class CoreContext {
 
   getFile(filePath: string): FileContents {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
+      .with({ type: 'group' }, ({ context }) => {
         return context.getFile(filePath)
       })
       .with({ type: 'parse' }, () => {
@@ -130,7 +125,7 @@ export class CoreContext {
 
   async render(): Promise<Record<string, string>> {
     return await match(this.phase)
-      .with({ type: 'generate' }, () => {
+      .with({ type: 'group' }, () => {
         throw new Error('Cannot render in parse phase')
       })
       .with({ type: 'parse' }, () => {
@@ -140,40 +135,9 @@ export class CoreContext {
       .exhaustive()
   }
 
-  resolveRefSingle<T extends OasRefData>(arg: T): RefToResolved<T> | T {
-    return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
-        return context.resolveRefSingle(arg)
-      })
-      .with({ type: 'parse' }, () => {
-        throw new Error('Cannot resolve ref in parse phase')
-      })
-      .with({ type: 'render' }, () => {
-        throw new Error('Cannot resolve ref in render phase')
-      })
-      .exhaustive()
-  }
-
-  resolveRef<T extends OasRefData>(
-    arg: T,
-    lookupsPerformed: number = 0
-  ): RefToResolved<T> {
-    return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
-        return context.resolveRef(arg, lookupsPerformed)
-      })
-      .with({ type: 'parse' }, () => {
-        throw new Error('Cannot resolve ref in parse phase')
-      })
-      .with({ type: 'render' }, () => {
-        throw new Error('Cannot resolve ref in render phase')
-      })
-      .exhaustive()
-  }
-
   addFile(normalisedPath: string) {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
+      .with({ type: 'group' }, ({ context }) => {
         return context.addFile(normalisedPath)
       })
       .with({ type: 'parse' }, () => {
@@ -191,7 +155,7 @@ export class CoreContext {
     destinationPath
   }: ToTypeSystemArgs): Stringable {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
+      .with({ type: 'group' }, ({ context }) => {
         return context.toTypeSystem({ value, required, destinationPath }, this)
       })
       .with({ type: 'parse' }, () => {
@@ -205,7 +169,7 @@ export class CoreContext {
 
   toInferType(value: Stringable) {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => {
+      .with({ type: 'group' }, ({ context }) => {
         return context.toInferType(value, this)
       })
       .with({ type: 'parse' }, () => {
@@ -219,7 +183,7 @@ export class CoreContext {
 
   get files(): Map<string, FileContents> {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => context.files)
+      .with({ type: 'group' }, ({ context }) => context.files)
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot access files in parse phase')
       })
@@ -229,7 +193,7 @@ export class CoreContext {
 
   get schemaModel(): OasDocument {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => context.schemaModel)
+      .with({ type: 'group' }, ({ context }) => context.schemaModel)
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot access schema model in parse phase')
       })
@@ -241,7 +205,7 @@ export class CoreContext {
 
   get settings(): Settings {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => context.settings)
+      .with({ type: 'group' }, ({ context }) => context.settings)
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot access settings in parse phase')
       })
@@ -253,7 +217,7 @@ export class CoreContext {
 
   get typeSystemInfo(): Omit<TypeSystem, 'create'> {
     return match(this.phase)
-      .with({ type: 'generate' }, ({ context }) => context.typeSystemInfo)
+      .with({ type: 'group' }, ({ context }) => context.typeSystemInfo)
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot access type system in parse phase')
       })

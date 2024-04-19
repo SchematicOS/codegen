@@ -2,6 +2,7 @@ import { OasBase } from 'parse/elements/OasBase.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import type { OasMediaType } from 'parse/elements/MediaType.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type RequestBodyFields = {
   description: string | undefined
@@ -45,5 +46,13 @@ export class OasRequestBody extends OasBase {
 
   get required() {
     return this.fields.required
+  }
+
+  isRef(): this is OasRef<'requestBody'> {
+    return false
+  }
+
+  resolve() {
+    return this
   }
 }

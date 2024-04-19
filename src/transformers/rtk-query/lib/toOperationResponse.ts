@@ -2,7 +2,6 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
-import { isRef } from 'generate/helpers/ref.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasResponse } from 'parse/elements/Response.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
@@ -60,9 +59,7 @@ const toResponseValue = ({
     return OasVoid.fromFields({ context })
   }
 
-  const resolvedResponse = isRef(response)
-    ? context.resolveRef(response)
-    : response
+  const resolvedResponse = response.resolve()
 
   const schema = resolvedResponse.toSchema()
 

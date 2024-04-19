@@ -1,6 +1,7 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
 import { Trail } from 'core/lib/Trail.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type VoidFields = {
   title?: string
@@ -49,5 +50,13 @@ export class OasVoid extends OasBase {
 
   get description() {
     return this.fields.description
+  }
+
+  isRef(): this is OasRef<'schema'> {
+    return false
+  }
+
+  resolve() {
+    return this
   }
 }

@@ -64,4 +64,12 @@ export class OasHeader extends OasBase {
   get content() {
     return this.fields.content
   }
+
+  isRef(): this is OasRef<'header'> {
+    return false
+  }
+
+  resolve() {
+    return this
+  }
 }

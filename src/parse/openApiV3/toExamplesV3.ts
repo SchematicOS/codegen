@@ -48,7 +48,6 @@ export const toExamplesV3 = ({
   | undefined => {
   if (example && examples) {
     context.warn({
-      phase: 'group',
       trail,
       message: `Both example and examples are defined for ${exampleKey}`
     })
