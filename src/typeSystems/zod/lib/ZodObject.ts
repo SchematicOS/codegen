@@ -5,7 +5,7 @@ import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasObject } from 'parse/elements/schema/Object.ts'
-import { sanitiseKey } from 'typescript/helpers/sanitise.ts'
+import { handleKey } from 'typescript/helpers/names.ts'
 
 type ZodObjectProps = {
   context: CoreContext
@@ -93,7 +93,7 @@ class ZodObjectProperties extends SchematicBase implements Stringable {
         required: required?.includes(key)
       })
 
-      return `${sanitiseKey(key)}: ${value}`
+      return `${handleKey(key)}: ${value}`
     })
   }
 

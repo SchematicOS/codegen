@@ -9,6 +9,7 @@
       "jsr:@std/fs@0.222.1": "jsr:@std/fs@0.222.1",
       "jsr:@std/path@0.222.1": "jsr:@std/path@0.222.1",
       "jsr:@std/path@^0.222.1": "jsr:@std/path@0.222.1",
+      "npm:@babel/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
       "npm:@redocly/openapi-core@1.11.0": "npm:@redocly/openapi-core@1.11.0",
       "npm:@schematicos/types@0.0.44": "npm:@schematicos/types@0.0.44",
       "npm:lodash-es": "npm:lodash-es@4.17.21",
@@ -48,6 +49,10 @@
       }
     },
     "npm": {
+      "@babel/helper-validator-identifier@7.22.20": {
+        "integrity": "sha512-Y4OZ+ytlatR8AI+8KZfKuL5urKp7qey08ha31L8b3BwewJAoJamTzyvxPR/5D+KkdJCGPq/+8TukHBlY10FX9A==",
+        "dependencies": {}
+      },
       "@redocly/ajv@8.11.0": {
         "integrity": "sha512-9GWx27t7xWhDIR02PA18nzBdLcKQRgc46xNQvjFkrYk4UOmvKhJ/dawwiX0cCOeetN5LcaaiqQbVOWYK62SGHw==",
         "dependencies": {

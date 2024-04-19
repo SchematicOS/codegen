@@ -5,10 +5,7 @@ import { KeyValues } from 'typescript/lib/KeyValues.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
-import {
-  sanitiseKey,
-  sanitisePropertyName
-} from 'typescript/helpers/sanitise.ts'
+import { handleKey, handlePropertyName } from 'typescript/helpers/names.ts'
 
 type QueryCallProps = {
   queryArg: string
@@ -80,7 +77,7 @@ const toKeyValues = (
   queryArg: string
 ) => {
   const mapped = parameters?.map(({ name }) => {
-    return `${sanitiseKey(name)}: ${sanitisePropertyName(name, queryArg)}`
+    return `${handleKey(name)}: ${handlePropertyName(name, queryArg)}`
   })
 
   return mapped?.length ? `{\n${mapped.join(',\n')}\n}` : EMPTY
