@@ -1,9 +1,9 @@
-import { needsWrapping } from 'typescript/helpers/needsWrapping.ts'
+import { isIdentifierName } from 'npm:@babel/helper-validator-identifier'
 
 export const sanitiseKey = (key: string): string => {
-  return needsWrapping(key) ? `'${key}'` : key
+  return isIdentifierName(key) ? `'${key}'` : key
 }
 
 export const sanitisePropertyName = (name: string, parent: string): string => {
-  return needsWrapping(name) ? `${parent}['${name}']` : `${parent}.${name}`
+  return isIdentifierName(name) ? `${parent}['${name}']` : `${parent}.${name}`
 }
