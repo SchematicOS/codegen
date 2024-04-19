@@ -1,7 +1,6 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasDiscriminatorData, Stringable } from '@schematicos/types'
-import { isRef } from 'generate/helpers/ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 
@@ -51,7 +50,7 @@ type ToChildrenArgs = {
 
 const toChildren = ({ context, destinationPath, members }: ToChildrenArgs) => {
   return members
-    .filter((member): member is OasSchema => !isRef(member))
+    .filter((member): member is OasSchema => !member.isRef())
     .map(member => {
       return context.toTypeSystem({
         destinationPath,
