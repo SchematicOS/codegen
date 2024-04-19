@@ -1,7 +1,4 @@
-import { ImportName } from './ImportName.ts'
-import type { ImportNameArg } from './ImportName.ts'
 import type { Stringable } from '@schematicos/types'
-
 
 type ConstructorArgs = {
   module: string
@@ -20,7 +17,7 @@ export class Import implements Stringable {
   static create(
     module: string,
     importNamesArg: ImportNameArg | ImportNameArg[]
-  ):Import {
+  ): Import {
     const importNames = Array.isArray(importNamesArg)
       ? importNamesArg.map(importName => ImportName.create(importName))
       : [ImportName.create(importNamesArg)]
@@ -31,7 +28,31 @@ export class Import implements Stringable {
     })
   }
 
-  toString():string {
+  toString(): string {
     return `import { ${this.importNames.join(', ')} } from '${this.module}'`
+  }
+}
+
+export type ImportNameArg = string | { [name: string]: string }
+
+export class ImportName {
+  name: string
+  alias?: string
+
+  private constructor(name: string, alias?: string) {
+    this.name = name
+    this.alias = alias
+  }
+
+  static create(name: ImportNameArg): ImportName {
+    if (typeof name === 'string') {
+      return new ImportName(name)
+    }
+
+    return new ImportName(...Object.entries(name)[0])
+  }
+
+  toString(): string {
+    return this.alias ? `${this.name} as ${this.alias}` : this.name
   }
 }

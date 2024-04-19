@@ -6,6 +6,7 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
 import { handleKey, handlePropertyName } from 'typescript/helpers/names.ts'
+import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 
 type QueryCallProps = {
   queryArg: string
@@ -62,7 +63,7 @@ const toProperties = ({ operation, queryArg }: ToPropertiesArgs) => {
   const isEmpty = !params?.length && !headers?.length && !operation.requestBody
 
   const properties = KeyValues.create({
-    path: operation.toPathTemplate(queryArg),
+    path: toPathTemplate(operation.path, queryArg),
     method: operation.method.toUpperCase(),
     params: toKeyValues(params, queryArg),
     headers: toKeyValues(headers, queryArg),

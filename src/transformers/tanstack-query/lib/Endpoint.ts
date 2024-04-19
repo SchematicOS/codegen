@@ -5,6 +5,7 @@ import type { Stringable } from '@schematicos/types'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 import { toEndpointName } from 'generate/helpers/naming.ts'
+import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 
 export type EndpointArgs = {
   context: CoreContext
@@ -43,9 +44,9 @@ export class Endpoint extends SchematicBase implements Stringable {
     return `
     const ${toEndpointName(this.operation)} = async (deploymentId: string) => {
       const { data, error } = await supabaseClient.functions.invoke(
-        ${this.operation.toPathTemplate('temp')},
+        ${toPathTemplate(this.operation.path)},
         {
-          method: 'GET'
+          method: '${this.operation.method.toUpperCase()}',
         }
       )
     

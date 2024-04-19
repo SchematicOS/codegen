@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "tasks": {
     "types": "deno check **/*.ts",
-    "generate": "deno run --allow-read --allow-write --allow-env src/cli/mod.ts -d=./.schematic/deno-subhosting"
+    "generate": "deno run --allow-read --allow-write --allow-env src/cli/mod.ts"
   },
   "exports": {
     "./cli": "./src/cli/mod.ts"
