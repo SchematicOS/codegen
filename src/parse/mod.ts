@@ -19,16 +19,10 @@ import { Trail } from 'core/lib/Trail.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 
-type ParsePayload = {
-  schemaFormat: 'json' | 'yaml'
-  schemaDocument: string
+export const parse = async (
+  schemaDocument: string,
   context: CoreContext
-}
-
-export const parse = async ({
-  schemaDocument,
-  context
-}: ParsePayload): Promise<OasDocument> => {
+): Promise<OasDocument> => {
   const { document, specVersion } = await parseSchema(schemaDocument)
 
   const trail = Trail.create({
@@ -37,14 +31,11 @@ export const parse = async ({
 
   return match(specVersion)
     .with(SpecVersion.OAS2, () => {
-      context.report({
-        level: 'error',
+      context.error({
         phase: 'parse',
         trail,
         message: 'OpenAPI v2 is not supported yet'
       })
-
-      throw new Error('OpenAPI v2 is not supported yet')
     })
     .with(SpecVersion.OAS3_0, (): OasDocument => {
       return toDocumentV3({
@@ -54,24 +45,18 @@ export const parse = async ({
       })
     })
     .with(SpecVersion.OAS3_1, () => {
-      context.report({
-        level: 'error',
+      context.error({
         phase: 'parse',
         trail,
         message: 'OpenAPI v3.1 is not supported yet'
       })
-
-      throw new Error('OpenAPI v3.1 is not supported yet')
     })
     .otherwise(() => {
-      context.report({
-        level: 'error',
+      context.error({
         phase: 'parse',
         trail,
         message: `Unsupported spec version: ${specVersion}`
       })
-
-      throw new Error(`Unsupported spec version: ${specVersion}`)
     })
 }
 

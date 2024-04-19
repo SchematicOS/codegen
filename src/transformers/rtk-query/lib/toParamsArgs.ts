@@ -1,6 +1,6 @@
 import { EMPTY } from 'generate/constants.ts'
 import { Key } from 'generate/elements/Key.ts'
-import { Property } from 'generate/elements/Property.ts'
+import { Property } from 'typescript/lib/Property.ts'
 import type { OasParameterData } from '@schematicos/types'
 
 type ToParamsArgs = {

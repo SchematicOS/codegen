@@ -55,7 +55,7 @@ export type Transformer = {
   transform: TransformerFn
 }
 
-type OasComponentType =
+export type OasComponentType =
   | OasSchema
   | OasResponse
   | OasParameter

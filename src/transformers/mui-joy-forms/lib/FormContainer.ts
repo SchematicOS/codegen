@@ -182,14 +182,11 @@ const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {
   const { requestBody } = operation
 
   if (!requestBody) {
-    context.report({
+    return context.warn({
       phase: 'group',
-      level: 'warn',
       trail: operation.trail,
       message: 'No requestBody found'
     })
-
-    return
   }
 
   const { content } = isRef(requestBody)
@@ -204,24 +201,19 @@ const toBodySchemaValue = ({ context, operation }: ToBodySchemaValueArgs) => {
     .otherwise(() => undefined)
 
   if (!bodySchemaValue) {
-    context.report({
+    return context.warn({
       phase: 'group',
-      level: 'warn',
       trail: operation.trail,
       message: 'No body schema found'
     })
-    return
   }
 
   if (bodySchemaValue.type !== 'object') {
-    context.report({
+    return context.warn({
       phase: 'group',
-      level: 'warn',
       trail: operation.trail,
       message: 'Body schema is not an object'
     })
-
-    return
   }
 
   return bodySchemaValue

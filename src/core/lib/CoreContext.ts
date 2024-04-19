@@ -16,6 +16,7 @@ import type { RefToResolved, TypeSystem } from 'generate/types.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { Settings } from 'generate/settings/Settings.ts'
 import { RenderContext } from 'core/lib/RenderContext.ts'
+import invariant from 'tiny-invariant'
 
 type SharedContext =
   | {
@@ -81,8 +82,22 @@ export class CoreContext {
     this.phase = { type: 'render', context: renderContext }
   }
 
-  report({ level, phase, trail, message }: ReportArgs): void {
+  private report({ level, phase, trail, message }: ReportArgs) {
     this.reporter.report({ level, phase, trail, message })
+  }
+
+  error(args: Omit<ReportArgs, 'level'>): never {
+    this.report({ ...args, level: 'error' })
+
+    throw new Error(args.message)
+  }
+
+  info(args: Omit<ReportArgs, 'level'>): void {
+    this.report({ ...args, level: 'info' })
+  }
+
+  warn(args: Omit<ReportArgs, 'level'>): void {
+    this.report({ ...args, level: 'warn' })
   }
 
   register({ destinationPath, ...args }: RegisterArgs) {

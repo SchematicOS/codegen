@@ -40,6 +40,10 @@ export class OasParameter extends OasBase {
     return new OasParameter({ fields, trail, context, skipped })
   }
 
+  resolve() {
+    return this
+  }
+
   get name() {
     return this.fields.name
   }

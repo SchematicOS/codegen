@@ -15,7 +15,6 @@ import { Settings } from 'generate/settings/Settings.ts'
 type RunArgs = {
   schema: string
   project: string
-  schemaFormat: 'json' | 'yaml'
   settings?: SettingsType
   prettier?: PrettierConfigType
 }
@@ -23,7 +22,6 @@ type RunArgs = {
 export const run = async ({
   schema,
   project,
-  schemaFormat,
   settings = {},
   prettier
 }: RunArgs) => {
@@ -41,11 +39,7 @@ export const run = async ({
     reporter
   })
 
-  const schemaModel: OasDocument = await parse({
-    schemaDocument: schema,
-    schemaFormat,
-    context
-  })
+  const schemaModel: OasDocument = await parse(schema, context)
 
   if (!schemaModel.openapi.startsWith('3.0.')) {
     throw new Error('Only OpenAPI v3 is supported')

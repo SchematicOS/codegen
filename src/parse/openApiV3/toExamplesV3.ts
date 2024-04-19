@@ -47,9 +47,8 @@ export const toExamplesV3 = ({
   | Record<string, OasExample | OasRef<'example'>>
   | undefined => {
   if (example && examples) {
-    context.report({
+    context.warn({
       phase: 'group',
-      level: 'warn',
       trail,
       message: `Both example and examples are defined for ${exampleKey}`
     })

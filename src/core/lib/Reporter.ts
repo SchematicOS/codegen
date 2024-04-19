@@ -25,9 +25,19 @@ export class Reporter {
     return new Reporter({ destination, logLevel })
   }
 
+  error(
+    args: Omit<ReportArgs, 'level'>
+  ): asserts args is Omit<ReportArgs, 'level'> {
+    this.report({ ...args, level: 'error' })
+  }
+
   report({ level, phase, trail, message }: ReportArgs) {
     if (this.shouldLog(level)) {
       this.destination({ level, phase, trail, message })
+    }
+
+    if (level === 'error') {
+      throw new Error(message)
     }
   }
 

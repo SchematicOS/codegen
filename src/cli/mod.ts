@@ -55,8 +55,6 @@ const main = (inputArgs: string[]) => {
     Deno.exit(0)
   }
 
-  const schemaFormat = args.schema.endsWith('.json') ? 'json' : 'yaml'
-
   const directory = join('./.schematic', args.project, 'config')
 
   const schemaPath = resolve(directory, args.schema)
@@ -79,7 +77,6 @@ const main = (inputArgs: string[]) => {
   run({
     schema: schemaContent,
     project: args.project,
-    schemaFormat,
     settings,
     prettier
   })
