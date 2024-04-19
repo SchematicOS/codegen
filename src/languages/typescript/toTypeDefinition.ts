@@ -4,22 +4,19 @@ import { capitalize } from 'generate/helpers/strings.ts'
 import { EntityType } from './lib/EntityType.ts'
 
 export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
-  const { context, sourcePath, modelSettings } = valueIdentifier
+  const { context, modelSettings } = valueIdentifier
 
   const typeIdentifier = Identifier.create({
     name: capitalize(valueIdentifier.name),
-    sourcePath,
     modelSettings,
     type: EntityType.create('type'),
     context
   })
 
-  const inferred = context.toInferType(valueIdentifier)
-
   return Definition.create({
     identifier: typeIdentifier,
-    children: inferred,
-    destinationPath: sourcePath,
+    children: context.toInferType(valueIdentifier),
+    destinationPath: modelSettings.getExportPath(),
     context
   })
 }

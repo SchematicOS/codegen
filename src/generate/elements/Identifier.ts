@@ -8,7 +8,6 @@ import type { EntityType } from 'typescript/lib/EntityType.ts'
 
 type IdentifierArgs = {
   name: string
-  sourcePath: string
   modelSettings: ModelSettings
   type: EntityType
   context: CoreContext
@@ -21,21 +20,12 @@ type From$RefArgs = {
 
 export class Identifier implements Stringable {
   name: string
-  /** source is where Identifier is defined */
-  sourcePath: string
   modelSettings: ModelSettings
   type: EntityType
   context: CoreContext
 
-  private constructor({
-    name,
-    sourcePath,
-    modelSettings,
-    type,
-    context
-  }: IdentifierArgs) {
+  private constructor({ name, modelSettings, type, context }: IdentifierArgs) {
     this.name = name
-    this.sourcePath = sourcePath
     this.modelSettings = modelSettings
     this.type = type
     this.context = context
@@ -43,14 +33,12 @@ export class Identifier implements Stringable {
 
   static create({
     name,
-    sourcePath,
     modelSettings,
     type,
     context
   }: IdentifierArgs): Identifier {
     return new Identifier({
       name,
-      sourcePath,
       modelSettings,
       type,
       context
@@ -62,11 +50,9 @@ export class Identifier implements Stringable {
     const modelSettings = context.settings.getModelSettings($ref)
 
     const name = modelSettings.getRenameTo() || toRefName($ref)
-    const sourcePath = modelSettings.getExportPath()
 
     return Identifier.create({
       name: formatIdentifier(name),
-      sourcePath,
       modelSettings,
       type,
       context
@@ -74,12 +60,14 @@ export class Identifier implements Stringable {
   }
 
   toImport(): Import {
-    return Import.create(this.sourcePath, this.name)
+    return Import.create(this.modelSettings.getExportPath(), this.name)
   }
 
   isImported(destination: string): boolean {
     // Normalize paths to ensure comparison is accurate
-    return normalize(this.sourcePath) !== normalize(destination)
+    return (
+      normalize(this.modelSettings.getExportPath()) !== normalize(destination)
+    )
   }
 
   toString(): string {
