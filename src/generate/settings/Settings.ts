@@ -29,10 +29,7 @@ export class Settings {
 
     const modelSettings = this.settings?.components?.models?.[modelName]
 
-    return ModelSettings.create({
-      settings: modelSettings,
-      parentExportPath: this.getExportPath()
-    })
+    return ModelSettings.create(modelSettings, this.getExportPath())
   }
 
   getExportPath(): string {

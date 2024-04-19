@@ -3,10 +3,7 @@ import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
-import type { OasResponse } from 'parse/elements/Response.ts'
-import type { OasRef } from 'parse/elements/Ref.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
-import type { OasSchema } from 'parse/elements/schema/types.ts'
 import { toResponseName } from 'generate/helpers/naming.ts'
 
 type ToOperationResponseArgs = {
@@ -21,10 +18,7 @@ export const toOperationResponse = ({
   destinationPath
 }: ToOperationResponseArgs) => {
   const modelSettings = ModelSettings.create({
-    settings: {
-      exportPath: destinationPath,
-      selected: true
-    }
+    exportPath: destinationPath
   })
 
   const identifier = Identifier.create({
@@ -36,32 +30,11 @@ export const toOperationResponse = ({
   })
 
   const successResponse = operation.toSuccessResponse()
-  const value = toResponseValue({ context, response: successResponse })
 
   return Definition.fromValue({
     context,
     identifier,
-    value,
+    value: successResponse?.resolve().toSchema() ?? OasVoid.empty(context),
     destinationPath
   })
-}
-
-type ToResponseValue = {
-  context: CoreContext
-  response: OasResponse | OasRef<'response'> | undefined
-}
-
-const toResponseValue = ({
-  context,
-  response
-}: ToResponseValue): OasSchema | OasRef<'schema'> | OasVoid => {
-  if (!response) {
-    return OasVoid.fromFields({ context })
-  }
-
-  const resolvedResponse = response.resolve()
-
-  const schema = resolvedResponse.toSchema()
-
-  return schema ?? OasVoid.fromFields({ context })
 }

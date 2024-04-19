@@ -3,6 +3,7 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Trail } from 'core/lib/Trail.ts'
 import type { OasMediaType } from 'parse/elements/MediaType.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
+import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 export type RequestBodyFields = {
   description: string | undefined
@@ -54,5 +55,11 @@ export class OasRequestBody extends OasBase {
 
   resolve() {
     return this
+  }
+
+  toSchema(
+    mediaType: string = 'application/json'
+  ): OasSchema | OasRef<'schema'> | undefined {
+    return this.fields.content?.[mediaType]?.schema
   }
 }

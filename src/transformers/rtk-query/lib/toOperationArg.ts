@@ -2,7 +2,6 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { ModelSettings } from 'generate/settings/ModelSettings.ts'
-import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasObject } from 'parse/elements/schema/Object.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
@@ -20,10 +19,7 @@ export const toEndpointArg = ({
   operation
 }: ToEndpointArgArgs) => {
   const modelSettings = ModelSettings.create({
-    settings: {
-      exportPath: destinationPath,
-      selected: true
-    }
+    exportPath: destinationPath
   })
 
   const identifier = Identifier.create({
@@ -34,7 +30,7 @@ export const toEndpointArg = ({
     context
   })
 
-  const body = toBodySchema(operation)
+  const body = operation.requestBody?.resolve().toSchema('application/json')
 
   const parameterItems = toParametersByName(operation)
 
@@ -42,7 +38,7 @@ export const toEndpointArg = ({
     return Definition.fromValue({
       context,
       identifier,
-      value: OasVoid.fromFields({ context }),
+      value: OasVoid.empty(context),
       destinationPath
     })
   }
@@ -69,39 +65,16 @@ export const toEndpointArg = ({
   })
 }
 
-const toBodySchema = (operation: OasOperation) => {
-  const { requestBody } = operation
-
-  if (!requestBody) {
-    return
-  }
-
-  const { content } = requestBody.resolve()
-
-  return content['application/json']?.schema
-}
-
 const toParametersByName = (operation: OasOperation) => {
-  const { parameters } = operation
-
-  if (!parameters || isEmpty(parameters)) {
-    return
-  }
-
-  const nameRequiredSchema = parameters.map(parameter => {
-    const { name, required, schema } = parameter.resolve()
-
-    return { name, required, schema }
-  })
+  const resolved = operation.parameters?.map(parameter => parameter.resolve())
 
   const properties = Object.fromEntries(
-    nameRequiredSchema.map(({ name, schema }) => [name, schema])
+    resolved?.map(({ name, schema }) => [name, schema]) ?? []
   )
 
   return {
     properties,
-    required: nameRequiredSchema
-      .filter(({ required }) => required)
-      .map(({ name }) => name)
+    required:
+      resolved?.filter(({ required }) => required).map(({ name }) => name) ?? []
   }
 }

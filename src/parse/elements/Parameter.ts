@@ -83,4 +83,14 @@ export class OasParameter extends OasBase {
   resolve() {
     return this
   }
+
+  toSchema(
+    mediaType: string = 'application/json'
+  ): OasSchema | OasRef<'schema'> | undefined {
+    if (this.schema) {
+      return this.schema
+    }
+
+    return this.fields.content?.[mediaType]?.schema
+  }
 }

@@ -35,9 +35,9 @@ export class OasVoid extends OasBase {
     return new OasVoid({ fields, trail, context, skipped })
   }
 
-  static fromFields({ fields = {}, context }: FromFieldsArgs) {
+  static empty(context: CoreContext) {
     return new OasVoid({
-      fields,
+      fields: {},
       trail: Trail.create(),
       context,
       skipped: {}

@@ -2,27 +2,33 @@ import type { ModelSettingsType } from '@schematicos/types'
 import { join } from 'path'
 
 type ModelSettingsArgs = {
-  settings: ModelSettingsType | undefined
-  parentExportPath?: string
+  selected?: boolean
+  renameTo?: string
+  importFrom?: string
+  exportPath?: string
 }
 
 export class ModelSettings {
   settings: ModelSettingsType | undefined
   parentExportPath: string
 
-  private constructor({ settings, parentExportPath = '' }: ModelSettingsArgs) {
+  private constructor(settings: ModelSettingsType, parentExportPath: string) {
     this.settings = settings
     this.parentExportPath = parentExportPath
   }
 
-  static create({
-    settings,
-    parentExportPath
-  }: ModelSettingsArgs): ModelSettings {
-    return new ModelSettings({
-      settings,
+  static create(
+    {
+      selected = true,
+      exportPath,
+      renameTo
+    }: ModelSettingsArgs | undefined = {},
+    parentExportPath = ''
+  ): ModelSettings {
+    return new ModelSettings(
+      { selected, exportPath, renameTo },
       parentExportPath
-    })
+    )
   }
 
   isSelected(): boolean {
