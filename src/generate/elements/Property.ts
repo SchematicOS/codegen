@@ -1,4 +1,4 @@
-import { needsWrapping } from '../helpers/needsWrapping.ts'
+import { needsWrapping } from 'generate/helpers/needsWrapping.ts'
 import type { Stringable } from '@schematicos/types'
 
 type PropertyArgs = {
@@ -15,11 +15,11 @@ export class Property implements Stringable {
     this.property = property
   }
 
-  static create({ parentPath, property }: PropertyArgs):Property {
+  static create({ parentPath, property }: PropertyArgs): Property {
     return new Property({ parentPath, property })
   }
 
-  toString():string {
+  toString(): string {
     const property = this.property.toString()
 
     return needsWrapping(property)

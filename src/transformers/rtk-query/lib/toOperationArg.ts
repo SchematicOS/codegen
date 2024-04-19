@@ -1,4 +1,3 @@
-import { toArgsName } from './util.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
@@ -8,6 +7,7 @@ import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasObject } from 'parse/elements/schema/Object.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
+import { toArgsName } from 'generate/helpers/naming.ts'
 
 type ToEndpointArgArgs = {
   context: CoreContext

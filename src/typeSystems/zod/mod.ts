@@ -1,7 +1,7 @@
 import type { TypeSystem } from 'generate/types.ts'
 import { decapitalize } from 'generate/helpers/strings.ts'
 import { Zod } from './lib/Zod.ts'
-import { EntityType } from 'typescript/EntityType.ts'
+import { EntityType } from 'typescript/lib/EntityType.ts'
 import { ZodInferType } from 'zod/lib/ZodInferType.ts'
 
 const zodTypeSystem: TypeSystem = {

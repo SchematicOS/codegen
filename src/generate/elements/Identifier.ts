@@ -1,10 +1,10 @@
 import type { CoreContext } from 'core/lib/CoreContext.ts'
-import { toRefName } from '../helpers/ref.ts'
+import { toRefName } from 'generate/helpers/ref.ts'
 import { Import } from './Import.ts'
 import { normalize } from 'path'
-import type { ModelSettings } from '../settings/ModelSettings.ts'
+import type { ModelSettings } from 'generate/settings/ModelSettings.ts'
 import type { Stringable } from '@schematicos/types'
-import type { EntityType } from 'typescript/EntityType.ts'
+import type { EntityType } from 'typescript/lib/EntityType.ts'
 
 type IdentifierArgs = {
   name: string

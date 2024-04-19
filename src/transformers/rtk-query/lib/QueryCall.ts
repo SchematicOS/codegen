@@ -3,7 +3,7 @@ import { toParamsArgs } from './toParamsArgs.ts'
 import { isRef } from 'generate/helpers/ref.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
-import { KeyValues } from 'generate/elements/KeyValues.ts'
+import { KeyValues } from 'typescript/lib/KeyValues.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 

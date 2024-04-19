@@ -1,5 +1,5 @@
 import type { PrettierConfigType, Stringable } from '@schematicos/types'
-import { Import } from '../../generate/elements/Import.ts'
+import { Import } from 'generate/elements/Import.ts'
 import type { ReportArgs } from 'core/lib/Reporter.ts'
 import type { Reporter } from 'core/lib/Reporter.ts'
 import { format } from 'prettier/standalone'

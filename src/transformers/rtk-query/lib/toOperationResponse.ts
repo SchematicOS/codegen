@@ -1,4 +1,3 @@
-import { toResponseName } from './util.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
@@ -9,6 +8,7 @@ import type { OasResponse } from 'parse/elements/Response.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
+import { toResponseName } from 'generate/helpers/naming.ts'
 
 type ToOperationResponseArgs = {
   context: CoreContext

@@ -1,4 +1,3 @@
-import { toEndpointName, toEndpointType } from './util.ts'
 import { QueryCall } from './QueryCall.ts'
 import { toEndpointArg } from './toOperationArg.ts'
 import { toOperationResponse } from './toOperationResponse.ts'
@@ -9,6 +8,7 @@ import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
 import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
+import { toEndpointName, toEndpointType } from 'generate/helpers/naming.ts'
 
 export type RtkEndpointArgs = {
   context: CoreContext

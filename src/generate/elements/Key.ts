@@ -1,4 +1,4 @@
-import { needsWrapping } from '../helpers/needsWrapping.ts'
+import { needsWrapping } from 'generate/helpers/needsWrapping.ts'
 import type { Stringable } from '@schematicos/types'
 
 export class Key implements Stringable {
@@ -8,11 +8,11 @@ export class Key implements Stringable {
     this.key = key
   }
 
-  static create(key: Stringable):Key {
+  static create(key: Stringable): Key {
     return new Key(key)
   }
 
-  toString():string {
+  toString(): string {
     const key = this.key.toString()
 
     return needsWrapping(key) ? `'${key}'` : key

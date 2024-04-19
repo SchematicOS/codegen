@@ -1,7 +1,7 @@
 import { Definition } from 'generate/elements/Definition.ts'
 import { Identifier } from 'generate/elements/Identifier.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
-import { EntityType } from 'typescript/EntityType.ts'
+import { EntityType } from './lib/EntityType.ts'
 
 export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
   const { context, sourcePath, modelSettings } = valueIdentifier

@@ -1,4 +1,4 @@
-import type { EntityType } from '../languages/typescript/EntityType.ts'
+import type { EntityType } from 'typescript/lib/EntityType.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'

@@ -1,6 +1,6 @@
 import { OasBase } from 'parse/elements/OasBase.ts'
-import { Trail } from 'core/lib/Trail.ts'
-import { CoreContext } from 'core/lib/CoreContext.ts'
+import type { Trail } from 'core/lib/Trail.ts'
+import type { CoreContext } from 'core/lib/CoreContext.ts'
 
 export type UnknownFields = {
   title?: string
