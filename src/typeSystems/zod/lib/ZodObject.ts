@@ -44,9 +44,7 @@ export class ZodObject extends SchematicBase implements Stringable {
   }
 
   static create(args: ZodObjectProps) {
-    const instance = new ZodObject(args)
-
-    return instance
+    return new ZodObject(args)
   }
 
   toString() {
