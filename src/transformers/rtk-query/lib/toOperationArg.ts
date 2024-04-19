@@ -6,6 +6,7 @@ import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasObject } from 'parse/elements/schema/Object.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 import { toArgsName } from 'generate/helpers/naming.ts'
+import isEmpty from 'lodash-es/isEmpty.js'
 
 type ToEndpointArgArgs = {
   context: CoreContext
@@ -32,30 +33,14 @@ export const toEndpointArg = ({
 
   const body = operation.requestBody?.resolve().toSchema('application/json')
 
-  const parameterItems = toParametersByName(operation)
+  const { properties, required } = toQueryProperties(operation, Boolean(body))
 
-  if (!body && !parameterItems) {
-    return Definition.fromValue({
-      context,
-      identifier,
-      value: OasVoid.empty(context),
-      destinationPath
-    })
-  }
-
-  const parametersProperties = parameterItems?.properties || {}
-  const parametersRequired = parameterItems?.required || []
-
-  const value = OasObject.fromFields({
-    fields: {
-      required: parametersRequired.concat(body ? 'body' : []),
-      properties: {
-        ...parametersProperties,
-        ...(body ? { body } : {})
-      }
-    },
-    context
-  })
+  const value = isEmpty(properties)
+    ? OasVoid.empty(context)
+    : OasObject.fromFields({
+        fields: { required, properties },
+        context
+      })
 
   return Definition.fromValue({
     context,
@@ -65,16 +50,24 @@ export const toEndpointArg = ({
   })
 }
 
-const toParametersByName = (operation: OasOperation) => {
-  const resolved = operation.parameters?.map(parameter => parameter.resolve())
+const toQueryProperties = (operation: OasOperation, hasBody: boolean) => {
+  const parameters = operation.parameters ?? []
 
-  const properties = Object.fromEntries(
-    resolved?.map(({ name, schema }) => [name, schema]) ?? []
-  )
+  const resolved = parameters.map(parameter => parameter.resolve())
+
+  // map property schemas by name
+  const properties = resolved
+    .map(parameter => [parameter.name, parameter.toSchema()])
+    .concat(hasBody ? [['body', 'body']] : [])
+
+  // create list of required properties
+  const required = resolved
+    .filter(({ required }) => required)
+    .map(({ name }) => name)
+    .concat(hasBody ? ['body'] : [])
 
   return {
-    properties,
-    required:
-      resolved?.filter(({ required }) => required).map(({ name }) => name) ?? []
+    properties: Object.fromEntries(properties),
+    required
   }
 }

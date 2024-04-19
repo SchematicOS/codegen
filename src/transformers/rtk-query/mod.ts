@@ -1,6 +1,6 @@
 import type { TransformerArgs, Transformer } from 'generate/types.ts'
-import { RtkEndpoint } from './lib/RtkEndpoint.ts'
-import { RtkQueryContainer } from './lib/RtkQueryContainer.ts'
+import { RtkEndpoint } from './lib/Endpoint.ts'
+import { RtkQueryContainer } from './lib/Container.ts'
 
 export const transform = ({
   context,

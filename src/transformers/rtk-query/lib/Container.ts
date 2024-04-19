@@ -1,4 +1,4 @@
-import type { RtkEndpoint } from './RtkEndpoint.ts'
+import type { RtkEndpoint } from './Endpoint.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { TransformerSettings } from 'generate/settings/TransformerSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
