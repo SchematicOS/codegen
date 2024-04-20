@@ -11,5 +11,5 @@ export const keyValues = (properties: Record<string, Stringable>) => {
     })
     .filter(row => row !== EMPTY)
 
-  return `${filteredEntries.join(',\n')}`
+  return filteredEntries.length ? `{${filteredEntries.join(',\n')}}` : EMPTY
 }

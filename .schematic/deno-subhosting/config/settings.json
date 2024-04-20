@@ -1,6 +1,5 @@
 {
   "transformerModules": ["rtk-query/mod.ts"],
   "typeSystemModule": "zod/mod.ts",
-  "schemaHash": "d6571e718d76a5ebb9d3f7451bf35188d2e1b1e1bddb766f1faf8edae2b326fc",
   "exportPath": "./src/index.tsx"
 }

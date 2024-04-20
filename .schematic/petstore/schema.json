@@ -288,7 +288,7 @@
         ]
       }
     },
-    "/pet/{petId}": {
+    "/pet/{petId}/temp/{tempId}": {
       "get": {
         "tags": [
           "pet"

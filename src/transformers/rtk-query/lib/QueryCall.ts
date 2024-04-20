@@ -42,15 +42,16 @@ export class QueryCall extends SchematicBase implements Stringable {
 
   toString(): string {
     const { params, headers, body } = this.properties
+    const { path } = this.operation
     const isEmpty = !params?.length && !headers?.length && !body
 
-    return `(${isEmpty ? '' : this.queryArg}) => ({${keyValues({
-      path: toPathTemplate(this.operation.path, this.queryArg),
+    return `(${isEmpty ? '' : this.queryArg}) => (${keyValues({
+      path: toPathTemplate(path, this.queryArg),
       method: this.operation.method.toUpperCase(),
-      params: toKeyValues(params, this.queryArg),
-      headers: toKeyValues(headers, this.queryArg),
+      params: params?.length ? toParameters(params, this.queryArg) : EMPTY,
+      headers: headers?.length ? toParameters(headers, this.queryArg) : EMPTY,
       body: this.operation.requestBody ? `${this.queryArg}.body` : EMPTY
-    })}})`
+    })})`
   }
 }
 
@@ -73,13 +74,10 @@ const toProperties = ({ operation }: ToPropertiesArgs) => {
   return { params, headers, body: operation.requestBody }
 }
 
-const toKeyValues = (
-  parameters: OasParameter[] | undefined,
-  queryArg: string
-) => {
-  const mapped = parameters?.map(({ name }) => {
-    return `${handleKey(name)}: ${handlePropertyName(name, queryArg)}`
-  })
-
-  return mapped?.length ? `{\n${mapped.join(',\n')}\n}` : EMPTY
+const toParameters = (parameters: OasParameter[], queryArg: string) => {
+  return `{${parameters
+    .map(
+      ({ name }) => `${handleKey(name)}: ${handlePropertyName(name, queryArg)}`
+    )
+    .join(',\n')}}`
 }

@@ -1,8 +1,6 @@
 import { parse } from 'parse/mod.ts'
 import type { SettingsType, PrettierConfigType } from '@schematicos/types'
-import { generate } from 'generate/mod.ts'
 import { writeFile } from './writeFile.ts'
-import generateModules from './transfomers.ts'
 import { join } from 'path'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import { Reporter } from 'core/lib/Reporter.ts'
@@ -12,20 +10,22 @@ import { ParseContext } from 'core/lib/ParseContext.ts'
 import { CoreContext } from 'core/lib/CoreContext.ts'
 import { Settings } from 'generate/settings/Settings.ts'
 import { Trail } from 'core/lib/Trail.ts'
+import type { Transformer } from 'generate/types.ts'
+import { generate } from 'generate/mod.ts'
+
+export type GenerateConfig = {
+  transformers: string[]
+  typeSystem: string
+}
 
 type RunArgs = {
   schema: string
   project: string
-  settings?: SettingsType
+  settings: SettingsType
   prettier?: PrettierConfigType
 }
 
-export const run = async ({
-  schema,
-  project,
-  settings = {},
-  prettier
-}: RunArgs) => {
+export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
   const logStore = new LogStore()
 
   const reporter = Reporter.create({
@@ -56,7 +56,11 @@ export const run = async ({
     throw new Error('Only OpenAPI v3 is supported')
   }
 
-  const { transformers, typeSystem } = generateModules
+  const transformers: Transformer[] = await Promise.all(
+    settings.transformerModules.map(transformer => import(transformer))
+  )
+
+  const { default: typeSystem } = await import(settings.typeSystemModule)
 
   context.setupGeneratePhase({
     schemaModel,

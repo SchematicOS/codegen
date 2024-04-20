@@ -1,0 +1,4 @@
+{
+  "transformerModules": ["rtk-query/mod.ts"],
+  "typeSystemModule": "zod/mod.ts"
+}

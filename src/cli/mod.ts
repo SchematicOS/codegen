@@ -55,9 +55,7 @@ const main = (inputArgs: string[]) => {
     Deno.exit(0)
   }
 
-  const directory = join('./.schematic', args.project, 'config')
-
-  const schemaPath = resolve(directory, args.schema)
+  const schemaPath = resolve('./.schematic', args.project, args.schema)
 
   const schemaContent = readFile<string>(schemaPath)
 
@@ -66,11 +64,18 @@ const main = (inputArgs: string[]) => {
     return
   }
 
-  const settingsPath = resolve(directory, args.settings)
+  const config = join('./.schematic', args.project, 'config')
+
+  const settingsPath = resolve(config, args.settings)
 
   const settings = readFile<SettingsType>(settingsPath)
 
-  const prettierPath = resolve(directory, args.prettier)
+  if (!settings) {
+    console.error(`Could not read schema from "${settingsPath}"`)
+    return
+  }
+
+  const prettierPath = resolve(config, args.prettier)
 
   const prettier = readFile<PrettierConfigType>(prettierPath)
 

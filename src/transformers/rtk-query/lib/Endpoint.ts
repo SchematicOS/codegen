@@ -1,6 +1,5 @@
 import { QueryCall } from './QueryCall.ts'
-import { toOperationArg } from './toOperationArg.ts'
-import { toOperationResponse } from './toOperationResponse.ts'
+import { toOperationResponse } from 'typescript/helpers/toOperationResponse.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Definition } from 'generate/elements/Definition.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
@@ -9,8 +8,9 @@ import type { Stringable } from '@schematicos/types'
 import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { toEndpointName, toEndpointType } from 'generate/helpers/naming.ts'
+import { toOperationArg } from 'typescript/helpers/toOperationArg.ts'
 
-export type RtkEndpointArgs = {
+export type EndpointArgs = {
   context: CoreContext
   operationSettings: OperationSettings
   operation: OasOperation
@@ -28,11 +28,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
 
   queryCall: QueryCall
 
-  private constructor({
-    operation,
-    operationSettings,
-    context
-  }: RtkEndpointArgs) {
+  private constructor({ operation, operationSettings, context }: EndpointArgs) {
     super({ context })
 
     this.operation = operation
@@ -75,7 +71,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
     })
   }
 
-  static create(args: RtkEndpointArgs): RtkEndpoint {
+  static create(args: EndpointArgs): RtkEndpoint {
     return new RtkEndpoint(args)
   }
 

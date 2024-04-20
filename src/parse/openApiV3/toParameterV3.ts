@@ -115,14 +115,34 @@ const toParameterV3 = ({
   } = parameter
 
   if (!isLocationV3(location)) {
+    context.error({
+      message: `Invalid location: ${location}`,
+      trail
+    })
+
     throw new Error(`Invalid location: ${location}`)
   }
+
+  if (location === 'path' && !required) {
+    context.warn({
+      message: `Path parameters must be required`,
+      trail
+    })
+  }
+
+  // Set missing 'required' to true for path parameters and false for others
+  const defaultRequired =
+    typeof required === 'undefined'
+      ? location === 'path'
+        ? true
+        : false
+      : required
 
   const fields: ParameterFields = {
     name,
     location,
     description,
-    required,
+    required: defaultRequired,
     deprecated,
     allowEmptyValue,
     schema: toOptionalSchemaV3({ schema, trail: trail.add('schema'), context }),
