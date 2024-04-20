@@ -56,9 +56,11 @@ export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
     throw new Error('Only OpenAPI v3 is supported')
   }
 
-  const transformers: Transformer[] = await Promise.all(
+  const t: { default: Transformer }[] = await Promise.all(
     settings.transformerModules.map(transformer => import(transformer))
   )
+
+  const transformers = t.map(({ default: d }) => d)
 
   const { default: typeSystem } = await import(settings.typeSystemModule)
 

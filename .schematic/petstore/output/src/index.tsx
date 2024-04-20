@@ -339,3 +339,420 @@ export const injectedRtkApi = createApi({
   }),
   overrideExisting: false
 })
+const postApiPet = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(`/pet`, {
+    method: 'POST',
+    body: queryArg.body
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return pet.parse(data)
+}
+const putApiPet = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(`/pet`, {
+    method: 'PUT',
+    body: queryArg.body
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return pet.parse(data)
+}
+const getApiPetFindByStatus = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/findByStatus`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.array(pet).parse(data)
+}
+const getApiPetFindByTags = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/findByTags`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.array(pet).parse(data)
+}
+const getApiPetPetIdTempTempId = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return pet.parse(data)
+}
+const postApiPetPetIdTempTempId = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+    { method: 'POST' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+const deleteApiPetPetIdTempTempId = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+    { method: 'DELETE' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+const postApiPetPetIdUploadImage = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/pet/${queryArg.petId}/uploadImage`,
+    { method: 'POST', body: queryArg.body }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return apiResponse.parse(data)
+}
+const getApiStoreInventory = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/inventory`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.record(z.string(), z.number().int()).parse(data)
+}
+const postApiStoreOrder = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/order`,
+    { method: 'POST', body: queryArg.body }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return order.parse(data)
+}
+const getApiStoreOrderOrderId = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/order/${queryArg.orderId}`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return order.parse(data)
+}
+const deleteApiStoreOrderOrderId = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/store/order/${queryArg.orderId}`,
+    { method: 'DELETE' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+const postApiUser = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(`/user`, {
+    method: 'POST',
+    body: queryArg.body
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return user.parse(data)
+}
+const postApiUserCreateWithList = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/createWithList`,
+    { method: 'POST', body: queryArg.body }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return user.parse(data)
+}
+const getApiUserLogin = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(`/user/login`, {
+    method: 'GET'
+  })
+
+  if (error) {
+    throw error
+  }
+
+  return z.string().parse(data)
+}
+const getApiUserLogout = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/logout`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+const getApiUserUsername = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/${queryArg.username}`,
+    { method: 'GET' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return user.parse(data)
+}
+const putApiUserUsername = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/${queryArg.username}`,
+    { method: 'PUT', body: queryArg.body }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+const deleteApiUserUsername = async queryArg => {
+  const { data, error } = await supabaseClient.functions.invoke(
+    `/user/${queryArg.username}`,
+    { method: 'DELETE' }
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return z.void().parse(data)
+}
+
+const postApiPetFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet`, {
+    method: 'POST'
+  })
+
+  const data = await res.json()
+
+  return pet.parse(data)
+}
+
+const putApiPetFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet`, {
+    method: 'PUT'
+  })
+
+  const data = await res.json()
+
+  return pet.parse(data)
+}
+
+const getApiPetFindByStatusFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet/findByStatus`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return z.array(pet).parse(data)
+}
+
+const getApiPetFindByTagsFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet/findByTags`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return z.array(pet).parse(data)
+}
+
+const getApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return pet.parse(data)
+}
+
+const postApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
+    method: 'POST'
+  })
+
+  const data = await res.json()
+
+  return z.void().parse(data)
+}
+
+const deleteApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
+    method: 'DELETE'
+  })
+
+  const data = await res.json()
+
+  return z.void().parse(data)
+}
+
+const postApiPetPetIdUploadImageFn = async (deploymentId: string) => {
+  const res = await fetch(`/pet/${petId}/uploadImage`, {
+    method: 'POST'
+  })
+
+  const data = await res.json()
+
+  return apiResponse.parse(data)
+}
+
+const getApiStoreInventoryFn = async (deploymentId: string) => {
+  const res = await fetch(`/store/inventory`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return z.record(z.string(), z.number().int()).parse(data)
+}
+
+const postApiStoreOrderFn = async (deploymentId: string) => {
+  const res = await fetch(`/store/order`, {
+    method: 'POST'
+  })
+
+  const data = await res.json()
+
+  return order.parse(data)
+}
+
+const getApiStoreOrderOrderIdFn = async (deploymentId: string) => {
+  const res = await fetch(`/store/order/${orderId}`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return order.parse(data)
+}
+
+const deleteApiStoreOrderOrderIdFn = async (deploymentId: string) => {
+  const res = await fetch(`/store/order/${orderId}`, {
+    method: 'DELETE'
+  })
+
+  const data = await res.json()
+
+  return z.void().parse(data)
+}
+
+const postApiUserFn = async (deploymentId: string) => {
+  const res = await fetch(`/user`, {
+    method: 'POST'
+  })
+
+  const data = await res.json()
+
+  return user.parse(data)
+}
+
+const postApiUserCreateWithListFn = async (deploymentId: string) => {
+  const res = await fetch(`/user/createWithList`, {
+    method: 'POST'
+  })
+
+  const data = await res.json()
+
+  return user.parse(data)
+}
+
+const getApiUserLoginFn = async (deploymentId: string) => {
+  const res = await fetch(`/user/login`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return z.string().parse(data)
+}
+
+const getApiUserLogoutFn = async (deploymentId: string) => {
+  const res = await fetch(`/user/logout`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return z.void().parse(data)
+}
+
+const getApiUserUsernameFn = async (deploymentId: string) => {
+  const res = await fetch(`/user/${username}`, {
+    method: 'GET'
+  })
+
+  const data = await res.json()
+
+  return user.parse(data)
+}
+
+const putApiUserUsernameFn = async (deploymentId: string) => {
+  const res = await fetch(`/user/${username}`, {
+    method: 'PUT'
+  })
+
+  const data = await res.json()
+
+  return z.void().parse(data)
+}
+
+const deleteApiUserUsernameFn = async (deploymentId: string) => {
+  const res = await fetch(`/user/${username}`, {
+    method: 'DELETE'
+  })
+
+  const data = await res.json()
+
+  return z.void().parse(data)
+}
