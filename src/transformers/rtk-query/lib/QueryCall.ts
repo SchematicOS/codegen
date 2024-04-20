@@ -4,7 +4,10 @@ import { EMPTY } from 'generate/constants.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
-import { handleKey, handlePropertyName } from 'typescript/helpers/names.ts'
+import {
+  handleKey,
+  handlePropertyName
+} from 'typescript/helpers/identifiers.ts'
 import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'

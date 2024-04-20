@@ -5,7 +5,7 @@ import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasObject } from 'parse/elements/schema/Object.ts'
-import { handleKey } from 'typescript/helpers/names.ts'
+import { handleKey } from 'typescript/helpers/identifiers.ts'
 
 type ZodObjectProps = {
   context: CoreContext
