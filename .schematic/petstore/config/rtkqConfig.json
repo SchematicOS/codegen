@@ -1,8 +1,0 @@
-{
-  "schemaFile": "https://petstore3.swagger.io/api/v3/openapi.json",
-  "apiFile": "../rtkq-codegen-output/emptyApi.ts",
-  "apiImport": "emptySplitApi",
-  "outputFile": "../rtkq-codegen-output/petApi.ts",
-  "exportName": "petApi",
-  "hooks": true
-}
