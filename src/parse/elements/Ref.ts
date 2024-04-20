@@ -63,7 +63,7 @@ export class OasRef<T extends OasRefData['refType']> extends OasBase {
     const refType: OasRefData['refType'] = this.refType
 
     const resolved = match(refType)
-      .with('schema', () => c?.models?.[refName])
+      .with('schema', () => c?.schemas?.[refName])
       .with('requestBody', () => c?.requestBodies?.[refName])
       .with('parameter', () => c?.parameters?.[refName])
       .with('response', () => c?.responses?.[refName])

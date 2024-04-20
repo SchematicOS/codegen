@@ -10,7 +10,7 @@ import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 
 export type ComponentsFields = {
-  models?: Record<string, OasSchema | OasRef<'schema'>>
+  schemas?: Record<string, OasSchema | OasRef<'schema'>>
   responses?: Record<string, OasResponse | OasRef<'response'>>
   parameters?: Record<string, OasParameter | OasRef<'parameter'>>
   examples?: Record<string, OasExample | OasRef<'example'>>
@@ -39,8 +39,8 @@ export class OasComponents extends OasBase {
     return new OasComponents({ fields, trail, context, skipped })
   }
 
-  get models() {
-    return this.fields.models
+  get schemas() {
+    return this.fields.schemas
   }
 
   get responses() {

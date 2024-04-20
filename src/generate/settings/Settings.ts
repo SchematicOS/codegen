@@ -27,7 +27,7 @@ export class Settings {
   getModelSettings($ref: string): ModelSettings {
     const modelName = toRefName($ref)
 
-    const modelSettings = this.settings?.components?.models?.[modelName]
+    const modelSettings = this.settings?.components?.schemas?.[modelName]
 
     return ModelSettings.create(modelSettings, this.getExportPath())
   }

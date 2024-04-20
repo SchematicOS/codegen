@@ -35,7 +35,7 @@ export const toComponentsV3 = ({
   } = components
 
   const fields: ComponentsFields = {
-    models: toOptionalSchemasV3({
+    schemas: toOptionalSchemasV3({
       schemas,
       trail: trail.add('schemas'),
       context

@@ -24,7 +24,7 @@ export const generate = ({
     console.log('')
   })
 
-  Object.entries(schemaModel.components?.models ?? {})
+  Object.entries(schemaModel.components?.schemas ?? {})
     .map(([$ref, value]) => {
       const identifier = Identifier.from$Ref({ $ref, context })
 
