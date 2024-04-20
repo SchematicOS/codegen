@@ -1,6 +1,7 @@
 import type { TransformerArgs, Transformer } from 'generate/types.ts'
 import { RtkEndpoint } from './lib/Endpoint.ts'
 import { RtkQueryContainer } from './lib/Container.ts'
+import { withDescription } from 'typescript/helpers/withDescription.ts'
 
 export const transform = ({
   context,
@@ -26,11 +27,14 @@ export const transform = ({
         operation.path
       )
 
-      return RtkEndpoint.create({
-        context,
-        operation,
-        operationSettings
-      })
+      return withDescription(
+        RtkEndpoint.create({
+          context,
+          operation,
+          operationSettings
+        }),
+        operation.description
+      )
     })
 
   const rtkContainer = RtkQueryContainer.create({

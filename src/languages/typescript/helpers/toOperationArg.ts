@@ -43,6 +43,7 @@ export const toOperationArg = ({
     context,
     identifier,
     value,
+    description: value.description,
     destinationPath
   })
 }

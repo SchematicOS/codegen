@@ -147,10 +147,13 @@ export class GenerateContext {
         context
       })
 
+      const resolved = value.resolveOnce()
+
       const definition = Definition.fromValue({
         context,
         identifier,
-        value: value.resolveOnce(),
+        value: resolved,
+        description: resolved.description,
         destinationPath: identifier.modelSettings.getExportPath()
       })
 

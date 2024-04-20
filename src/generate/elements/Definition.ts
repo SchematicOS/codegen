@@ -5,17 +5,13 @@ import { SchematicBase } from './SchematicBase.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
+import { withDescription } from 'typescript/helpers/withDescription.ts'
 
 type ConstructorArgs = {
   context: CoreContext
   children: Stringable
   identifier: Identifier
-  destinationPath: string
-}
-
-type FromRefArgs = {
-  context: CoreContext
-  ref: OasRef<'schema'>
+  description: string | undefined
   destinationPath: string
 }
 
@@ -23,22 +19,26 @@ type FromValueArgs = {
   context: CoreContext
   identifier: Identifier
   value: OasSchema | OasRef<'schema'> | OasVoid
+  description: string | undefined
   destinationPath: string
 }
 
 export class Definition extends SchematicBase implements Stringable {
   identifier: Identifier
+  description: string | undefined
   destinationPath: string
 
   private constructor({
     context,
     identifier,
     children,
+    description,
     destinationPath
   }: ConstructorArgs) {
     super({ context, children })
 
     this.identifier = identifier
+    this.description = description
     this.destinationPath = destinationPath
   }
 
@@ -46,12 +46,14 @@ export class Definition extends SchematicBase implements Stringable {
     context,
     children,
     identifier,
+    description,
     destinationPath
   }: ConstructorArgs): Definition {
     return new Definition({
       context,
       children,
       identifier,
+      description,
       destinationPath
     })
   }
@@ -60,6 +62,7 @@ export class Definition extends SchematicBase implements Stringable {
     context,
     identifier,
     value,
+    description,
     destinationPath
   }: FromValueArgs): Definition {
     const children = context.toTypeSystem({
@@ -72,6 +75,7 @@ export class Definition extends SchematicBase implements Stringable {
       context,
       identifier,
       children,
+      description,
       destinationPath
     })
   }
@@ -91,6 +95,9 @@ export class Definition extends SchematicBase implements Stringable {
   toString(): string {
     // @TODO move syntax to typescript package to enable
     // language agnostic use
-    return `export ${this.identifier.type} ${this.identifier} = ${this.children};`
+    return withDescription(
+      `export ${this.identifier.type} ${this.identifier} = ${this.children};`,
+      this.description
+    )
   }
 }

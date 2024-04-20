@@ -24,12 +24,15 @@ export const toOperationResponse = ({
     context
   })
 
-  const successResponse = operation.toSuccessResponse()
+  const successResponse = operation.toSuccessResponse()?.resolve()
+
+  console.log('Description: ', successResponse?.description)
 
   return Definition.fromValue({
     context,
     identifier,
-    value: successResponse?.resolve().toSchema() ?? OasVoid.empty(context),
+    value: successResponse?.toSchema() ?? OasVoid.empty(context),
+    description: successResponse?.description,
     destinationPath
   })
 }

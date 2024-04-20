@@ -9,6 +9,7 @@ import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import { keyValues } from 'typescript/helpers/keyValues.ts'
+import { withDescription } from 'typescript/helpers/withDescription.ts'
 
 type QueryCallProps = {
   queryArg: string
@@ -76,8 +77,11 @@ const toProperties = ({ operation }: ToPropertiesArgs) => {
 
 const toParameters = (parameters: OasParameter[], queryArg: string) => {
   return `{${parameters
-    .map(
-      ({ name }) => `${handleKey(name)}: ${handlePropertyName(name, queryArg)}`
-    )
+    .map(({ name, description }) => {
+      return withDescription(
+        `${handleKey(name)}: ${handlePropertyName(name, queryArg)}`,
+        description
+      )
+    })
     .join(',\n')}}`
 }

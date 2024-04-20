@@ -3,7 +3,7 @@ import { Identifier } from 'generate/elements/Identifier.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
 import { EntityType } from './lib/EntityType.ts'
 
-export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
+export const toInferredType = (valueIdentifier: Identifier): Definition => {
   const { context, modelSettings } = valueIdentifier
 
   const typeIdentifier = Identifier.create({
@@ -17,6 +17,7 @@ export const toTypeDefinition = (valueIdentifier: Identifier): Definition => {
     identifier: typeIdentifier,
     children: context.toInferType(valueIdentifier),
     destinationPath: modelSettings.getExportPath(),
+    description: undefined,
     context
   })
 }

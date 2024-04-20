@@ -13,6 +13,8 @@ import { Import } from 'generate/elements/Import.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
+import { withDescription } from 'typescript/helpers/withDescription.ts'
+import { ZodOptional } from 'zod/lib/ZodOptional.ts'
 
 export class Zod extends SchematicBase implements Stringable {
   destinationPath: string
@@ -98,59 +100,8 @@ const toChildren = ({
     .with({ type: 'unknown' }, () => `z.unknown()`)
     .exhaustive()
 
-  return WithDescription.create({
-    description: value?.description,
-    value: Optional.create({
-      required,
-      value: children
-    })
-  })
-}
-
-type OptionalArgs = {
-  required: boolean | undefined
-  value: Stringable
-}
-
-class Optional implements Stringable {
-  required: boolean | undefined
-  value: Stringable
-
-  private constructor({ required, value }: OptionalArgs) {
-    this.required = required
-    this.value = value
-  }
-
-  static create(args: OptionalArgs) {
-    return new Optional(args)
-  }
-
-  toString() {
-    return this.required ? `${this.value}` : `${this.value}.optional()`
-  }
-}
-
-type WithDescriptionArgs = {
-  description?: Stringable
-  value: Stringable
-}
-
-class WithDescription implements Stringable {
-  description?: Stringable
-  value: Stringable
-
-  constructor({ description, value }: WithDescriptionArgs) {
-    this.description = description
-    this.value = value
-  }
-
-  static create(args: WithDescriptionArgs) {
-    return new WithDescription(args)
-  }
-
-  toString() {
-    return this.description
-      ? `/** ${this.description} */\n${this.value}`
-      : `${this.value}`
-  }
+  return withDescription(
+    ZodOptional.create({ required, value: children }),
+    value?.description
+  )
 }

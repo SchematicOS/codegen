@@ -36,6 +36,7 @@ export const generate = ({
         context,
         value,
         identifier,
+        description: value.description,
         destinationPath: identifier.modelSettings.getExportPath()
       })
 

@@ -5,7 +5,7 @@ import type { Definition } from 'generate/elements/Definition.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
-import { toTypeDefinition } from 'typescript/toTypeDefinition.ts'
+import { toInferredType } from 'typescript/toInferredType.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { toEndpointName, toEndpointType } from 'generate/helpers/naming.ts'
 import { toOperationArg } from 'typescript/helpers/toOperationArg.ts'
@@ -42,9 +42,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
       operation
     })
 
-    this.endpointResponseType = toTypeDefinition(
-      this.endpointResponse.identifier
-    )
+    this.endpointResponseType = toInferredType(this.endpointResponse.identifier)
 
     this.endpointArg = toOperationArg({
       context,
@@ -52,7 +50,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
       operation
     })
 
-    this.endpointArgType = toTypeDefinition(this.endpointArg.identifier)
+    this.endpointArgType = toInferredType(this.endpointArg.identifier)
 
     this.queryCall = QueryCall.create({
       context,
