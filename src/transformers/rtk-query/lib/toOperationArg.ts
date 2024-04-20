@@ -10,17 +10,17 @@ import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 
-type ToEndpointArgArgs = {
+type ToOperationArgArgs = {
   context: CoreContext
   destinationPath: string
   operation: OasOperation
 }
 
-export const toEndpointArg = ({
+export const toOperationArg = ({
   context,
   destinationPath,
   operation
-}: ToEndpointArgArgs) => {
+}: ToOperationArgArgs) => {
   const identifier = Identifier.create({
     name: toArgsName(operation),
     modelSettings: ModelSettings.create({ exportPath: destinationPath }),
@@ -30,7 +30,7 @@ export const toEndpointArg = ({
 
   const body = operation.requestBody?.resolve().toSchema('application/json')
 
-  const { properties, required } = toQueryProperties(operation, body)
+  const { properties, required } = toOperationArgProperties(operation, body)
 
   const value = isEmpty(properties)
     ? OasVoid.empty(context)
@@ -47,7 +47,7 @@ export const toEndpointArg = ({
   })
 }
 
-const toQueryProperties = (
+const toOperationArgProperties = (
   operation: OasOperation,
   body: OasSchema | OasRef<'schema'> | undefined
 ) => {

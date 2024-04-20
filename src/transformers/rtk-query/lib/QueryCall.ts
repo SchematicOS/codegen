@@ -1,12 +1,14 @@
 import type { Stringable } from '@schematicos/types'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
-import { KeyValues } from 'typescript/lib/KeyValues.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
 import { handleKey, handlePropertyName } from 'typescript/helpers/names.ts'
 import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
+import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
+import { keyValues } from 'typescript/helpers/keyValues.ts'
 
 type QueryCallProps = {
   queryArg: string
@@ -14,11 +16,16 @@ type QueryCallProps = {
   context: CoreContext
 }
 
+type QueryProperties = {
+  params: OasParameter[] | undefined
+  headers: OasParameter[] | undefined
+  body: OasRequestBody | OasRef<'requestBody'> | undefined
+}
+
 export class QueryCall extends SchematicBase implements Stringable {
   operation: OasOperation
   queryArg: string
-  properties: KeyValues
-  isEmpty: boolean
+  properties: QueryProperties
 
   private constructor({ operation, context, queryArg }: QueryCallProps) {
     super({ context })
@@ -26,13 +33,7 @@ export class QueryCall extends SchematicBase implements Stringable {
     this.queryArg = queryArg
     this.operation = operation
 
-    const { isEmpty, properties } = toProperties({
-      operation,
-      queryArg
-    })
-
-    this.properties = properties
-    this.isEmpty = isEmpty
+    this.properties = toProperties({ operation, queryArg })
   }
 
   static create(args: QueryCallProps): QueryCall {
@@ -40,7 +41,16 @@ export class QueryCall extends SchematicBase implements Stringable {
   }
 
   toString(): string {
-    return `(${this.isEmpty ? '' : this.queryArg}) => ({${this.properties}})`
+    const { params, headers, body } = this.properties
+    const isEmpty = !params?.length && !headers?.length && !body
+
+    return `(${isEmpty ? '' : this.queryArg}) => ({${keyValues({
+      path: toPathTemplate(this.operation.path, this.queryArg),
+      method: this.operation.method.toUpperCase(),
+      params: toKeyValues(params, this.queryArg),
+      headers: toKeyValues(headers, this.queryArg),
+      body: this.operation.requestBody ? `${this.queryArg}.body` : EMPTY
+    })}})`
   }
 }
 
@@ -49,7 +59,7 @@ type ToPropertiesArgs = {
   queryArg: string
 }
 
-const toProperties = ({ operation, queryArg }: ToPropertiesArgs) => {
+const toProperties = ({ operation }: ToPropertiesArgs) => {
   const parameters = operation.parameters?.map(parameter => parameter.resolve())
 
   const params = parameters?.filter(
@@ -60,17 +70,7 @@ const toProperties = ({ operation, queryArg }: ToPropertiesArgs) => {
     ({ location, name }) => location === 'header' && name !== 'Authorization'
   )
 
-  const isEmpty = !params?.length && !headers?.length && !operation.requestBody
-
-  const properties = KeyValues.create({
-    path: toPathTemplate(operation.path, queryArg),
-    method: operation.method.toUpperCase(),
-    params: toKeyValues(params, queryArg),
-    headers: toKeyValues(headers, queryArg),
-    body: operation.requestBody ? `${queryArg}.body` : EMPTY
-  })
-
-  return { isEmpty, properties }
+  return { params, headers, body: operation.requestBody }
 }
 
 const toKeyValues = (

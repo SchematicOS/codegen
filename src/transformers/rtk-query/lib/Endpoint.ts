@@ -1,5 +1,5 @@
 import { QueryCall } from './QueryCall.ts'
-import { toEndpointArg } from './toOperationArg.ts'
+import { toOperationArg } from './toOperationArg.ts'
 import { toOperationResponse } from './toOperationResponse.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Definition } from 'generate/elements/Definition.ts'
@@ -52,7 +52,7 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
 
     this.endpointArgType = toTypeDefinition(this.endpointResponse.identifier)
 
-    this.endpointArg = toEndpointArg({
+    this.endpointArg = toOperationArg({
       context,
       destinationPath,
       operation

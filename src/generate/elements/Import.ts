@@ -29,6 +29,8 @@ export class Import implements Stringable {
   }
 
   toString(): string {
+    // @TODO move syntax to typescript package to enable
+    // language agnostic use
     return `import { ${this.importNames.join(', ')} } from '${this.module}'`
   }
 }
