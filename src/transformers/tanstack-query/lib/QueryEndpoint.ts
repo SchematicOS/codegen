@@ -20,8 +20,6 @@ export class QueryEndpoint extends SchematicBase implements Stringable {
   operation: OasOperation
   settings: OperationSettings
   responseModel: Stringable
-  argName: string
-  queryArg: Stringable = ''
   pathParams: OasParameter[]
   tags: string[]
 
@@ -30,7 +28,6 @@ export class QueryEndpoint extends SchematicBase implements Stringable {
 
     this.operation = operation
     this.settings = settings
-    this.argName = 'args'
     this.tags = operation.tags?.map(tag => `'${tag}'`) ?? []
 
     const destinationPath = settings.getExportPath()
