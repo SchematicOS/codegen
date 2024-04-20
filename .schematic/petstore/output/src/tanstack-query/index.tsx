@@ -1,28 +1,24 @@
-import { pet, apiResponse, order } from 'src/index.tsx'
+import { pet, order } from 'src/index.tsx'
 import { z } from 'zod'
+import { useQuery } from '@tanstack/react-query'
 import { customer } from 'src/schemas/Customer.ts'
 
-const postApiPetFn = async (deploymentId: string) => {
-  const res = await fetch(`/pet`, {
-    method: 'POST'
-  })
+export const getApiPetPetIdTempTempIdArgs = z.object({
+  petId: z.number().int()
+})
+export type GetApiPetPetIdTempTempIdArgs = z.infer<
+  typeof getApiPetPetIdTempTempIdArgs
+>
+export const getApiStoreOrderOrderIdArgs = z.object({
+  orderId: z.number().int()
+})
+export type GetApiStoreOrderOrderIdArgs = z.infer<
+  typeof getApiStoreOrderOrderIdArgs
+>
+export const getApiUserUsernameArgs = z.object({ username: z.string() })
+export type GetApiUserUsernameArgs = z.infer<typeof getApiUserUsernameArgs>
 
-  const data = await res.json()
-
-  return pet.parse(data)
-}
-
-const putApiPetFn = async (deploymentId: string) => {
-  const res = await fetch(`/pet`, {
-    method: 'PUT'
-  })
-
-  const data = await res.json()
-
-  return pet.parse(data)
-}
-
-const getApiPetFindByStatusFn = async (deploymentId: string) => {
+const getApiPetFindByStatusFn = async () => {
   const res = await fetch(`/pet/findByStatus`, {
     method: 'GET'
   })
@@ -32,7 +28,17 @@ const getApiPetFindByStatusFn = async (deploymentId: string) => {
   return z.array(pet).parse(data)
 }
 
-const getApiPetFindByTagsFn = async (deploymentId: string) => {
+export const useGetApiPetFindByStatusFn = () => {
+  const result = useQuery({
+    queryKey: ['pet'],
+    queryFn: () => getApiPetFindByStatusFn(),
+    enabled: Boolean()
+  })
+
+  return result
+}
+
+const getApiPetFindByTagsFn = async () => {
   const res = await fetch(`/pet/findByTags`, {
     method: 'GET'
   })
@@ -42,7 +48,17 @@ const getApiPetFindByTagsFn = async (deploymentId: string) => {
   return z.array(pet).parse(data)
 }
 
-const getApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
+export const useGetApiPetFindByTagsFn = () => {
+  const result = useQuery({
+    queryKey: ['pet'],
+    queryFn: () => getApiPetFindByTagsFn(),
+    enabled: Boolean()
+  })
+
+  return result
+}
+
+const getApiPetPetIdTempTempIdFn = async (petId: string | undefined) => {
   const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
     method: 'GET'
   })
@@ -52,37 +68,17 @@ const getApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
   return pet.parse(data)
 }
 
-const postApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
-  const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
-    method: 'POST'
+export const useGetApiPetPetIdTempTempIdFn = (petId: string | undefined) => {
+  const result = useQuery({
+    queryKey: ['pet', petId],
+    queryFn: () => getApiPetPetIdTempTempIdFn(petId),
+    enabled: Boolean(petId)
   })
 
-  const data = await res.json()
-
-  return z.void().parse(data)
+  return result
 }
 
-const deleteApiPetPetIdTempTempIdFn = async (deploymentId: string) => {
-  const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
-    method: 'DELETE'
-  })
-
-  const data = await res.json()
-
-  return z.void().parse(data)
-}
-
-const postApiPetPetIdUploadImageFn = async (deploymentId: string) => {
-  const res = await fetch(`/pet/${petId}/uploadImage`, {
-    method: 'POST'
-  })
-
-  const data = await res.json()
-
-  return apiResponse.parse(data)
-}
-
-const getApiStoreInventoryFn = async (deploymentId: string) => {
+const getApiStoreInventoryFn = async () => {
   const res = await fetch(`/store/inventory`, {
     method: 'GET'
   })
@@ -92,17 +88,17 @@ const getApiStoreInventoryFn = async (deploymentId: string) => {
   return z.record(z.string(), z.number().int()).parse(data)
 }
 
-const postApiStoreOrderFn = async (deploymentId: string) => {
-  const res = await fetch(`/store/order`, {
-    method: 'POST'
+export const useGetApiStoreInventoryFn = () => {
+  const result = useQuery({
+    queryKey: ['store'],
+    queryFn: () => getApiStoreInventoryFn(),
+    enabled: Boolean()
   })
 
-  const data = await res.json()
-
-  return order.parse(data)
+  return result
 }
 
-const getApiStoreOrderOrderIdFn = async (deploymentId: string) => {
+const getApiStoreOrderOrderIdFn = async (orderId: string | undefined) => {
   const res = await fetch(`/store/order/${orderId}`, {
     method: 'GET'
   })
@@ -112,37 +108,17 @@ const getApiStoreOrderOrderIdFn = async (deploymentId: string) => {
   return order.parse(data)
 }
 
-const deleteApiStoreOrderOrderIdFn = async (deploymentId: string) => {
-  const res = await fetch(`/store/order/${orderId}`, {
-    method: 'DELETE'
+export const useGetApiStoreOrderOrderIdFn = (orderId: string | undefined) => {
+  const result = useQuery({
+    queryKey: ['store', orderId],
+    queryFn: () => getApiStoreOrderOrderIdFn(orderId),
+    enabled: Boolean(orderId)
   })
 
-  const data = await res.json()
-
-  return z.void().parse(data)
+  return result
 }
 
-const postApiUserFn = async (deploymentId: string) => {
-  const res = await fetch(`/user`, {
-    method: 'POST'
-  })
-
-  const data = await res.json()
-
-  return customer.parse(data)
-}
-
-const postApiUserCreateWithListFn = async (deploymentId: string) => {
-  const res = await fetch(`/user/createWithList`, {
-    method: 'POST'
-  })
-
-  const data = await res.json()
-
-  return customer.parse(data)
-}
-
-const getApiUserLoginFn = async (deploymentId: string) => {
+const getApiUserLoginFn = async () => {
   const res = await fetch(`/user/login`, {
     method: 'GET'
   })
@@ -152,7 +128,17 @@ const getApiUserLoginFn = async (deploymentId: string) => {
   return z.string().parse(data)
 }
 
-const getApiUserLogoutFn = async (deploymentId: string) => {
+export const useGetApiUserLoginFn = () => {
+  const result = useQuery({
+    queryKey: ['user'],
+    queryFn: () => getApiUserLoginFn(),
+    enabled: Boolean()
+  })
+
+  return result
+}
+
+const getApiUserLogoutFn = async () => {
   const res = await fetch(`/user/logout`, {
     method: 'GET'
   })
@@ -162,7 +148,17 @@ const getApiUserLogoutFn = async (deploymentId: string) => {
   return z.void().parse(data)
 }
 
-const getApiUserUsernameFn = async (deploymentId: string) => {
+export const useGetApiUserLogoutFn = () => {
+  const result = useQuery({
+    queryKey: ['user'],
+    queryFn: () => getApiUserLogoutFn(),
+    enabled: Boolean()
+  })
+
+  return result
+}
+
+const getApiUserUsernameFn = async (username: string | undefined) => {
   const res = await fetch(`/user/${username}`, {
     method: 'GET'
   })
@@ -172,22 +168,12 @@ const getApiUserUsernameFn = async (deploymentId: string) => {
   return customer.parse(data)
 }
 
-const putApiUserUsernameFn = async (deploymentId: string) => {
-  const res = await fetch(`/user/${username}`, {
-    method: 'PUT'
+export const useGetApiUserUsernameFn = (username: string | undefined) => {
+  const result = useQuery({
+    queryKey: ['user', username],
+    queryFn: () => getApiUserUsernameFn(username),
+    enabled: Boolean(username)
   })
 
-  const data = await res.json()
-
-  return z.void().parse(data)
-}
-
-const deleteApiUserUsernameFn = async (deploymentId: string) => {
-  const res = await fetch(`/user/${username}`, {
-    method: 'DELETE'
-  })
-
-  const data = await res.json()
-
-  return z.void().parse(data)
+  return result
 }

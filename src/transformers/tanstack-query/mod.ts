@@ -1,5 +1,6 @@
 import type { TransformerArgs, Transformer } from 'generate/types.ts'
-import { Endpoint } from './lib/Endpoint.ts'
+import { QueryEndpoint } from './lib/QueryEndpoint.ts'
+import { match } from 'ts-pattern'
 
 export const transform = ({
   context,
@@ -25,16 +26,20 @@ export const transform = ({
         operation.path
       )
 
-      const endpoint = Endpoint.create({
-        context,
-        operation,
-        settings
-      })
+      match(operation)
+        .with({ method: 'get' }, matched => {
+          const endpoint = QueryEndpoint.create({
+            context,
+            operation: matched,
+            settings
+          })
 
-      context.register({
-        content: endpoint,
-        destinationPath: settings.getExportPath()
-      })
+          context.register({
+            content: endpoint,
+            destinationPath: settings.getExportPath()
+          })
+        })
+        .otherwise(() => {})
     })
 }
 
