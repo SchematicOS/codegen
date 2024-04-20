@@ -1,23 +1,7 @@
+import { pet, apiResponse, order, user } from 'src/index.tsx'
 import { z } from 'zod'
-import { category, tag, pet, apiResponse, order, user } from 'src/index.tsx'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const category = z.object({
-  id: z.number().int().optional(),
-  name: z.string().optional()
-})
-export const tag = z.object({
-  id: z.number().int().optional(),
-  name: z.string().optional()
-})
-export const pet = z.object({
-  id: z.number().int().optional(),
-  name: z.string(),
-  category: category.optional(),
-  photoUrls: z.array(z.string()),
-  tags: z.array(tag).optional(),
-  /** pet status in the store */ status: z.string().optional()
-})
 export const postApiPetResponse = pet
 export type PostApiPetResponse = z.infer<typeof postApiPetResponse>
 export const postApiPetArgs = z.object({ body: pet })
@@ -77,11 +61,6 @@ export const deleteApiPetPetIdTempTempIdArgs = z.object({
 export type DeleteApiPetPetIdTempTempIdArgs = z.infer<
   typeof deleteApiPetPetIdTempTempIdArgs
 >
-export const apiResponse = z.object({
-  code: z.number().int().optional(),
-  type: z.string().optional(),
-  message: z.string().optional()
-})
 export const postApiPetPetIdUploadImageResponse = apiResponse
 export type PostApiPetPetIdUploadImageResponse = z.infer<
   typeof postApiPetPetIdUploadImageResponse
@@ -102,14 +81,6 @@ export type GetApiStoreInventoryResponse = z.infer<
 >
 export const getApiStoreInventoryArgs = z.void()
 export type GetApiStoreInventoryArgs = z.infer<typeof getApiStoreInventoryArgs>
-export const order = z.object({
-  id: z.number().int().optional(),
-  petId: z.number().int().optional(),
-  quantity: z.number().int().optional(),
-  shipDate: z.string().optional(),
-  /** Order Status */ status: z.string().optional(),
-  complete: z.boolean().optional()
-})
 export const postApiStoreOrderResponse = order
 export type PostApiStoreOrderResponse = z.infer<
   typeof postApiStoreOrderResponse
@@ -136,16 +107,6 @@ export const deleteApiStoreOrderOrderIdArgs = z.object({
 export type DeleteApiStoreOrderOrderIdArgs = z.infer<
   typeof deleteApiStoreOrderOrderIdArgs
 >
-export const user = z.object({
-  id: z.number().int().optional(),
-  username: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  email: z.string().optional(),
-  password: z.string().optional(),
-  phone: z.string().optional(),
-  /** User Status */ userStatus: z.number().int().optional()
-})
 export const postApiUserResponse = user
 export type PostApiUserResponse = z.infer<typeof postApiUserResponse>
 export const postApiUserArgs = z.object({ body: user })

@@ -1,6 +1,6 @@
 import type { Stringable } from '@schematicos/types'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
-import { Identifier } from './Identifier.ts'
+import type { Identifier } from './Identifier.ts'
 import { SchematicBase } from './SchematicBase.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
@@ -52,20 +52,6 @@ export class Definition extends SchematicBase implements Stringable {
       context,
       children,
       identifier,
-      destinationPath
-    })
-  }
-
-  static fromRef({ context, ref, destinationPath }: FromRefArgs): Definition {
-    const identifier = Identifier.from$Ref({
-      $ref: ref.$ref,
-      context
-    })
-
-    return Definition.fromValue({
-      context,
-      identifier,
-      value: ref.resolveOnce(),
       destinationPath
     })
   }

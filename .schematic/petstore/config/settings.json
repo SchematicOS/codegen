@@ -19,5 +19,13 @@
         "exportPath": "./tanstack-query"
       }
     }
+  },
+  "components": {
+    "schemas":{
+      "Category": {
+        "exportPath": "./schemas/Category.ts",
+        "selected": true
+      }
+    }
   }
 }

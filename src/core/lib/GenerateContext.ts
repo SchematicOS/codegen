@@ -12,6 +12,7 @@ import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
+import { Identifier } from 'generate/elements/Identifier.ts'
 
 export type FileContents = {
   imports: Map<string, Set<string>>
@@ -136,22 +137,31 @@ export class GenerateContext {
 
   toTypeSystem(
     { value, required, destinationPath }: ToTypeSystemArgs,
-    coreContext: CoreContext
+    context: CoreContext
   ): Stringable {
     // if value is a ref
     if (value.isRef()) {
       // create a definition for it in its own source file
-      const definition = Definition.fromRef({
-        context: coreContext,
-        ref: value,
-        destinationPath
+      const identifier = Identifier.from$Ref({
+        $ref: value.$ref,
+        context
+      })
+
+      const definition = Definition.fromValue({
+        context,
+        identifier,
+        value: value.resolveOnce(),
+        destinationPath: identifier.modelSettings.getExportPath()
       })
 
       // and add it to outputs
-      this.register({ definition, destinationPath })
+      this.register({
+        definition,
+        destinationPath: identifier.modelSettings.getExportPath()
+      })
 
       // if the ref is defined outside of the file where it is used
-      if (definition.isImported()) {
+      if (identifier.isImported(destinationPath)) {
         // import it
         this.register({
           imports: [definition.identifier.toImport()],
@@ -164,7 +174,7 @@ export class GenerateContext {
       value,
       required,
       destinationPath,
-      context: coreContext
+      context
     })
   }
 

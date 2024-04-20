@@ -6,8 +6,6 @@ type WriteFileArgs = {
 }
 
 export const writeFile = ({ content, resolvedPath }: WriteFileArgs) => {
-  console.log(`Writing file: ${resolvedPath}`)
-
   try {
     const dir = resolvedPath.substring(0, resolvedPath.lastIndexOf('/'))
 
