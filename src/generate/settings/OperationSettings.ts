@@ -1,5 +1,6 @@
 import type { OperationSettingsType } from '@schematicos/types'
 import { join } from 'path'
+import { defaultFileName } from 'typescript/defaults.ts'
 
 type OperationSettingsArgs = {
   settings?: OperationSettingsType
@@ -30,7 +31,10 @@ export class OperationSettings {
   }
 
   getExportPath(): string {
-    return join(this.parentExportPath, this.settings?.exportPath ?? '')
+    return join(
+      this.parentExportPath,
+      this.settings?.exportPath ?? defaultFileName
+    )
   }
 }
 

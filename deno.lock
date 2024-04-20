@@ -10,6 +10,7 @@
       "npm:@babel/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
       "npm:@redocly/openapi-core@1.11.0": "npm:@redocly/openapi-core@1.11.0",
       "npm:@schematicos/types@0.0.46": "npm:@schematicos/types@0.0.46",
+      "npm:openapi-types@12.1.3": "npm:openapi-types@12.1.3",
       "npm:prettier@3.2.5": "npm:prettier@3.2.5",
       "npm:tiny-invariant@1.3.3": "npm:tiny-invariant@1.3.3",
       "npm:ts-pattern@5.1.1": "npm:ts-pattern@5.1.1"
@@ -129,6 +130,10 @@
           "whatwg-url": "whatwg-url@5.0.0"
         }
       },
+      "openapi-types@12.1.3": {
+        "integrity": "sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==",
+        "dependencies": {}
+      },
       "pluralize@8.0.0": {
         "integrity": "sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==",
         "dependencies": {}
@@ -183,6 +188,11 @@
         "dependencies": {}
       }
     }
+  },
+  "redirects": {
+    "https://esm.sh/v135/@types/lodash-es@~4.17/camelCase~.d.ts": "https://esm.sh/v135/@types/lodash-es@4.17.12/camelCase~.d.ts",
+    "https://esm.sh/v135/@types/lodash-es@~4.17/isEmpty~.d.ts": "https://esm.sh/v135/@types/lodash-es@4.17.12/isEmpty~.d.ts",
+    "https://esm.sh/v135/@types/lodash@4.14.202/index": "https://esm.sh/v135/@types/lodash@4.14.202/index~.d.ts"
   },
   "remote": {
     "https://esm.sh/lodash-es@4.17.21/camelCase.js": "a90d866b2e17783f64a2d0fe7b87db3f4429bdcf25ab676f08e780a3bd2a6520",

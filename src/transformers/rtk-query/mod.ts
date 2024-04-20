@@ -41,7 +41,7 @@ export const transform = ({
 
   context.register({
     content: rtkContainer,
-    destinationPath: transformerSettings.getExportPath()
+    destinationPath: transformerSettings.getExportPath({ appendFileName: true })
   })
 }
 

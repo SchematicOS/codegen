@@ -46,13 +46,13 @@ export class RtkEndpoint extends SchematicBase implements Stringable {
       this.endpointResponse.identifier
     )
 
-    this.endpointArgType = toTypeDefinition(this.endpointResponse.identifier)
-
     this.endpointArg = toOperationArg({
       context,
       destinationPath,
       operation
     })
+
+    this.endpointArgType = toTypeDefinition(this.endpointArg.identifier)
 
     this.queryCall = QueryCall.create({
       context,

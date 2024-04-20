@@ -2,7 +2,6 @@ import { toRefName } from 'generate/helpers/ref.ts'
 import { ModelSettings } from './ModelSettings.ts'
 import type { SettingsType } from '@schematicos/types'
 import { TransformerSettings } from 'generate/settings/TransformerSettings.ts'
-import * as defaults from 'typescript/defaults.ts'
 
 export class Settings {
   settings: SettingsType
@@ -33,6 +32,6 @@ export class Settings {
   }
 
   getExportPath(): string {
-    return this.settings.exportPath ?? defaults.exportPath
+    return this.settings.exportPath ?? ''
   }
 }

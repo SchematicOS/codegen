@@ -30,7 +30,9 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
           'fetchBaseQuery'
         ])
       ],
-      destinationPath: this.transformerSettings.getExportPath()
+      destinationPath: this.transformerSettings.getExportPath({
+        appendFileName: true
+      })
     })
   }
 

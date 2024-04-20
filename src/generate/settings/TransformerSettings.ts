@@ -1,6 +1,7 @@
 import type { TransformerSettingsType, Method } from '@schematicos/types'
 import { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { join } from 'path'
+import { defaultFileName } from 'typescript/defaults.ts'
 
 type ConstructorArgs = {
   settings?: TransformerSettingsType
@@ -16,6 +17,10 @@ type TransformerSettingsArgs = {
 type GetOperationSettingsArgs = {
   path: string
   method: Method
+}
+
+type GetExportPathArgs = {
+  appendFileName?: boolean
 }
 
 export class TransformerSettings {
@@ -42,8 +47,14 @@ export class TransformerSettings {
     return this.selected ?? true
   }
 
-  getExportPath(): string {
-    return join(this.parentExportPath, this.settings?.root?.exportPath ?? '')
+  getExportPath({ appendFileName }: GetExportPathArgs): string {
+    return join(
+      this.parentExportPath,
+      this.settings?.root?.exportPath ?? '',
+      appendFileName
+        ? this.settings?.root?.exportFileName ?? defaultFileName
+        : ''
+    )
   }
 
   getOperationSettings({
@@ -52,7 +63,7 @@ export class TransformerSettings {
   }: GetOperationSettingsArgs): OperationSettings {
     return OperationSettings.create({
       settings: this.settings?.operations?.[path]?.[method],
-      parentExportPath: this.getExportPath()
+      parentExportPath: this.getExportPath({ appendFileName: false })
     })
   }
 }

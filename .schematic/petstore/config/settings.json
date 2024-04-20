@@ -6,17 +6,17 @@
   "transformers": {
     "@schematicos/rtk-query": {
       "root":{
-        "exportPath": "./rtk-query/index.ts"
+        "exportPath": "./rtk-query"
       }
     },
     "@schematicos/supabase-client": {
       "root":{
-        "exportPath": "./supabase-client/index.ts"
+        "exportPath": "./supabase-client"
       }
     },
     "@schematicos/tanstack-query": {
       "root":{
-        "exportPath": "./tanstack-query/index.ts"
+        "exportPath": "./tanstack-query"
       }
     }
   }

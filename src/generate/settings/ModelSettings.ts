@@ -1,5 +1,6 @@
 import type { ModelSettingsType } from '@schematicos/types'
 import { join } from 'path'
+import { defaultFileName } from 'typescript/defaults.ts'
 
 type ModelSettingsArgs = {
   selected?: boolean
@@ -36,7 +37,10 @@ export class ModelSettings {
   }
 
   getExportPath(): string {
-    return join(this.parentExportPath, this.settings?.exportPath ?? '')
+    return join(
+      this.parentExportPath,
+      this.settings?.exportPath ?? defaultFileName
+    )
   }
 
   getRenameTo(): string | undefined {
