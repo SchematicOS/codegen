@@ -4,15 +4,11 @@ import { EMPTY } from 'generate/constants.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
-import {
-  handleKey,
-  handlePropertyName
-} from 'typescript/helpers/identifiers.ts'
 import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import { keyValues } from 'typescript/helpers/keyValues.ts'
-import { withDescription } from 'typescript/helpers/withDescription.ts'
+import { toParamsObject } from 'typescript/helpers/toParamsObject.ts'
 
 type QueryCallProps = {
   queryArg: string
@@ -37,7 +33,7 @@ export class QueryCall extends SchematicBase implements Stringable {
     this.queryArg = queryArg
     this.operation = operation
 
-    this.properties = toProperties({ operation, queryArg })
+    this.properties = toArgProperties({ operation, queryArg })
   }
 
   static create(args: QueryCallProps): QueryCall {
@@ -52,8 +48,8 @@ export class QueryCall extends SchematicBase implements Stringable {
     return `(${isEmpty ? '' : this.queryArg}) => (${keyValues({
       path: toPathTemplate(path, this.queryArg),
       method: this.operation.method.toUpperCase(),
-      params: params?.length ? toParameters(params, this.queryArg) : EMPTY,
-      headers: headers?.length ? toParameters(headers, this.queryArg) : EMPTY,
+      params: params?.length ? toParamsObject(params, this.queryArg) : EMPTY,
+      headers: headers?.length ? toParamsObject(headers, this.queryArg) : EMPTY,
       body: this.operation.requestBody ? `${this.queryArg}.body` : EMPTY
     })})`
   }
@@ -64,7 +60,7 @@ type ToPropertiesArgs = {
   queryArg: string
 }
 
-const toProperties = ({ operation }: ToPropertiesArgs) => {
+const toArgProperties = ({ operation }: ToPropertiesArgs) => {
   const parameters = operation.parameters?.map(parameter => parameter.resolve())
 
   const params = parameters?.filter(
@@ -76,15 +72,4 @@ const toProperties = ({ operation }: ToPropertiesArgs) => {
   )
 
   return { params, headers, body: operation.requestBody }
-}
-
-const toParameters = (parameters: OasParameter[], queryArg: string) => {
-  return `{${parameters
-    .map(({ name, description }) => {
-      return withDescription(
-        `${handleKey(name)}: ${handlePropertyName(name, queryArg)}`,
-        description
-      )
-    })
-    .join(',\n')}}`
 }

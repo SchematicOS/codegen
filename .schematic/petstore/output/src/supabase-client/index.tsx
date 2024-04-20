@@ -1,10 +1,78 @@
-import { pet, apiResponse, order, user } from 'src/index.tsx'
+import { pet, apiResponse, order } from 'src/index.tsx'
 import { z } from 'zod'
+import { supabaseClient } from 'lib/supabase'
+import { customer } from 'src/schemas/Customer.ts'
 
-const postApiPet = async queryArg => {
+export const postApiPetArgs = z.object({ body: pet })
+export type PostApiPetArgs = z.infer<typeof postApiPetArgs>
+export const putApiPetArgs = z.object({ body: pet })
+export type PutApiPetArgs = z.infer<typeof putApiPetArgs>
+export const getApiPetPetIdTempTempIdArgs = z.object({
+  petId: z.number().int()
+})
+export type GetApiPetPetIdTempTempIdArgs = z.infer<
+  typeof getApiPetPetIdTempTempIdArgs
+>
+export const postApiPetPetIdTempTempIdArgs = z.object({
+  petId: z.number().int(),
+  name: z.string().optional(),
+  status: z.string().optional()
+})
+export type PostApiPetPetIdTempTempIdArgs = z.infer<
+  typeof postApiPetPetIdTempTempIdArgs
+>
+export const deleteApiPetPetIdTempTempIdArgs = z.object({
+  api_key: z.string().optional(),
+  petId: z.number().int()
+})
+export type DeleteApiPetPetIdTempTempIdArgs = z.infer<
+  typeof deleteApiPetPetIdTempTempIdArgs
+>
+export const postApiPetPetIdUploadImageArgs = z.object({
+  petId: z.number().int(),
+  additionalMetadata: z.string().optional()
+})
+export type PostApiPetPetIdUploadImageArgs = z.infer<
+  typeof postApiPetPetIdUploadImageArgs
+>
+export const postApiStoreOrderArgs = z.object({ body: order })
+export type PostApiStoreOrderArgs = z.infer<typeof postApiStoreOrderArgs>
+export const getApiStoreOrderOrderIdArgs = z.object({
+  orderId: z.number().int()
+})
+export type GetApiStoreOrderOrderIdArgs = z.infer<
+  typeof getApiStoreOrderOrderIdArgs
+>
+export const deleteApiStoreOrderOrderIdArgs = z.object({
+  orderId: z.number().int()
+})
+export type DeleteApiStoreOrderOrderIdArgs = z.infer<
+  typeof deleteApiStoreOrderOrderIdArgs
+>
+export const postApiUserArgs = z.object({ body: customer })
+export type PostApiUserArgs = z.infer<typeof postApiUserArgs>
+export const postApiUserCreateWithListArgs = z.object({
+  body: z.array(customer)
+})
+export type PostApiUserCreateWithListArgs = z.infer<
+  typeof postApiUserCreateWithListArgs
+>
+export const getApiUserUsernameArgs = z.object({ username: z.string() })
+export type GetApiUserUsernameArgs = z.infer<typeof getApiUserUsernameArgs>
+export const putApiUserUsernameArgs = z.object({
+  username: z.string(),
+  body: customer
+})
+export type PutApiUserUsernameArgs = z.infer<typeof putApiUserUsernameArgs>
+export const deleteApiUserUsernameArgs = z.object({ username: z.string() })
+export type DeleteApiUserUsernameArgs = z.infer<
+  typeof deleteApiUserUsernameArgs
+>
+
+export const postApiPet = async (args: PostApiPetArgs) => {
   const { data, error } = await supabaseClient.functions.invoke(`/pet`, {
     method: 'POST',
-    body: queryArg.body
+    body: args.body
   })
 
   if (error) {
@@ -13,10 +81,11 @@ const postApiPet = async queryArg => {
 
   return pet.parse(data)
 }
-const putApiPet = async queryArg => {
+
+export const putApiPet = async (args: PutApiPetArgs) => {
   const { data, error } = await supabaseClient.functions.invoke(`/pet`, {
     method: 'PUT',
-    body: queryArg.body
+    body: args.body
   })
 
   if (error) {
@@ -25,7 +94,8 @@ const putApiPet = async queryArg => {
 
   return pet.parse(data)
 }
-const getApiPetFindByStatus = async queryArg => {
+
+export const getApiPetFindByStatus = async () => {
   const { data, error } = await supabaseClient.functions.invoke(
     `/pet/findByStatus`,
     { method: 'GET' }
@@ -37,7 +107,8 @@ const getApiPetFindByStatus = async queryArg => {
 
   return z.array(pet).parse(data)
 }
-const getApiPetFindByTags = async queryArg => {
+
+export const getApiPetFindByTags = async () => {
   const { data, error } = await supabaseClient.functions.invoke(
     `/pet/findByTags`,
     { method: 'GET' }
@@ -49,9 +120,12 @@ const getApiPetFindByTags = async queryArg => {
 
   return z.array(pet).parse(data)
 }
-const getApiPetPetIdTempTempId = async queryArg => {
+
+export const getApiPetPetIdTempTempId = async (
+  args: GetApiPetPetIdTempTempIdArgs
+) => {
   const { data, error } = await supabaseClient.functions.invoke(
-    `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+    `/pet/${args.petId}/temp/${args.tempId}`,
     { method: 'GET' }
   )
 
@@ -61,34 +135,39 @@ const getApiPetPetIdTempTempId = async queryArg => {
 
   return pet.parse(data)
 }
-const postApiPetPetIdTempTempId = async queryArg => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+
+export const postApiPetPetIdTempTempId = async (
+  args: PostApiPetPetIdTempTempIdArgs
+) => {
+  const { error } = await supabaseClient.functions.invoke(
+    `/pet/${args.petId}/temp/${args.tempId}`,
     { method: 'POST' }
   )
 
   if (error) {
     throw error
   }
-
-  return z.void().parse(data)
 }
-const deleteApiPetPetIdTempTempId = async queryArg => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+
+export const deleteApiPetPetIdTempTempId = async (
+  args: DeleteApiPetPetIdTempTempIdArgs
+) => {
+  const { error } = await supabaseClient.functions.invoke(
+    `/pet/${args.petId}/temp/${args.tempId}`,
     { method: 'DELETE' }
   )
 
   if (error) {
     throw error
   }
-
-  return z.void().parse(data)
 }
-const postApiPetPetIdUploadImage = async queryArg => {
+
+export const postApiPetPetIdUploadImage = async (
+  args: PostApiPetPetIdUploadImageArgs
+) => {
   const { data, error } = await supabaseClient.functions.invoke(
-    `/pet/${queryArg.petId}/uploadImage`,
-    { method: 'POST', body: queryArg.body }
+    `/pet/${args.petId}/uploadImage`,
+    { method: 'POST', body: args.body }
   )
 
   if (error) {
@@ -97,7 +176,8 @@ const postApiPetPetIdUploadImage = async queryArg => {
 
   return apiResponse.parse(data)
 }
-const getApiStoreInventory = async queryArg => {
+
+export const getApiStoreInventory = async () => {
   const { data, error } = await supabaseClient.functions.invoke(
     `/store/inventory`,
     { method: 'GET' }
@@ -109,10 +189,11 @@ const getApiStoreInventory = async queryArg => {
 
   return z.record(z.string(), z.number().int()).parse(data)
 }
-const postApiStoreOrder = async queryArg => {
+
+export const postApiStoreOrder = async (args: PostApiStoreOrderArgs) => {
   const { data, error } = await supabaseClient.functions.invoke(
     `/store/order`,
-    { method: 'POST', body: queryArg.body }
+    { method: 'POST', body: args.body }
   )
 
   if (error) {
@@ -121,9 +202,12 @@ const postApiStoreOrder = async queryArg => {
 
   return order.parse(data)
 }
-const getApiStoreOrderOrderId = async queryArg => {
+
+export const getApiStoreOrderOrderId = async (
+  args: GetApiStoreOrderOrderIdArgs
+) => {
   const { data, error } = await supabaseClient.functions.invoke(
-    `/store/order/${queryArg.orderId}`,
+    `/store/order/${args.orderId}`,
     { method: 'GET' }
   )
 
@@ -133,43 +217,49 @@ const getApiStoreOrderOrderId = async queryArg => {
 
   return order.parse(data)
 }
-const deleteApiStoreOrderOrderId = async queryArg => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    `/store/order/${queryArg.orderId}`,
+
+export const deleteApiStoreOrderOrderId = async (
+  args: DeleteApiStoreOrderOrderIdArgs
+) => {
+  const { error } = await supabaseClient.functions.invoke(
+    `/store/order/${args.orderId}`,
     { method: 'DELETE' }
   )
 
   if (error) {
     throw error
   }
-
-  return z.void().parse(data)
 }
-const postApiUser = async queryArg => {
+
+export const postApiUser = async (args: PostApiUserArgs) => {
   const { data, error } = await supabaseClient.functions.invoke(`/user`, {
     method: 'POST',
-    body: queryArg.body
+    body: args.body
   })
 
   if (error) {
     throw error
   }
 
-  return user.parse(data)
+  return customer.parse(data)
 }
-const postApiUserCreateWithList = async queryArg => {
+
+export const postApiUserCreateWithList = async (
+  args: PostApiUserCreateWithListArgs
+) => {
   const { data, error } = await supabaseClient.functions.invoke(
     `/user/createWithList`,
-    { method: 'POST', body: queryArg.body }
+    { method: 'POST', body: args.body }
   )
 
   if (error) {
     throw error
   }
 
-  return user.parse(data)
+  return customer.parse(data)
 }
-const getApiUserLogin = async queryArg => {
+
+export const getApiUserLogin = async () => {
   const { data, error } = await supabaseClient.functions.invoke(`/user/login`, {
     method: 'GET'
   })
@@ -180,9 +270,20 @@ const getApiUserLogin = async queryArg => {
 
   return z.string().parse(data)
 }
-const getApiUserLogout = async queryArg => {
+
+export const getApiUserLogout = async () => {
+  const { error } = await supabaseClient.functions.invoke(`/user/logout`, {
+    method: 'GET'
+  })
+
+  if (error) {
+    throw error
+  }
+}
+
+export const getApiUserUsername = async (args: GetApiUserUsernameArgs) => {
   const { data, error } = await supabaseClient.functions.invoke(
-    `/user/logout`,
+    `/user/${args.username}`,
     { method: 'GET' }
   )
 
@@ -190,41 +291,29 @@ const getApiUserLogout = async queryArg => {
     throw error
   }
 
-  return z.void().parse(data)
+  return customer.parse(data)
 }
-const getApiUserUsername = async queryArg => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    `/user/${queryArg.username}`,
-    { method: 'GET' }
+
+export const putApiUserUsername = async (args: PutApiUserUsernameArgs) => {
+  const { error } = await supabaseClient.functions.invoke(
+    `/user/${args.username}`,
+    { method: 'PUT', body: args.body }
   )
 
   if (error) {
     throw error
   }
-
-  return user.parse(data)
 }
-const putApiUserUsername = async queryArg => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    `/user/${queryArg.username}`,
-    { method: 'PUT', body: queryArg.body }
-  )
 
-  if (error) {
-    throw error
-  }
-
-  return z.void().parse(data)
-}
-const deleteApiUserUsername = async queryArg => {
-  const { data, error } = await supabaseClient.functions.invoke(
-    `/user/${queryArg.username}`,
+export const deleteApiUserUsername = async (
+  args: DeleteApiUserUsernameArgs
+) => {
+  const { error } = await supabaseClient.functions.invoke(
+    `/user/${args.username}`,
     { method: 'DELETE' }
   )
 
   if (error) {
     throw error
   }
-
-  return z.void().parse(data)
 }

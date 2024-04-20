@@ -5,6 +5,7 @@ export const toEndpointType = (operation: OasOperation) => {
   return operation.method === 'get' ? 'query' : 'mutation'
 }
 
+/** generates endpoint name in the `camelCase{method}Api{path}` format */
 export const toEndpointName = (operation: OasOperation) => {
   const { path, method } = operation
 

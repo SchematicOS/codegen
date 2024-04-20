@@ -93,8 +93,7 @@ export class Definition extends SchematicBase implements Stringable {
   }
 
   toString(): string {
-    // @TODO move syntax to typescript package to enable
-    // language agnostic use
+    // @TODO move syntax to typescript package to enable language agnostic use
     return withDescription(
       `export ${this.identifier.type} ${this.identifier} = ${this.children};`,
       this.description

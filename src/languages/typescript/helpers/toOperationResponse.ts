@@ -26,8 +26,6 @@ export const toOperationResponse = ({
 
   const successResponse = operation.toSuccessResponse()?.resolve()
 
-  console.log('Description: ', successResponse?.description)
-
   return Definition.fromValue({
     context,
     identifier,

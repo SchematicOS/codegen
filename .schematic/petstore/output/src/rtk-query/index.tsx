@@ -1,5 +1,6 @@
-import { pet, apiResponse, order, user } from 'src/index.tsx'
+import { pet, apiResponse, order } from 'src/index.tsx'
 import { z } from 'zod'
+import { customer } from 'src/schemas/Customer.ts'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 /** Successful operation */
@@ -117,16 +118,18 @@ export type DeleteApiStoreOrderOrderIdArgs = z.infer<
   typeof deleteApiStoreOrderOrderIdArgs
 >
 /** successful operation */
-export const postApiUserResponse = user
+export const postApiUserResponse = customer
 export type PostApiUserResponse = z.infer<typeof postApiUserResponse>
-export const postApiUserArgs = z.object({ body: user })
+export const postApiUserArgs = z.object({ body: customer })
 export type PostApiUserArgs = z.infer<typeof postApiUserArgs>
 /** Successful operation */
-export const postApiUserCreateWithListResponse = user
+export const postApiUserCreateWithListResponse = customer
 export type PostApiUserCreateWithListResponse = z.infer<
   typeof postApiUserCreateWithListResponse
 >
-export const postApiUserCreateWithListArgs = z.object({ body: z.array(user) })
+export const postApiUserCreateWithListArgs = z.object({
+  body: z.array(customer)
+})
 export type PostApiUserCreateWithListArgs = z.infer<
   typeof postApiUserCreateWithListArgs
 >
@@ -144,7 +147,7 @@ export type GetApiUserLogoutResponse = z.infer<typeof getApiUserLogoutResponse>
 export const getApiUserLogoutArgs = z.void()
 export type GetApiUserLogoutArgs = z.infer<typeof getApiUserLogoutArgs>
 /** successful operation */
-export const getApiUserUsernameResponse = user
+export const getApiUserUsernameResponse = customer
 export type GetApiUserUsernameResponse = z.infer<
   typeof getApiUserUsernameResponse
 >
@@ -157,7 +160,7 @@ export type PutApiUserUsernameResponse = z.infer<
 >
 export const putApiUserUsernameArgs = z.object({
   username: z.string(),
-  body: user
+  body: customer
 })
 export type PutApiUserUsernameArgs = z.infer<typeof putApiUserUsernameArgs>
 export const deleteApiUserUsernameResponse = z.void()

@@ -26,16 +26,6 @@ export const order = z.object({
   /** Order Status */ status: z.string().optional(),
   complete: z.boolean().optional()
 })
-export const user = z.object({
-  id: z.number().int().optional(),
-  username: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  email: z.string().optional(),
-  password: z.string().optional(),
-  phone: z.string().optional(),
-  /** User Status */ userStatus: z.number().int().optional()
-})
 export const address = z.object({
   street: z.string().optional(),
   city: z.string().optional(),

@@ -25,6 +25,11 @@
       "Category": {
         "exportPath": "./schemas/Category.ts",
         "selected": true
+      },
+      "User": {
+        "exportPath": "./schemas/Customer.ts",
+        "selected": true,
+        "renameTo": "Customer"
       }
     }
   }

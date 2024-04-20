@@ -1,5 +1,6 @@
-import { pet, apiResponse, order, user } from 'src/index.tsx'
+import { pet, apiResponse, order } from 'src/index.tsx'
 import { z } from 'zod'
+import { customer } from 'src/schemas/Customer.ts'
 
 const postApiPetFn = async (deploymentId: string) => {
   const res = await fetch(`/pet`, {
@@ -128,7 +129,7 @@ const postApiUserFn = async (deploymentId: string) => {
 
   const data = await res.json()
 
-  return user.parse(data)
+  return customer.parse(data)
 }
 
 const postApiUserCreateWithListFn = async (deploymentId: string) => {
@@ -138,7 +139,7 @@ const postApiUserCreateWithListFn = async (deploymentId: string) => {
 
   const data = await res.json()
 
-  return user.parse(data)
+  return customer.parse(data)
 }
 
 const getApiUserLoginFn = async (deploymentId: string) => {
@@ -168,7 +169,7 @@ const getApiUserUsernameFn = async (deploymentId: string) => {
 
   const data = await res.json()
 
-  return user.parse(data)
+  return customer.parse(data)
 }
 
 const putApiUserUsernameFn = async (deploymentId: string) => {
