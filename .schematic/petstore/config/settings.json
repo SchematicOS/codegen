@@ -2,5 +2,22 @@
   "transformerModules": ["rtk-query/mod.ts", "supabase-client/mod.ts", "tanstack-query/mod.ts"],
   "typeSystemModule": "zod/mod.ts",
   "schemaHash": "d6571e718d76a5ebb9d3f7451bf35188d2e1b1e1bddb766f1faf8edae2b326fc",
-  "exportPath": "./src/index.tsx"
+  "exportPath": "./src",
+  "transformers": {
+    "@schematicos/rtk-query": {
+      "root":{
+        "exportPath": "./rtk-query/index.ts"
+      }
+    },
+    "@schematicos/supabase-client": {
+      "root":{
+        "exportPath": "./supabase-client/index.ts"
+      }
+    },
+    "@schematicos/tanstack-query": {
+      "root":{
+        "exportPath": "./tanstack-query/index.ts"
+      }
+    }
+  }
 }

@@ -94,6 +94,8 @@ export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
 
   const artifactsMap = await context.render()
 
+  console.log(artifactsMap)
+
   Object.entries(artifactsMap).forEach(([filePath, content]) => {
     const resolvedPath = join('./.schematic', project, 'output', filePath)
 
