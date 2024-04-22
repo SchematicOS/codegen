@@ -28,6 +28,14 @@ export class Import implements Stringable {
     })
   }
 
+  toRecord(): Record<string, ImportNameArg[]> {
+    return {
+      [this.module]: this.importNames.map(({ name, alias }) =>
+        alias ? { [name]: alias } : name
+      )
+    }
+  }
+
   toString(): string {
     // @TODO move syntax to typescript package to enable
     // language agnostic use

@@ -2,7 +2,6 @@ import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { TransformerSettings } from 'generate/settings/TransformerSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
-import { Import } from 'generate/elements/Import.ts'
 
 type RtkQueryContainerProps = {
   context: CoreContext
@@ -23,12 +22,9 @@ export class RtkQueryContainer extends SchematicBase implements Stringable {
     this.transformerSettings = transformerSettings
 
     this.register({
-      imports: [
-        Import.create('@reduxjs/toolkit/query/react', [
-          'createApi',
-          'fetchBaseQuery'
-        ])
-      ],
+      imports: {
+        '@reduxjs/toolkit/query/react': ['createApi', 'fetchBaseQuery']
+      },
       destinationPath: this.transformerSettings.getExportPath({
         appendFileName: true
       })

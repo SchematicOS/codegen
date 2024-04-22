@@ -41,7 +41,7 @@ export const generate = ({
       })
 
       context.register({
-        definition,
+        definitions: [definition],
         destinationPath: definition.destinationPath
       })
     })

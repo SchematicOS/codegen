@@ -9,7 +9,6 @@ import { ZodIntersection } from './ZodIntersection.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { TypeSystemArgs } from 'generate/types.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
-import { Import } from 'generate/elements/Import.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
@@ -38,7 +37,7 @@ export class Zod extends SchematicBase implements Stringable {
     this.children.push(children)
 
     this.register({
-      imports: [Import.create('zod', 'z')],
+      imports: { zod: 'z' },
       destinationPath: this.destinationPath
     })
   }

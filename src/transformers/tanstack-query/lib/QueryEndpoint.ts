@@ -8,7 +8,6 @@ import { toEndpointName } from 'generate/helpers/naming.ts'
 import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
-import { Import } from 'generate/elements/Import.ts'
 
 export type QueryEndpointArgs = {
   context: CoreContext
@@ -49,7 +48,7 @@ export class QueryEndpoint extends SchematicBase implements Stringable {
         .filter(param => param.location === 'path') ?? []
 
     this.register({
-      imports: [Import.create('@tanstack/react-query', 'useQuery')],
+      imports: { '@tanstack/react-query': 'useQuery' },
       destinationPath
     })
   }

@@ -1,7 +1,6 @@
 import type { TypeSystem } from 'generate/types.ts'
 import type { Stringable } from '@schematicos/types'
-import { P, match } from 'ts-pattern'
-import type { Import } from 'generate/elements/Import.ts'
+import { Import, type ImportNameArg } from 'generate/elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from 'generate/settings/Settings.ts'
 import { Definition } from 'generate/elements/Definition.ts'
@@ -27,23 +26,12 @@ type ConstructorArgs = {
   reporter: Reporter
 }
 
-export type RegisterArgs =
-  | {
-      imports: Import[]
-      destinationPath: string
-    }
-  | {
-      definition: Definition
-      destinationPath: string
-    }
-  | {
-      definitions: Definition[]
-      destinationPath: string
-    }
-  | {
-      content: Stringable
-      destinationPath: string
-    }
+export type RegisterArgs = {
+  imports?: Record<string, ImportNameArg | ImportNameArg[]>
+  definitions?: Definition[]
+  content?: Stringable
+  destinationPath: string
+}
 
 export type ToTypeSystemArgs = {
   value: OasSchema | OasRef<'schema'> | OasVoid
@@ -87,36 +75,36 @@ export class GenerateContext {
     return currentFile
   }
 
-  register({ destinationPath, ...args }: RegisterArgs) {
+  register({
+    imports = {},
+    definitions,
+    content,
+    destinationPath
+  }: RegisterArgs) {
     const currentFile = this.getFile(destinationPath)
 
-    match(args)
-      .with({ imports: P.nonNullable }, ({ imports }) => {
-        imports.forEach(importItem => {
-          const module = currentFile.imports.get(importItem.module)
+    Object.entries(imports).forEach(([importModule, importNames]) => {
+      const module = currentFile.imports.get(importModule)
 
-          if (!module) {
-            currentFile.imports.set(
-              importItem.module,
-              new Set(importItem.importNames.map(n => `${n}`))
-            )
-          } else {
-            importItem.importNames.forEach(n => module.add(`${n}`))
-          }
-        })
-      })
-      .with({ definitions: P.nonNullable }, ({ definitions }) => {
-        definitions.forEach(definition => {
-          currentFile.definitions.set(`${definition.identifier}`, definition)
-        })
-      })
-      .with({ definition: P.nonNullable }, ({ definition }) => {
-        currentFile.definitions.set(`${definition.identifier}`, definition)
-      })
-      .with({ content: P.nonNullable }, ({ content }) => {
-        currentFile.content.push(content)
-      })
-      .exhaustive()
+      const importItem = Import.create(importModule, importNames)
+
+      if (!module) {
+        currentFile.imports.set(
+          importModule,
+          new Set(importItem.importNames.map(n => `${n}`))
+        )
+      } else {
+        importItem.importNames.forEach(n => module.add(`${n}`))
+      }
+    })
+
+    definitions?.forEach(definition => {
+      currentFile.definitions.set(`${definition.identifier}`, definition)
+    })
+
+    if (content) {
+      currentFile.content.push(content)
+    }
   }
 
   addFile(normalisedPath: string) {
@@ -159,7 +147,7 @@ export class GenerateContext {
 
       // and add it to outputs
       this.register({
-        definition,
+        definitions: [definition],
         destinationPath: identifier.modelSettings.getExportPath()
       })
 
@@ -167,7 +155,7 @@ export class GenerateContext {
       if (identifier.isImported(destinationPath)) {
         // import it
         this.register({
-          imports: [definition.identifier.toImport()],
+          imports: definition.identifier.toImport().toRecord(),
           destinationPath
         })
       }

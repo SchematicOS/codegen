@@ -1,7 +1,6 @@
 import { FormField } from './FormField.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import { Import } from 'generate/elements/Import.ts'
 import { capitalize } from 'generate/helpers/strings.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import type { Stringable } from '@schematicos/types'
@@ -54,14 +53,14 @@ export class FormContainer extends SchematicBase implements Stringable {
     })
 
     this.register({
-      imports: [
-        Import.create('react', { default: 'React' }),
-        Import.create('zod', 'z'),
-        Import.create('@mui/joy/Box', { default: 'Box' }),
-        Import.create('react-hook-form', ['useForm', 'Controller']),
-        Import.create('@hookform/resolvers/zod', 'zodResolver'),
-        Import.create('@mui/joy/Button', { default: 'Button' })
-      ],
+      imports: {
+        react: { default: 'React' },
+        zod: 'z',
+        '@mui/joy/Box': { default: 'Box' },
+        'react-hook-form': ['useForm', 'Controller'],
+        '@hookform/resolvers/zod': 'zodResolver',
+        '@mui/joy/Button': { default: 'Button' }
+      },
       destinationPath: this.operationSettings.getExportPath()
     })
   }

@@ -8,7 +8,6 @@ import { toPathTemplate } from 'typescript/helpers/toPathTemplate.ts'
 import { InvokeOptions } from './InvokeOptions.ts'
 import { toOperationArg } from 'typescript/helpers/toOperationArg.ts'
 import { toInferredType } from 'typescript/toInferredType.ts'
-import { Import } from 'generate/elements/Import.ts'
 
 export type EndpointArgs = {
   context: CoreContext
@@ -73,7 +72,7 @@ export class Endpoint extends SchematicBase implements Stringable {
       })
 
       this.register({
-        imports: [Import.create('lib/supabase', ['supabaseClient'])],
+        imports: { 'lib/supabase': ['supabaseClient'] },
         destinationPath
       })
 

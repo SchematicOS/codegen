@@ -1,5 +1,4 @@
 import type { CoreContext } from 'core/lib/CoreContext.ts'
-import { Import } from 'generate/elements/Import.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { Stringable } from '@schematicos/types'
@@ -25,13 +24,13 @@ export class FormField extends SchematicBase implements Stringable {
     this.fieldName = fieldName
 
     this.register({
-      imports: [
-        Import.create('react-hook-form', 'Controller'),
-        Import.create('@mui/joy/FormLabel', { default: 'FormLabel' }),
-        Import.create('@mui/joy/Input', { default: 'Input' }),
-        Import.create('@mui/joy/FormControl', { default: 'FormControl' }),
-        Import.create('@mui/joy/FormHelperText', { default: 'FormHelperText' })
-      ],
+      imports: {
+        'react-hook-form': 'Controller',
+        '@mui/joy/FormLabel': { default: 'FormLabel' },
+        '@mui/joy/Input': { default: 'Input' },
+        '@mui/joy/FormControl': { default: 'FormControl' },
+        '@mui/joy/FormHelperText': { default: 'FormHelperText' }
+      },
       destinationPath: this.operationSettings.getExportPath()
     })
   }
