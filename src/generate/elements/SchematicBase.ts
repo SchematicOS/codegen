@@ -3,7 +3,7 @@ import { EMPTY } from 'generate/constants.ts'
 import type { Stringable } from '@schematicos/types'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 
-type SchenmaticBaseArgs = {
+type SchematicBaseArgs = {
   context: CoreContext
   children?: Stringable | Stringable[]
 }
@@ -12,7 +12,7 @@ export class SchematicBase implements Stringable {
   context: CoreContext
   children: Stringable[] = []
 
-  constructor({ context, children = [] }: SchenmaticBaseArgs) {
+  constructor({ context, children = [] }: SchematicBaseArgs) {
     this.context = context
 
     this.children = this.children.concat(children)
