@@ -34,39 +34,27 @@ export const getApiPetFindByTagsArgs = z.object({
 })
 export type GetApiPetFindByTagsArgs = z.infer<typeof getApiPetFindByTagsArgs>
 /** successful operation */
-export const getApiPetPetIdTempTempIdResponse = pet
-export type GetApiPetPetIdTempTempIdResponse = z.infer<
-  typeof getApiPetPetIdTempTempIdResponse
->
-export const getApiPetPetIdTempTempIdArgs = z.object({
-  petId: z.number().int()
-})
-export type GetApiPetPetIdTempTempIdArgs = z.infer<
-  typeof getApiPetPetIdTempTempIdArgs
->
-export const postApiPetPetIdTempTempIdResponse = z.void()
-export type PostApiPetPetIdTempTempIdResponse = z.infer<
-  typeof postApiPetPetIdTempTempIdResponse
->
-export const postApiPetPetIdTempTempIdArgs = z.object({
+export const getApiPetPetIdResponse = pet
+export type GetApiPetPetIdResponse = z.infer<typeof getApiPetPetIdResponse>
+export const getApiPetPetIdArgs = z.object({ petId: z.number().int() })
+export type GetApiPetPetIdArgs = z.infer<typeof getApiPetPetIdArgs>
+export const postApiPetPetIdResponse = z.void()
+export type PostApiPetPetIdResponse = z.infer<typeof postApiPetPetIdResponse>
+export const postApiPetPetIdArgs = z.object({
   petId: z.number().int(),
   name: z.string().optional(),
   status: z.string().optional()
 })
-export type PostApiPetPetIdTempTempIdArgs = z.infer<
-  typeof postApiPetPetIdTempTempIdArgs
+export type PostApiPetPetIdArgs = z.infer<typeof postApiPetPetIdArgs>
+export const deleteApiPetPetIdResponse = z.void()
+export type DeleteApiPetPetIdResponse = z.infer<
+  typeof deleteApiPetPetIdResponse
 >
-export const deleteApiPetPetIdTempTempIdResponse = z.void()
-export type DeleteApiPetPetIdTempTempIdResponse = z.infer<
-  typeof deleteApiPetPetIdTempTempIdResponse
->
-export const deleteApiPetPetIdTempTempIdArgs = z.object({
+export const deleteApiPetPetIdArgs = z.object({
   api_key: z.string().optional(),
   petId: z.number().int()
 })
-export type DeleteApiPetPetIdTempTempIdArgs = z.infer<
-  typeof deleteApiPetPetIdTempTempIdArgs
->
+export type DeleteApiPetPetIdArgs = z.infer<typeof deleteApiPetPetIdArgs>
 /** successful operation */
 export const postApiPetPetIdUploadImageResponse = apiResponse
 export type PostApiPetPetIdUploadImageResponse = z.infer<
@@ -211,24 +199,21 @@ export const injectedRtkApi = createApi({
       })
     }),
     /** Returns a single pet */
-    getApiPetPetIdTempTempId: build.query<
-      GetApiPetPetIdTempTempIdResponse,
-      GetApiPetPetIdTempTempIdArgs
-    >({
+    getApiPetPetId: build.query<GetApiPetPetIdResponse, GetApiPetPetIdArgs>({
       query: queryArg => ({
-        path: `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+        path: `/pet/${queryArg.petId}`,
         method: GET,
         params: {
           /** ID of pet to return */ petId: queryArg.petId
         }
       })
     }),
-    postApiPetPetIdTempTempId: build.mutation<
-      PostApiPetPetIdTempTempIdResponse,
-      PostApiPetPetIdTempTempIdArgs
+    postApiPetPetId: build.mutation<
+      PostApiPetPetIdResponse,
+      PostApiPetPetIdArgs
     >({
       query: queryArg => ({
-        path: `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+        path: `/pet/${queryArg.petId}`,
         method: POST,
         params: {
           /** ID of pet that needs to be updated */ petId: queryArg.petId,
@@ -239,12 +224,12 @@ export const injectedRtkApi = createApi({
         }
       })
     }),
-    deleteApiPetPetIdTempTempId: build.mutation<
-      DeleteApiPetPetIdTempTempIdResponse,
-      DeleteApiPetPetIdTempTempIdArgs
+    deleteApiPetPetId: build.mutation<
+      DeleteApiPetPetIdResponse,
+      DeleteApiPetPetIdArgs
     >({
       query: queryArg => ({
-        path: `/pet/${queryArg.petId}/temp/${queryArg.tempId}`,
+        path: `/pet/${queryArg.petId}`,
         method: DELETE,
         params: {
           /** Pet id to delete */ petId: queryArg.petId

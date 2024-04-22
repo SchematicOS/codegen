@@ -7,27 +7,19 @@ export const postApiPetArgs = z.object({ body: pet })
 export type PostApiPetArgs = z.infer<typeof postApiPetArgs>
 export const putApiPetArgs = z.object({ body: pet })
 export type PutApiPetArgs = z.infer<typeof putApiPetArgs>
-export const getApiPetPetIdTempTempIdArgs = z.object({
-  petId: z.number().int()
-})
-export type GetApiPetPetIdTempTempIdArgs = z.infer<
-  typeof getApiPetPetIdTempTempIdArgs
->
-export const postApiPetPetIdTempTempIdArgs = z.object({
+export const getApiPetPetIdArgs = z.object({ petId: z.number().int() })
+export type GetApiPetPetIdArgs = z.infer<typeof getApiPetPetIdArgs>
+export const postApiPetPetIdArgs = z.object({
   petId: z.number().int(),
   name: z.string().optional(),
   status: z.string().optional()
 })
-export type PostApiPetPetIdTempTempIdArgs = z.infer<
-  typeof postApiPetPetIdTempTempIdArgs
->
-export const deleteApiPetPetIdTempTempIdArgs = z.object({
+export type PostApiPetPetIdArgs = z.infer<typeof postApiPetPetIdArgs>
+export const deleteApiPetPetIdArgs = z.object({
   api_key: z.string().optional(),
   petId: z.number().int()
 })
-export type DeleteApiPetPetIdTempTempIdArgs = z.infer<
-  typeof deleteApiPetPetIdTempTempIdArgs
->
+export type DeleteApiPetPetIdArgs = z.infer<typeof deleteApiPetPetIdArgs>
 export const postApiPetPetIdUploadImageArgs = z.object({
   petId: z.number().int(),
   additionalMetadata: z.string().optional()
@@ -121,11 +113,9 @@ export const getApiPetFindByTags = async () => {
   return z.array(pet).parse(data)
 }
 
-export const getApiPetPetIdTempTempId = async (
-  args: GetApiPetPetIdTempTempIdArgs
-) => {
+export const getApiPetPetId = async (args: GetApiPetPetIdArgs) => {
   const { data, error } = await supabaseClient.functions.invoke(
-    `/pet/${args.petId}/temp/${args.tempId}`,
+    `/pet/${args.petId}`,
     { method: 'GET' }
   )
 
@@ -136,11 +126,9 @@ export const getApiPetPetIdTempTempId = async (
   return pet.parse(data)
 }
 
-export const postApiPetPetIdTempTempId = async (
-  args: PostApiPetPetIdTempTempIdArgs
-) => {
+export const postApiPetPetId = async (args: PostApiPetPetIdArgs) => {
   const { error } = await supabaseClient.functions.invoke(
-    `/pet/${args.petId}/temp/${args.tempId}`,
+    `/pet/${args.petId}`,
     { method: 'POST' }
   )
 
@@ -149,11 +137,9 @@ export const postApiPetPetIdTempTempId = async (
   }
 }
 
-export const deleteApiPetPetIdTempTempId = async (
-  args: DeleteApiPetPetIdTempTempIdArgs
-) => {
+export const deleteApiPetPetId = async (args: DeleteApiPetPetIdArgs) => {
   const { error } = await supabaseClient.functions.invoke(
-    `/pet/${args.petId}/temp/${args.tempId}`,
+    `/pet/${args.petId}`,
     { method: 'DELETE' }
   )
 

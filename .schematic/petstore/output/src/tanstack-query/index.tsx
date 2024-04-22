@@ -3,21 +3,6 @@ import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
 import { customer } from 'src/schemas/Customer.ts'
 
-export const getApiPetPetIdTempTempIdArgs = z.object({
-  petId: z.number().int()
-})
-export type GetApiPetPetIdTempTempIdArgs = z.infer<
-  typeof getApiPetPetIdTempTempIdArgs
->
-export const getApiStoreOrderOrderIdArgs = z.object({
-  orderId: z.number().int()
-})
-export type GetApiStoreOrderOrderIdArgs = z.infer<
-  typeof getApiStoreOrderOrderIdArgs
->
-export const getApiUserUsernameArgs = z.object({ username: z.string() })
-export type GetApiUserUsernameArgs = z.infer<typeof getApiUserUsernameArgs>
-
 const getApiPetFindByStatusFn = async () => {
   const res = await fetch(`/pet/findByStatus`, {
     method: 'GET'
@@ -58,8 +43,8 @@ export const useGetApiPetFindByTagsFn = () => {
   return result
 }
 
-const getApiPetPetIdTempTempIdFn = async (petId: string | undefined) => {
-  const res = await fetch(`/pet/${petId}/temp/${tempId}`, {
+const getApiPetPetIdFn = async (petId: string | undefined) => {
+  const res = await fetch(`/pet/${petId}`, {
     method: 'GET'
   })
 
@@ -68,10 +53,10 @@ const getApiPetPetIdTempTempIdFn = async (petId: string | undefined) => {
   return pet.parse(data)
 }
 
-export const useGetApiPetPetIdTempTempIdFn = (petId: string | undefined) => {
+export const useGetApiPetPetIdFn = (petId: string | undefined) => {
   const result = useQuery({
     queryKey: ['pet', petId],
-    queryFn: () => getApiPetPetIdTempTempIdFn(petId),
+    queryFn: () => getApiPetPetIdFn(petId),
     enabled: Boolean(petId)
   })
 
