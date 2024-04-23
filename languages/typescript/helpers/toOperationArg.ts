@@ -20,7 +20,7 @@ export const toOperationArg = ({
   context,
   destinationPath,
   operation
-}: ToOperationArgArgs) => {
+}: ToOperationArgArgs): Definition => {
   const identifier = Identifier.create({
     name: toArgsName(operation),
     modelSettings: ModelSettings.create({ exportPath: destinationPath }),
@@ -51,7 +51,10 @@ export const toOperationArg = ({
 const toOperationArgProperties = (
   operation: OasOperation,
   body: OasSchema | OasRef<'schema'> | undefined
-) => {
+): {
+  properties: Record<string, OasSchema | OasRef<'schema'>>
+  required: string[]
+} => {
   const parameters = operation.parameters ?? []
 
   const resolved = parameters.map(parameter => parameter.resolve())
