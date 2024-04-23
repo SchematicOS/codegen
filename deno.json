@@ -1,21 +1,26 @@
 {
   "name": "@schematicos/codegen",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "tasks": {
     "types": "deno check src/**/*.ts",
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net src/cli/mod.ts generate"
   },
   "exports": {
     "./cli": "./src/cli/mod.ts",
+    "./core": "./src/core/mod.ts",
+    "./generate": "./src/generate/mod.ts",
     "./mui-joy-forms": "./src/transformers/mui-joy-forms/mod.ts",
+    "./parse": "./src/parse/mod.ts",
     "./rtk-query": "./src/transformers/rtk-query/mod.ts",
     "./supabase-client": "./src/transformers/supabase-client/mod.ts",
     "./tanstack-query": "./src/transformers/tanstack-query/mod.ts",
+    "./typescript": "./src/languages/typescript/mod.ts",
     "./zod": "./src/typeSystems/zod/mod.ts"
   },
   "imports": {
     "@babel/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
     "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.4",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@1.0.0-rc.4",
     "@redocly/openapi-core": "npm:@redocly/openapi-core@1.11.0",
     "@schematicos/types": "npm:@schematicos/types@0.0.46",
     "assert": "jsr:@std/assert@0.222.1",

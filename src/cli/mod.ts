@@ -4,6 +4,7 @@ import { join, resolve } from 'path'
 import { readFile } from './lib/readFile.ts'
 import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 import type { TypeSystem, Transformer } from 'generate/types.ts'
+import { Confirm, Input } from '@cliffy/prompt'
 
 type MainArgs = {
   project: string
@@ -17,8 +18,7 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
   const schemaContent = readFile<string>(schemaPath)
 
   if (!schemaContent) {
-    console.error(`Could not read schema from "${schemaPath}"`)
-    return
+    return console.error(`Could not read schema from "${schemaPath}"`)
   }
 
   const config = join('./.schematic', project, 'config')
@@ -28,8 +28,7 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
   const settings = readFile<SettingsType>(settingsPath)
 
   if (!settings) {
-    console.error(`Could not read schema from "${settingsPath}"`)
-    return
+    return console.error(`Could not read schema from "${settingsPath}"`)
   }
 
   const prettierPath = resolve(config, 'prettier.json')
@@ -65,7 +64,7 @@ await new Command()
     { required: true, default: 'petstore' }
   )
   .option(
-    '-t --transformers [modules...:string]',
+    '-t --transformers <modules...:string>',
     'List of transformers to use',
     { required: true }
   )
@@ -83,6 +82,44 @@ await new Command()
       typeof typeSystem === 'string'
     ) {
       main({ project, transformers, typeSystem })
+    }
+  })
+  .command('init', 'Initialize a new project in current directory')
+  .action(async _options => {
+    const newSchema = await Confirm.prompt({ message: 'Add new schema?' })
+
+    if (newSchema) {
+      const url = await Input.prompt({
+        message: 'Enter the URL of the schema',
+        suggestions: ['https://petstore3.swagger.io/api/v3/openapi.json']
+      })
+
+      const name = await Input.prompt({
+        message: 'Enter the name of the schema',
+        suggestions: ['petstore']
+      })
+
+      const fileName = new URL(url).pathname.split('/').pop()
+
+      const fileType = fileName?.endsWith('.json')
+        ? 'json'
+        : fileName?.endsWith('.yaml') || fileName?.endsWith('.yml')
+        ? 'yaml'
+        : undefined
+
+      if (!fileType) {
+        throw new Error(`File type is not JSON or YAML: ${fileName}`)
+      }
+
+      const projectPath = join('./.schematic', name)
+
+      Deno.mkdirSync(projectPath, { recursive: true })
+
+      const res = await fetch(url)
+
+      const schema = await res.text()
+
+      Deno.writeTextFileSync(join(projectPath, `schema.${fileType}`), schema)
     }
   })
   .parse(Deno.args)
