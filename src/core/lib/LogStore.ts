@@ -34,7 +34,7 @@ export class LogStore {
     }
   }
 
-  generateOutput() {
+  generateOutput(): { logs: string; operations: string } {
     const logs = this.logs.join('\n')
     const operations = Object.entries(this.operations).reduce(
       (acc, [operation, logs]) => {
