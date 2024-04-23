@@ -6,7 +6,12 @@
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net src/cli/mod.ts generate"
   },
   "exports": {
-    "./cli": "./src/cli/mod.ts"
+    "./cli": "./src/cli/mod.ts",
+    "./mui-joy-forms": "./src/transformers/mui-joy-forms/mod.ts",
+    "./rtk-query": "./src/transformers/rtk-query/mod.ts",
+    "./supabase-client": "./src/transformers/supabase-client/mod.ts",
+    "./tanstack-query": "./src/transformers/tanstack-query/mod.ts",
+    "./zod": "./src/typeSystems/zod/mod.ts"
   },
   "imports": {
     "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.4",
