@@ -34,8 +34,7 @@
     "tiny-invariant": "npm:tiny-invariant@1.3.3",
     "ts-pattern": "npm:ts-pattern@5.1.1",
     "typescript/": "./src/languages/typescript/",
-    "zod/": "./src/typeSystems/zod/",
-    "https://deno.land/": "./vendor/deno.land/"
+    "zod/": "./src/typeSystems/zod/"
   },
   "publish": {
     "include": [
@@ -43,8 +42,7 @@
       "deno.lock",
       "LICENSE",
       "README.md",
-      "src/**/*.ts",
-      "vendor/**/*"
+      "src/**/*.ts"
     ]
   }
 }
