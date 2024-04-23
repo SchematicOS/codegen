@@ -5,7 +5,16 @@
     "types": "deno check ./cli/**/*.ts",
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net src/cli/mod.ts generate"
   },
-  "exports": "./**/*.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./cli": "./cli/mods.ts",
+    "./generate/types.ts": "./generate/types.ts",
+    "./typescript/withDescription.ts": "./languages/typescript/helpers/withDescription.ts",
+    "./typescript/toInferredType.ts": "./languages/typescript/toInferredType.ts",
+    "./TransformerSettings.ts": "./settings/TransformerSettings.ts",
+    "./SchematicBase.ts": "./generate/elements/SchematicBase.ts",
+    "./CoreContext.ts": "./context/CoreContext.ts"
+  },
   "imports": {
     "@babel/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
     "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.4",
