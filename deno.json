@@ -18,7 +18,7 @@
     "./Ref.ts": "./parse/elements/Ref.ts",
     "./RequestBody.ts": "./parse/elements/RequestBody.ts",
     "./SchematicBase.ts": "./generate/elements/SchematicBase.ts",
-    "./TransformerSettings.ts": "./settings/TransformerSettings.ts",
+    "./TransformerSettings.ts": "./generate/settings/TransformerSettings.ts",
     "./typescript/keyValues.ts": "./languages/helpers/keyValues.ts",
     "./typescript/toInferredType.ts": "./languages/typescript/toInferredType.ts",
     "./typescript/toOperationArg.ts": "./languages/helpers/toOperationArg.ts",
