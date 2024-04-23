@@ -14,6 +14,7 @@
     "./zod": "./src/typeSystems/zod/mod.ts"
   },
   "imports": {
+    "@babel/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
     "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.4",
     "@redocly/openapi-core": "npm:@redocly/openapi-core@1.11.0",
     "@schematicos/types": "npm:@schematicos/types@0.0.46",

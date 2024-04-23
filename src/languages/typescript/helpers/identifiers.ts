@@ -1,4 +1,4 @@
-import { isIdentifierName } from 'npm:@babel/helper-validator-identifier'
+import { isIdentifierName } from '@babel/helper-validator-identifier'
 
 export const handleKey = (key: string): string => {
   return isIdentifierName(key) ? key : `'${key}'`
