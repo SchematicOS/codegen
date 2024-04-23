@@ -6,7 +6,7 @@
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net src/cli/mod.ts generate"
   },
   "exports": {
-    "./cli": "./cli/mods.ts",
+    "./cli": "./cli/mod.ts",
     "./CoreContext.ts": "./context/CoreContext.ts",
     "./Definition.ts": "./generate/elements/Definition.ts",
     "./generate/constants.ts": "./generate/constants.ts",
