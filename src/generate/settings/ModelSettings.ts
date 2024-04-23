@@ -19,11 +19,7 @@ export class ModelSettings {
   }
 
   static create(
-    {
-      selected = true,
-      exportPath,
-      renameTo
-    }: ModelSettingsArgs | undefined = {},
+    { selected = true, exportPath, renameTo }: ModelSettingsArgs = {},
     parentExportPath = ''
   ): ModelSettings {
     return new ModelSettings(
