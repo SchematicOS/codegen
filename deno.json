@@ -19,12 +19,12 @@
     "./RequestBody.ts": "./parse/elements/RequestBody.ts",
     "./SchematicBase.ts": "./generate/elements/SchematicBase.ts",
     "./TransformerSettings.ts": "./generate/settings/TransformerSettings.ts",
-    "./typescript/keyValues.ts": "./languages/helpers/keyValues.ts",
+    "./typescript/keyValues.ts": "./languages/typescript/helpers/keyValues.ts",
     "./typescript/toInferredType.ts": "./languages/typescript/toInferredType.ts",
-    "./typescript/toOperationArg.ts": "./languages/helpers/toOperationArg.ts",
-    "./typescript/toOperationResponse.ts": "./languages/helpers/toOperationResponse.ts",
-    "./typescript/toParamsObject.ts": "./languages/helpers/toParamsObject.ts",
-    "./typescript/toPathTemplate.ts": "./languages/helpers/toPathTemplate.ts",
+    "./typescript/toOperationArg.ts": "./languages/typescript/helpers/toOperationArg.ts",
+    "./typescript/toOperationResponse.ts": "./languages/typescript/helpers/toOperationResponse.ts",
+    "./typescript/toParamsObject.ts": "./languages/typescript/helpers/toParamsObject.ts",
+    "./typescript/toPathTemplate.ts": "./languages/typescript/helpers/toPathTemplate.ts",
     "./typescript/withDescription.ts": "./languages/typescript/helpers/withDescription.ts"
   },
   "imports": {
