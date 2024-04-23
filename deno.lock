@@ -490,6 +490,7 @@
       "jsr:@std/path@0.222.1",
       "npm:@redocly/openapi-core@1.11.0",
       "npm:@schematicos/types@0.0.46",
+      "npm:lodash-es@4.17.21",
       "npm:openapi-types@12.1.3",
       "npm:prettier@3.2.5",
       "npm:tiny-invariant@1.3.3",

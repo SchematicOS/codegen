@@ -74,12 +74,12 @@ await new Command()
     'List of transformers to use',
     { required: true }
   )
-  .option('-ts --typeSystem [module:string]', 'Type system to use', {
-    default: 'jsr:@schematicos/zod'
+  .option('-s --typeSystem [module:string]', 'Type system to use', {
+    default: 'jsr:@schematicos/codegen/zod'
   })
   .example(
     'Generate MUI forms with RTK Query api client using Zod types',
-    'generate -t jsr:@schematicos/rtk-query jsr:@schematicos/mui-joy-forms -ts jsr:@schematicos/zod'
+    'generate -t jsr:@schematicos/codegen/rtk-query jsr:@schematicos/codegen/mui-joy-forms -s jsr:@schematicos/codegen/zod'
   )
   .action(({ project, transformers, typeSystem }) => {
     if (
