@@ -10,22 +10,28 @@ import { ParseContext } from 'core/lib/ParseContext.ts'
 import { CoreContext } from 'core/lib/CoreContext.ts'
 import { Settings } from 'generate/settings/Settings.ts'
 import { Trail } from 'core/lib/Trail.ts'
-import type { Transformer } from 'generate/types.ts'
+import type { Transformer, TypeSystem } from 'generate/types.ts'
 import { generate } from 'generate/mod.ts'
-
-export type GenerateConfig = {
-  transformers: string[]
-  typeSystem: string
-}
 
 type RunArgs = {
   schema: string
   project: string
   settings: SettingsType
   prettier?: PrettierConfigType
+  transformers: Transformer[]
+  typeSystem: TypeSystem
 }
 
-export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
+export const run = async ({
+  schema,
+  project,
+  settings,
+  prettier,
+  transformers,
+  typeSystem
+}: RunArgs) => {
+  const trail = Trail.create()
+
   const logStore = new LogStore()
 
   const reporter = Reporter.create({
@@ -40,29 +46,15 @@ export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
     reporter
   })
 
-  context.info({
-    trail: Trail.create(),
-    message: 'Begin parsing phase'
-  })
+  context.info({ trail, message: 'Begin parsing phase' })
 
   const schemaModel: OasDocument = await parse(schema, context)
 
-  context.info({
-    trail: Trail.create(),
-    message: 'Parsing phase complete'
-  })
+  context.info({ trail, message: 'Parsing phase complete' })
 
   if (!schemaModel.openapi.startsWith('3.0.')) {
     throw new Error('Only OpenAPI v3 is supported')
   }
-
-  const t: { default: Transformer }[] = await Promise.all(
-    settings.transformerModules.map(transformer => import(transformer))
-  )
-
-  const transformers = t.map(({ default: d }) => d)
-
-  const { default: typeSystem } = await import(settings.typeSystemModule)
 
   context.setupGeneratePhase({
     schemaModel,
@@ -70,22 +62,13 @@ export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
     typeSystem
   })
 
-  context.info({
-    trail: Trail.create(),
-    message: 'Begin generate phase'
-  })
+  context.info({ trail, message: 'Begin generate phase' })
 
   generate({ schemaModel, transformers, context })
 
-  context.info({
-    trail: Trail.create(),
-    message: 'Generate phase complete'
-  })
+  context.info({ trail, message: 'Generate phase complete' })
 
-  context.info({
-    trail: Trail.create(),
-    message: 'Begin render phase'
-  })
+  context.info({ trail, message: 'Begin render phase' })
 
   context.setupRenderPhase({
     files: context.files,
@@ -104,7 +87,7 @@ export const run = async ({ schema, project, settings, prettier }: RunArgs) => {
   })
 
   context.info({
-    trail: Trail.create(),
+    trail,
     message: 'Render phase complete'
   })
 

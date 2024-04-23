@@ -1,0 +1,14 @@
+{
+  "imports": {
+    "zod/": "../src/typeSystems/zod/",
+    "typescript/": "../src/languages/typescript/",
+    "tanstack-query/": "../src/transformers/tanstack-query/",
+    "supabase-client/": "../src/transformers/supabase-client/",
+    "rtk-query/": "../src/transformers/rtk-query/",
+    "parse/": "../src/parse/",
+    "mui-joy-forms/": "../src/transformers/mui-joy-forms/",
+    "generate/": "../src/generate/",
+    "core/": "../src/core/",
+    "https://deno.land/": "./deno.land/"
+  }
+}
