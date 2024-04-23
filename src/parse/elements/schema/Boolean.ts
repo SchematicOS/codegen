@@ -26,15 +26,20 @@ export class OasBoolean extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToBooleanV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToBooleanV3Args): OasBoolean {
     return new OasBoolean({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -42,7 +47,7 @@ export class OasBoolean extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasBoolean {
     return this
   }
 }

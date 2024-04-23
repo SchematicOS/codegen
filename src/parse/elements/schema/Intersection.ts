@@ -35,23 +35,28 @@ export class OasIntersection extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToIntersectionV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToIntersectionV3Args): OasIntersection {
     return new OasIntersection({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get discriminator() {
+  get discriminator(): OasDiscriminator | undefined {
     return this.fields.discriminator
   }
 
-  get members() {
+  get members(): (OasSchema | OasRef<'schema'>)[] {
     return this.fields.members
   }
 
@@ -59,7 +64,7 @@ export class OasIntersection extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasIntersection {
     return this
   }
 }

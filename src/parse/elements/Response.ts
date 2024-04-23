@@ -29,19 +29,24 @@ export class OasResponse extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToResponseV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToResponseV3Args): OasResponse {
     return new OasResponse({ fields, trail, context, skipped })
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get headers() {
+  get headers(): Record<string, OasHeader | OasRef<'header'>> | undefined {
     return this.fields.headers
   }
 
-  get content() {
+  get content(): Record<string, OasMediaType> | undefined {
     return this.fields.content
   }
 
@@ -49,7 +54,7 @@ export class OasResponse extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasResponse {
     return this
   }
 

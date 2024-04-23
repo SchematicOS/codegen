@@ -29,15 +29,20 @@ export class OasString extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToStringV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToStringV3Args): OasString {
     return new OasString({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -45,7 +50,7 @@ export class OasString extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasString {
     return this
   }
 

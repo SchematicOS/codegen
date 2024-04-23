@@ -28,19 +28,24 @@ export class OasMediaType extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToMediaTypeV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToMediaTypeV3Args): OasMediaType {
     return new OasMediaType({ fields, trail, context, skipped })
   }
 
-  get mediaType() {
+  get mediaType(): string {
     return this.fields.mediaType
   }
 
-  get schema() {
+  get schema(): OasSchema | OasRef<'schema'> | undefined {
     return this.fields.schema
   }
 
-  get examples() {
+  get examples(): Record<string, OasExample | OasRef<'example'>> | undefined {
     return this.fields.examples
   }
 }

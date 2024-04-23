@@ -30,11 +30,11 @@ export class RenderContext {
     this.prettier = prettier
   }
 
-  static create(args: ConstructorArgs) {
+  static create(args: ConstructorArgs): RenderContext {
     return new RenderContext(args)
   }
 
-  async render() {
+  async render(): Promise<Record<string, string>> {
     const artifactsMap = this.collate()
     return await this.format(artifactsMap)
   }

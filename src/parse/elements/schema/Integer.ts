@@ -26,15 +26,20 @@ export class OasInteger extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToIntegerV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToIntegerV3Args): OasInteger {
     return new OasInteger({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -42,7 +47,7 @@ export class OasInteger extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasInteger {
     return this
   }
 }

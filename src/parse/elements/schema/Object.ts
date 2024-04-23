@@ -35,11 +35,16 @@ export class OasObject extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToObjectV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToObjectV3Args): OasObject {
     return new OasObject({ fields, trail, context, skipped })
   }
 
-  static fromFields({ fields, context }: FromFieldsArgs) {
+  static fromFields({ fields, context }: FromFieldsArgs): OasObject {
     return new OasObject({
       fields,
       trail: Trail.create(),
@@ -48,23 +53,27 @@ export class OasObject extends OasBase {
     })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get properties() {
+  get properties(): Record<string, OasSchema | OasRef<'schema'>> | undefined {
     return this.fields.properties
   }
 
-  get required() {
+  get required(): string[] | undefined {
     return this.fields.required
   }
 
-  get additionalProperties() {
+  get additionalProperties():
+    | boolean
+    | OasSchema
+    | OasRef<'schema'>
+    | undefined {
     return this.fields.additionalProperties
   }
 
@@ -72,7 +81,7 @@ export class OasObject extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasObject {
     return this
   }
 }

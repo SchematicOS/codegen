@@ -26,15 +26,20 @@ export class OasUnknown extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToUnknownV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToUnknownV3Args): OasUnknown {
     return new OasUnknown({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -42,7 +47,7 @@ export class OasUnknown extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasUnknown {
     return this
   }
 }

@@ -26,15 +26,20 @@ export class OasNumber extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToNumberV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToNumberV3Args): OasNumber {
     return new OasNumber({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -42,7 +47,7 @@ export class OasNumber extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasNumber {
     return this
   }
 }

@@ -41,7 +41,7 @@ export class Trail implements Stringable {
     schemaRef,
     document,
     subMethodIndex
-  }: ConstructorArgs = {}) {
+  }: ConstructorArgs = {}): Trail {
     return new Trail({
       path,
       apiPath,
@@ -52,7 +52,7 @@ export class Trail implements Stringable {
     })
   }
 
-  add(path: string) {
+  add(path: string): Trail {
     return Trail.create({
       path: this.path.concat(path),
       apiPath: this.apiPath,
@@ -63,7 +63,7 @@ export class Trail implements Stringable {
     })
   }
 
-  addApiPath(apiPath: string) {
+  addApiPath(apiPath: string): Trail {
     return Trail.create({
       path: this.path.concat(`[${apiPath}]`),
       apiPath,
@@ -74,7 +74,7 @@ export class Trail implements Stringable {
     })
   }
 
-  addMethod(method: string) {
+  addMethod(method: string): Trail {
     return Trail.create({
       path: this.path.concat(method),
       apiPath: this.apiPath,
@@ -85,7 +85,7 @@ export class Trail implements Stringable {
     })
   }
 
-  addSchemaRef(schemaRef: string) {
+  addSchemaRef(schemaRef: string): Trail {
     return Trail.create({
       path: this.path.concat(schemaRef),
       apiPath: this.apiPath,
@@ -96,7 +96,7 @@ export class Trail implements Stringable {
     })
   }
 
-  toSubMethodTrail() {
+  toSubMethodTrail(): Trail {
     return Trail.create({
       path: this.path.slice(this.subMethodIndex),
       apiPath: this.apiPath,
@@ -107,7 +107,7 @@ export class Trail implements Stringable {
     })
   }
 
-  toString() {
+  toString(): string {
     return this.path.reduce((acc, path) => {
       if (!acc) {
         return path

@@ -35,31 +35,42 @@ export class OasComponents extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToComponentsV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToComponentsV3Args): OasComponents {
     return new OasComponents({ fields, trail, context, skipped })
   }
 
-  get schemas() {
+  get schemas(): Record<string, OasSchema | OasRef<'schema'>> | undefined {
     return this.fields.schemas
   }
 
-  get responses() {
+  get responses():
+    | Record<string, OasResponse | OasRef<'response'>>
+    | undefined {
     return this.fields.responses
   }
 
-  get parameters() {
+  get parameters():
+    | Record<string, OasParameter | OasRef<'parameter'>>
+    | undefined {
     return this.fields.parameters
   }
 
-  get examples() {
+  get examples(): Record<string, OasExample | OasRef<'example'>> | undefined {
     return this.fields.examples
   }
 
-  get requestBodies() {
+  get requestBodies():
+    | Record<string, OasRequestBody | OasRef<'requestBody'>>
+    | undefined {
     return this.fields.requestBodies
   }
 
-  get headers() {
+  get headers(): Record<string, OasHeader | OasRef<'header'>> | undefined {
     return this.fields.headers
   }
 }

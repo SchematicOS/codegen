@@ -59,7 +59,7 @@ export class GenerateContext {
     this.reporter = reporter
   }
 
-  static create(args: ConstructorArgs) {
+  static create(args: ConstructorArgs): GenerateContext {
     return new GenerateContext(args)
   }
 
@@ -107,7 +107,7 @@ export class GenerateContext {
     }
   }
 
-  addFile(normalisedPath: string) {
+  addFile(normalisedPath: string): FileContents {
     if (this.files.has(normalisedPath)) {
       throw new Error(`File already exists: ${normalisedPath}`)
     }
@@ -169,7 +169,7 @@ export class GenerateContext {
     })
   }
 
-  toInferType(value: Stringable, coreContext: CoreContext) {
+  toInferType(value: Stringable, coreContext: CoreContext): Stringable {
     return this.typeSystem.inferType({
       value,
       context: coreContext

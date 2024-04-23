@@ -37,7 +37,7 @@ export class OasRef<T extends OasRefData['refType']> extends OasBase {
     trail,
     context,
     skipped
-  }: ToRefV3Args<T>) {
+  }: ToRefV3Args<T>): OasRef<T> {
     return new OasRef({ fields, trail, context, skipped })
   }
 
@@ -97,19 +97,19 @@ export class OasRef<T extends OasRefData['refType']> extends OasBase {
     return resolved as OasRef<T> | ResolvedRef<T>
   }
 
-  get $ref() {
+  get $ref(): string {
     return this.fields.$ref
   }
 
-  get refType() {
+  get refType(): OasRefData['refType'] {
     return this.fields.refType
   }
 
-  get summary() {
+  get summary(): string | undefined {
     return this.fields.summary
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 }

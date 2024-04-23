@@ -33,35 +33,40 @@ export class OasHeader extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToHeaderV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToHeaderV3Args): OasHeader {
     return new OasHeader({ fields, trail, context, skipped })
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get required() {
+  get required(): boolean | undefined {
     return this.fields.required
   }
 
-  get deprecated() {
+  get deprecated(): boolean | undefined {
     return this.fields.deprecated
   }
 
-  get allowEmptyValue() {
+  get allowEmptyValue(): boolean | undefined {
     return this.fields.allowEmptyValue
   }
 
-  get schema() {
+  get schema(): OasSchema | OasRef<'schema'> | undefined {
     return this.fields.schema
   }
 
-  get examples() {
+  get examples(): Record<string, OasExample | OasRef<'example'>> | undefined {
     return this.fields.examples
   }
 
-  get content() {
+  get content(): Record<string, OasMediaType> | undefined {
     return this.fields.content
   }
 
@@ -69,7 +74,7 @@ export class OasHeader extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasHeader {
     return this
   }
 

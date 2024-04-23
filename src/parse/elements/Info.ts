@@ -29,31 +29,31 @@ export class OasInfo extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToInfoV3Args) {
+  static create({ fields, trail, context, skipped }: ToInfoV3Args): OasInfo {
     return new OasInfo({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get termsOfService() {
+  get termsOfService(): string | undefined {
     return this.fields.termsOfService
   }
 
-  get contact() {
+  get contact(): OasContactData | undefined {
     return this.fields.contact
   }
 
-  get license() {
+  get license(): OasLicenseData | undefined {
     return this.fields.license
   }
 
-  get version() {
+  get version(): string {
     return this.fields.version
   }
 }

@@ -39,7 +39,12 @@ export class OasOperation extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToOperationV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToOperationV3Args): OasOperation {
     return new OasOperation({ fields, trail, context, skipped })
   }
 
@@ -54,47 +59,47 @@ export class OasOperation extends OasBase {
     return successCode ? httpCodeResponses[successCode] : defaultResponse
   }
 
-  get path() {
+  get path(): string {
     return this.fields.path
   }
 
-  get method() {
+  get method(): Method {
     return this.fields.method
   }
 
-  get pathItem() {
+  get pathItem(): OasPathItem {
     return this.fields.pathItem
   }
 
-  get operationId() {
+  get operationId(): string | undefined {
     return this.fields.operationId
   }
 
-  get summary() {
+  get summary(): string | undefined {
     return this.fields.summary
   }
 
-  get tags() {
+  get tags(): string[] | undefined {
     return this.fields.tags
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get parameters() {
+  get parameters(): (OasParameter | OasRef<'parameter'>)[] | undefined {
     return this.fields.parameters
   }
 
-  get requestBody() {
+  get requestBody(): OasRequestBody | OasRef<'requestBody'> | undefined {
     return this.fields.requestBody
   }
 
-  get responses() {
+  get responses(): Record<string, OasResponse | OasRef<'response'>> {
     return this.fields.responses
   }
 
-  get deprecated() {
+  get deprecated(): boolean | undefined {
     return this.fields.deprecated
   }
 }

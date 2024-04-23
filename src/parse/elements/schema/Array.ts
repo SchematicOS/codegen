@@ -28,19 +28,19 @@ export class OasArray extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToArrayV3Args) {
+  static create({ fields, trail, context, skipped }: ToArrayV3Args): OasArray {
     return new OasArray({ fields, trail, context, skipped })
   }
 
-  get items() {
+  get items(): OasSchema | OasRef<'schema'> {
     return this.fields.items
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -48,7 +48,7 @@ export class OasArray extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasArray {
     return this
   }
 }

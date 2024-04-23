@@ -28,11 +28,16 @@ export class OasDiscriminator extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToDiscriminatorV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToDiscriminatorV3Args): OasDiscriminator {
     return new OasDiscriminator({ fields, trail, context, skipped })
   }
 
-  get propertyName() {
+  get propertyName(): string {
     return this.fields.propertyName
   }
 }

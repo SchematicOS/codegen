@@ -52,7 +52,7 @@ export class CoreContext {
     this.reporter = reporter
   }
 
-  static create({ phase, reporter }: CoreContextArgs) {
+  static create({ phase, reporter }: CoreContextArgs): CoreContext {
     return new CoreContext({ phase, reporter })
   }
 
@@ -95,7 +95,7 @@ export class CoreContext {
     this.report({ ...args, level: 'warn' })
   }
 
-  register({ destinationPath, ...args }: RegisterArgs) {
+  register({ destinationPath, ...args }: RegisterArgs): void {
     return match(this.phase)
       .with({ type: 'group' }, ({ context }) => {
         return context.register({ destinationPath, ...args })
@@ -135,7 +135,7 @@ export class CoreContext {
       .exhaustive()
   }
 
-  addFile(normalisedPath: string) {
+  addFile(normalisedPath: string): FileContents {
     return match(this.phase)
       .with({ type: 'group' }, ({ context }) => {
         return context.addFile(normalisedPath)
@@ -167,7 +167,7 @@ export class CoreContext {
       .exhaustive()
   }
 
-  toInferType(value: Stringable) {
+  toInferType(value: Stringable): Stringable {
     return match(this.phase)
       .with({ type: 'group' }, ({ context }) => {
         return context.toInferType(value, this)

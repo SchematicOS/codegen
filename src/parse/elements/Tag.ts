@@ -24,15 +24,15 @@ export class OasTag extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToTagV3Args) {
+  static create({ fields, trail, context, skipped }: ToTagV3Args): OasTag {
     return new OasTag({ fields, trail, context, skipped })
   }
 
-  get name() {
+  get name(): string {
     return this.fields.name
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 }

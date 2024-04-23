@@ -26,19 +26,24 @@ export class OasExample extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToExampleV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToExampleV3Args): OasExample {
     return new OasExample({ fields, trail, context, skipped })
   }
 
-  get summary() {
+  get summary(): string | undefined {
     return this.fields.summary
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get value() {
+  get value(): unknown {
     return this.fields.value
   }
 
@@ -46,7 +51,7 @@ export class OasExample extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasExample {
     return this
   }
 }

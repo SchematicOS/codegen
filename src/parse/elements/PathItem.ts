@@ -27,19 +27,24 @@ export class OasPathItem extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToPathItemV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToPathItemV3Args): OasPathItem {
     return new OasPathItem({ fields, trail, context, skipped })
   }
 
-  get summary() {
+  get summary(): string | undefined {
     return this.fields.summary
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get parameters() {
+  get parameters(): (OasParameter | OasRef<'parameter'>)[] | undefined {
     return this.fields.parameters
   }
 }

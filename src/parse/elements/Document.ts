@@ -31,27 +31,32 @@ export class OasDocument extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToDocumentV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToDocumentV3Args): OasDocument {
     return new OasDocument({ fields, trail, context, skipped })
   }
 
-  get openapi() {
+  get openapi(): string {
     return this.fields.openapi
   }
 
-  get info() {
+  get info(): OasInfo {
     return this.fields.info
   }
 
-  get operations() {
+  get operations(): OasOperation[] {
     return this.fields.operations
   }
 
-  get components() {
+  get components(): OasComponents | undefined {
     return this.fields.components
   }
 
-  get tags() {
+  get tags(): OasTag[] | undefined {
     return this.fields.tags
   }
 }

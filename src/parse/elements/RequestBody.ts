@@ -33,19 +33,24 @@ export class OasRequestBody extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToRequestBodyV3Args) {
+  static create({
+    fields,
+    trail,
+    context,
+    skipped
+  }: ToRequestBodyV3Args): OasRequestBody {
     return new OasRequestBody({ fields, trail, context, skipped })
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get content() {
+  get content(): Record<string, OasMediaType> {
     return this.fields.content
   }
 
-  get required() {
+  get required(): boolean | undefined {
     return this.fields.required
   }
 
@@ -53,7 +58,7 @@ export class OasRequestBody extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasRequestBody {
     return this
   }
 

@@ -30,23 +30,23 @@ export class OasUnion extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToUnionV3Args) {
+  static create({ fields, trail, context, skipped }: ToUnionV3Args): OasUnion {
     return new OasUnion({ fields, trail, context, skipped })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
-  get discriminator() {
+  get discriminator(): OasDiscriminator | undefined {
     return this.fields.discriminator
   }
 
-  get members() {
+  get members(): (OasSchema | OasRef<'schema'>)[] {
     return this.fields.members
   }
 
@@ -54,7 +54,7 @@ export class OasUnion extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasUnion {
     return this
   }
 }

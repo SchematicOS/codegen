@@ -31,11 +31,11 @@ export class OasVoid extends OasBase {
     this.fields = fields
   }
 
-  static create({ fields, trail, context, skipped }: ToVoidV3Args) {
+  static create({ fields, trail, context, skipped }: ToVoidV3Args): OasVoid {
     return new OasVoid({ fields, trail, context, skipped })
   }
 
-  static empty(context: CoreContext) {
+  static empty(context: CoreContext): OasVoid {
     return new OasVoid({
       fields: {},
       trail: Trail.create(),
@@ -44,11 +44,11 @@ export class OasVoid extends OasBase {
     })
   }
 
-  get title() {
+  get title(): string | undefined {
     return this.fields.title
   }
 
-  get description() {
+  get description(): string | undefined {
     return this.fields.description
   }
 
@@ -56,7 +56,7 @@ export class OasVoid extends OasBase {
     return false
   }
 
-  resolve() {
+  resolve(): OasVoid {
     return this
   }
 }

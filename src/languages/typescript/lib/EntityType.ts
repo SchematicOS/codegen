@@ -12,7 +12,7 @@ export class EntityType implements Stringable {
     return new EntityType(type)
   }
 
-  toString() {
+  toString(): string {
     return match(this.type)
       .with('type', () => 'type')
       .with('value', () => 'const')
