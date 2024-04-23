@@ -21,7 +21,7 @@
     "core/": "./src/core/",
     "fs": "jsr:@std/fs@0.222.1",
     "generate/": "./src/generate/",
-    "lodash-es/": "npm:lodash-es@4.17.21",
+    "lodash-es": "npm:lodash-es@4.17.21",
     "mui-joy-forms/": "./src/transformers/mui-joy-forms/",
     "openapi-types": "npm:openapi-types@12.1.3",
     "parse/": "./src/parse/",
