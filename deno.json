@@ -33,6 +33,8 @@
   },
   "publish": {
     "include": [
+      "deno.json",
+      "deno.lock",
       "LICENSE",
       "README.md",
       "src/**/*.ts",
