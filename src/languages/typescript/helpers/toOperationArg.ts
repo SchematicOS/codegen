@@ -6,7 +6,7 @@ import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasObject } from 'parse/elements/schema/Object.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 import { toArgsName } from 'generate/helpers/naming.ts'
-import isEmpty from 'lodash-es/isEmpty'
+import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 

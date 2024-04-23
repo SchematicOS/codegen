@@ -3,7 +3,6 @@ import { run } from './lib/run.ts'
 import { join, resolve } from 'path'
 import { readFile } from './lib/readFile.ts'
 import type { PrettierConfigType, SettingsType } from '@schematicos/types'
-import { dynamicImport } from 'https://deno.land/x/import@0.2.1/mod.ts'
 import type { TypeSystem, Transformer } from 'generate/types.ts'
 
 type MainArgs = {
@@ -37,15 +36,11 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
 
   const prettier = readFile<PrettierConfigType>(prettierPath)
 
-  const ts: { default: TypeSystem } = await dynamicImport(typeSystem)
-
-  console.log('Type system : ', ts)
+  const ts: { default: TypeSystem } = await import(typeSystem)
 
   const t: Transformer[] = await Promise.all(
     transformers.map(async transformer => {
-      const module = await dynamicImport(transformer)
-
-      console.log('Transformer : ', module)
+      const module = await import(transformer)
 
       return module.default
     })

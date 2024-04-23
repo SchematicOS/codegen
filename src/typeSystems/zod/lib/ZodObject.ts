@@ -1,7 +1,7 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { CoreContext } from 'core/lib/CoreContext.ts'
 import type { Stringable } from '@schematicos/types'
-import isEmpty from 'lodash-es/isEmpty'
+import isEmpty from 'lodash-es/isEmpty.js'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasObject } from 'parse/elements/schema/Object.ts'

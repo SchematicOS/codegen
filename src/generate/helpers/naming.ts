@@ -1,4 +1,4 @@
-import camelCase from 'lodash-es/camelCase'
+import camelCase from 'lodash-es/camelCase.js'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 
 export const toEndpointType = (operation: OasOperation) => {
