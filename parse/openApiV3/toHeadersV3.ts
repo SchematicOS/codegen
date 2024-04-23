@@ -2,13 +2,13 @@ import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
-import { isRef } from '../util/isRef.ts'
+import { isRef } from 'parse/util/isRef.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'context/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from './toMediaTypeItemV3.ts'
-import { OasHeader } from '../elements/Header.ts'
-import type { HeaderFields } from '../elements/Header.ts'
-import type { OasRef } from '../elements/Ref.ts'
+import { OasHeader } from 'parse/elements/Header.ts'
+import type { HeaderFields } from 'parse/elements/Header.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToHeadersV3Args = {
   headers:

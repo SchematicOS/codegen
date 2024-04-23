@@ -1,8 +1,8 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { Trail } from 'context/Trail.ts'
-import { OasTag } from '../elements/Tag.ts'
-import type { TagFields } from '../elements/Tag.ts'
+import { OasTag } from 'parse/elements/Tag.ts'
+import type { TagFields } from 'parse/elements/Tag.ts'
 
 type ToTagsV3Args = {
   tags: OpenAPIV3.TagObject[] | undefined

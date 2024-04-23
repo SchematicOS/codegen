@@ -1,8 +1,8 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { Trail } from 'context/Trail.ts'
-import { OasDiscriminator } from '../elements/Discriminator.ts'
-import type { DiscriminatorFields } from '../elements/Discriminator.ts'
+import { OasDiscriminator } from 'parse/elements/Discriminator.ts'
+import type { DiscriminatorFields } from 'parse/elements/Discriminator.ts'
 
 type ToDiscriminatorV3Args = {
   discriminator: OpenAPIV3.DiscriminatorObject | undefined

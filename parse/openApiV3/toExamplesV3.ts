@@ -1,11 +1,11 @@
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { OpenAPIV3 } from 'openapi-types'
-import { isRef } from '../util/isRef.ts'
+import { isRef } from 'parse/util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'context/Trail.ts'
-import { OasExample } from '../elements/Example.ts'
-import type { ExampleFields } from '../elements/Example.ts'
-import type { OasRef } from '../elements/Ref.ts'
+import { OasExample } from 'parse/elements/Example.ts'
+import type { ExampleFields } from 'parse/elements/Example.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToExampleSimpleV3Args = {
   example: unknown

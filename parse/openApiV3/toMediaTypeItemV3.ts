@@ -3,8 +3,8 @@ import type { CoreContext } from 'context/CoreContext.ts'
 import { toOptionalSchemaV3 } from './toSchemasV3.ts'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import type { Trail } from 'context/Trail.ts'
-import { OasMediaType } from '../elements/MediaType.ts'
-import type { MediaTypeFields } from '../elements/MediaType.ts'
+import { OasMediaType } from 'parse/elements/MediaType.ts'
+import type { MediaTypeFields } from 'parse/elements/MediaType.ts'
 
 type ToMediaTypeItemV3Args = {
   mediaTypeItem: OpenAPIV3.MediaTypeObject

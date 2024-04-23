@@ -1,7 +1,7 @@
-import { OasBase } from '../OasBase.ts'
+import { OasBase } from 'parse/elements/OasBase.ts'
 import type { Trail } from 'context/Trail.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
-import type { OasRef } from '../Ref.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 export type UnknownFields = {
   title?: string

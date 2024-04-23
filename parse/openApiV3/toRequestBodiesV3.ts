@@ -1,12 +1,12 @@
 import type { OpenAPIV3 } from 'openapi-types'
 import type { CoreContext } from 'context/CoreContext.ts'
-import { isRef } from '../util/isRef.ts'
+import { isRef } from 'parse/util/isRef.ts'
 import { toRefV31 } from './toRefV31.ts'
 import type { Trail } from 'context/Trail.ts'
 import { toMediaTypeItemsV3 } from './toMediaTypeItemV3.ts'
-import { OasRequestBody } from '../elements/RequestBody.ts'
-import type { RequestBodyFields } from '../elements/RequestBody.ts'
-import type { OasRef } from '../elements/Ref.ts'
+import { OasRequestBody } from 'parse/elements/RequestBody.ts'
+import type { RequestBodyFields } from 'parse/elements/RequestBody.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToRequestBodyV3Args = {
   requestBody:

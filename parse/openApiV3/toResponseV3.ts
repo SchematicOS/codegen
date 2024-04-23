@@ -1,13 +1,13 @@
 import { toRefV31 } from './toRefV31.ts'
 import { toHeadersV3 } from './toHeadersV3.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
-import { isRef } from '../util/isRef.ts'
+import { isRef } from 'parse/util/isRef.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'context/Trail.ts'
 import { toOptionalMediaTypeItemsV3 } from './toMediaTypeItemV3.ts'
-import { OasResponse } from '../elements/Response.ts'
-import type { ResponseFields } from '../elements/Response.ts'
-import type { OasRef } from '../elements/Ref.ts'
+import { OasResponse } from 'parse/elements/Response.ts'
+import type { ResponseFields } from 'parse/elements/Response.ts'
+import type { OasRef } from 'parse/elements/Ref.ts'
 
 type ToResponsesV3Args = {
   responses: OpenAPIV3.ResponsesObject

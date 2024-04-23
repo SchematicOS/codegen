@@ -2,8 +2,8 @@ import type { OasContactData, OasLicenseData } from '@schematicos/types'
 import type { OpenAPIV3 } from 'openapi-types'
 import type { Trail } from 'context/Trail.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
-import { OasInfo } from '../elements/Info.ts'
-import type { InfoFields } from '../elements/Info.ts'
+import { OasInfo } from 'parse/elements/Info.ts'
+import type { InfoFields } from 'parse/elements/Info.ts'
 
 type ToInfoV3Args = {
   info: OpenAPIV3.InfoObject

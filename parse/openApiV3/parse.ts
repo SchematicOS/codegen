@@ -4,9 +4,9 @@ import { toTagsV3 } from './toTagsV3.ts'
 import { toOperationsV3 } from './toOperationsV3.ts'
 import { toComponentsV3 } from './components/toComponentsV3.ts'
 import type { Trail } from 'context/Trail.ts'
-import { OasDocument } from '../elements/Document.ts'
+import { OasDocument } from 'parse/elements/Document.ts'
 import { toInfoV3 } from './toInfoV3.ts'
-import type { DocumentFields } from '../elements/Document.ts'
+import type { DocumentFields } from 'parse/elements/Document.ts'
 
 type ToDocumentV3Args = {
   document: OpenAPIV3.Document

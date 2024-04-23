@@ -5,10 +5,10 @@ import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'
 import { toParameterListV3 } from './toParameterV3.ts'
 import type { Trail } from 'context/Trail.ts'
-import { OasOperation } from '../elements/Operation.ts'
-import type { OperationFields } from '../elements/Operation.ts'
+import { OasOperation } from 'parse/elements/Operation.ts'
+import type { OperationFields } from 'parse/elements/Operation.ts'
 import { toPathItemV3 } from './toPathItemV3.ts'
-import type { OasPathItem } from '../elements/PathItem.ts'
+import type { OasPathItem } from 'parse/elements/PathItem.ts'
 
 type OperationInfo = {
   method: Method

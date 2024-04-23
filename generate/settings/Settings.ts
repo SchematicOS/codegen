@@ -1,4 +1,4 @@
-import { toRefName } from '../helpers/ref.ts'
+import { toRefName } from 'generate/helpers/ref.ts'
 import { ModelSettings } from './ModelSettings.ts'
 import type { SettingsType } from '@schematicos/types'
 import { TransformerSettings } from './TransformerSettings.ts'
