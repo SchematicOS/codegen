@@ -5,6 +5,7 @@ import { readFile } from './lib/readFile.ts'
 import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 import type { TypeSystem, Transformer } from 'generate/types.ts'
 import { Confirm, Input } from '@cliffy/prompt'
+import { ensureFile } from 'fs'
 
 type MainArgs = {
   project: string
@@ -53,6 +54,29 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
     transformers: t,
     typeSystem: ts.default
   })
+}
+
+const downloadPackage = async (name: string) => {
+  const res = await fetch(`https://jsr.io/${name}/meta.json`)
+  const data = await res.json()
+
+  console.log('DATA', data)
+
+  const url2 = `https://jsr.io/${name}/${data.latest}_meta.json`
+
+  console.log('URL2', url2)
+
+  const res2 = await fetch(url2)
+  const data2 = await res2.json()
+
+  const files = Object.keys(data2.manifest).map(async key => {
+    const res3 = await fetch(`https://jsr.io/${name}/${data.latest}/${key}`)
+    const data3 = await res3.text()
+
+    return [key, data3] as [string, string]
+  })
+
+  return await Promise.all(files)
 }
 
 await new Command()
@@ -120,6 +144,27 @@ await new Command()
       const schema = await res.text()
 
       Deno.writeTextFileSync(join(projectPath, `schema.${fileType}`), schema)
+    }
+
+    const cloneTransformer = await Confirm.prompt({
+      message: 'Clone existing transformer for editing?'
+    })
+
+    if (cloneTransformer) {
+      const transformer = await Input.prompt({
+        message: 'Enter the name of the transformer to clone',
+        suggestions: ['@schematicos/rtk-query']
+      })
+
+      const entries = await downloadPackage(transformer)
+
+      const [_a, transformerName] = transformer.split('/')
+
+      entries.forEach(async ([path, content]) => {
+        const joinedPath = join('./transformers', transformerName, path)
+        await ensureFile(joinedPath)
+        Deno.writeTextFileSync(joinedPath, content)
+      })
     }
   })
   .parse(Deno.args)

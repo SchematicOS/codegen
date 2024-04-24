@@ -86,10 +86,7 @@ export const run = async ({
     })
   })
 
-  context.info({
-    trail,
-    message: 'Render phase complete'
-  })
+  context.info({ trail, message: 'Render phase complete' })
 
   const { logs, operations } = logStore.generateOutput()
 
