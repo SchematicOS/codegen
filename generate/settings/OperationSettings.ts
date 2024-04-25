@@ -1,4 +1,4 @@
-import type { OperationSettingsType } from 'types'
+import type { OperationSettingsType } from 'types/schematic/settings.ts'
 import { join } from 'path'
 import { defaultFileName } from 'typescript/defaults.ts'
 

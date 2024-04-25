@@ -1,4 +1,4 @@
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import type { OpenAPIV3 } from 'openapi-types'
 
 type ConstructorArgs = {

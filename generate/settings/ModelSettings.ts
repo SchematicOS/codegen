@@ -1,4 +1,4 @@
-import type { ModelSettingsType } from 'types'
+import type { ModelSettingsType } from 'types/schematic/settings.ts'
 import { join } from 'path'
 import { defaultFileName } from 'typescript/defaults.ts'
 

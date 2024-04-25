@@ -1,7 +1,7 @@
 import { OasBase } from './OasBase.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { Trail } from 'context/Trail.ts'
-import type { Method } from 'types'
+import type { Method } from 'types/schematic/method.ts'
 import type { OasPathItem } from './PathItem.ts'
 import type { OasParameter } from './Parameter.ts'
 import type { OasRequestBody } from './RequestBody.ts'

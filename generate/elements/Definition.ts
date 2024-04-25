@@ -1,4 +1,4 @@
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { Identifier } from './Identifier.ts'
 import { SchematicBase } from './SchematicBase.ts'

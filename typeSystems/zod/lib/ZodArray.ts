@@ -1,5 +1,5 @@
 import type { CoreContext } from 'context/CoreContext.ts'
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 

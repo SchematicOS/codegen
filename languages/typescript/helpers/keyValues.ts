@@ -1,5 +1,5 @@
 import { EMPTY } from 'generate/constants.ts'
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 
 // Filter out properties with falsy or EMPTY values and return as joined string
 export const keyValues = (properties: Record<string, Stringable>): string => {

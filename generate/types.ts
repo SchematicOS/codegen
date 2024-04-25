@@ -2,7 +2,7 @@ import type { EntityType } from 'typescript/lib/EntityType.ts'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { TransformerSettings } from './settings/TransformerSettings.ts'
-import type { Stringable, OasRefData } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 import type { OasResponse } from 'parse/elements/Response.ts'
 import type { OasParameter } from 'parse/elements/Parameter.ts'
@@ -10,6 +10,7 @@ import type { OasExample } from 'parse/elements/Example.ts'
 import type { OasRequestBody } from 'parse/elements/RequestBody.ts'
 import type { OasHeader } from 'parse/elements/Header.ts'
 import type { OasVoid } from 'parse/elements/schema/Void.ts'
+import type { OasRefData } from 'types/oas/ref.ts'
 
 export type TypeSystemArgs = {
   context: CoreContext

@@ -1,5 +1,5 @@
 import type { OpenAPIV3_1 } from 'openapi-types'
-import type { OasRefData } from './types/oas/ref.ts'
+import type { OasRefData } from 'types/oas/ref.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { Trail } from 'context/Trail.ts'
 import { OasRef } from 'parse/elements/Ref.ts'

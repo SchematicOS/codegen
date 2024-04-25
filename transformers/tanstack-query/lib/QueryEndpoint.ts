@@ -1,7 +1,7 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { OperationSettings } from 'generate/settings/OperationSettings.ts'
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { OasVoid } from 'parse/elements/schema/Void.ts'
 import { toEndpointName } from 'generate/helpers/naming.ts'

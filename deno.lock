@@ -41,7 +41,8 @@
       "npm:pako": "npm:pako@2.1.0",
       "npm:prettier@3.2.5": "npm:prettier@3.2.5",
       "npm:tiny-invariant@1.3.3": "npm:tiny-invariant@1.3.3",
-      "npm:ts-pattern@5.1.1": "npm:ts-pattern@5.1.1"
+      "npm:ts-pattern@5.1.1": "npm:ts-pattern@5.1.1",
+      "npm:zod": "npm:zod@3.22.5"
     },
     "jsr": {
       "@cliffy/ansi@1.0.0-rc.4": {

@@ -1,4 +1,4 @@
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 
 type ConstructorArgs = {
   module: string

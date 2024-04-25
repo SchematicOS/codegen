@@ -1,6 +1,6 @@
 import { toRefName } from 'generate/helpers/ref.ts'
 import { ModelSettings } from './ModelSettings.ts'
-import type { SettingsType } from 'types'
+import type { SettingsType } from 'types/schematic/settings.ts'
 import { TransformerSettings } from './TransformerSettings.ts'
 
 export class Settings {

@@ -1,5 +1,5 @@
 import { OasBase } from './OasBase.ts'
-import type { OasRefData } from 'types'
+import type { OasRefData } from 'types/oas/ref.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { Trail } from 'context/Trail.ts'
 import type { OasComponentType } from 'generate/types.ts'

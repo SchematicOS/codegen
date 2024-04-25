@@ -1,4 +1,4 @@
-import type { Stringable } from 'types'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import { match } from 'ts-pattern'
 
 export class EntityType implements Stringable {

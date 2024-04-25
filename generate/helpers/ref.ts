@@ -1,5 +1,5 @@
 import type { OasRef } from 'parse/elements/Ref.ts'
-import type { OasRefData } from 'types'
+import type { OasRefData } from 'types/oas/ref.ts'
 
 export const toRefName = ($ref: string): string => {
   // TODO: Add validation here to ensure reference exists

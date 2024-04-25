@@ -1,4 +1,5 @@
-import type { OasStringData, Stringable } from 'types'
+import type { OasStringData } from 'types/oas/schemaValues.ts'
+import type { Stringable } from 'types/schematic/stringable.ts'
 import { match, P } from 'ts-pattern'
 
 type ZodStringArgs = {
