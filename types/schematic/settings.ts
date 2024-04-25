@@ -1,5 +1,5 @@
 import { type Method, method } from 'types/schematic/method.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const selectableType = z.object({ selected: z.boolean().optional() })
 

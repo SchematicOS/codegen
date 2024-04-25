@@ -8,7 +8,7 @@ import {
 } from './ref.ts'
 import { oasRequestBodyData } from './requestBody.ts'
 import { oasResponseData } from './response.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasOperationData = z.object({
   schematicType: z.literal('operation'),

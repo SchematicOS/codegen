@@ -1,7 +1,7 @@
 import { oasHeaderData } from './header.ts'
 import { oasMediaTypeData } from './mediaItem.ts'
 import { oasHeaderRefData } from './ref.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasResponseData = z.object({
   schematicType: z.literal('response'),

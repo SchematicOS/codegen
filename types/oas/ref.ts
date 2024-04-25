@@ -1,5 +1,5 @@
 import { markdown } from './markdown.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export type OasSchemaRefData = {
   schematicType: 'ref'

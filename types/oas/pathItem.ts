@@ -1,7 +1,7 @@
 import { markdown } from './markdown.ts'
 import { oasParameterData } from './parameter.ts'
 import { oasParameterRefData } from './ref.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasPathItemData = z.object({
   schematicType: z.literal('pathItem'),

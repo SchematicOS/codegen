@@ -1,7 +1,7 @@
 import { oasExampleData } from './example.ts'
 import { oasExampleRefData, oasSchemaRefData } from './ref.ts'
 import { oasSchemaData } from './schemaValues.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasMediaTypeData = z.object({
   schematicType: z.literal('mediaType'),

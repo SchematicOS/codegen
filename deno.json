@@ -53,7 +53,8 @@
     "ts-pattern": "npm:ts-pattern@5.1.1",
     "types/": "./types/",
     "typescript/": "./languages/typescript/",
-    "zod/": "./typeSystems/zod/"
+    "zod/": "./typeSystems/zod/",
+    "zod": "npm:zod@3.23.4"
   },
   "publish": {
     "include": [

@@ -1,6 +1,6 @@
 import { markdown } from './markdown.ts'
 import { oasMediaTypeData } from './mediaItem.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasRequestBodyData = z.object({
   schematicType: z.literal('requestBody'),

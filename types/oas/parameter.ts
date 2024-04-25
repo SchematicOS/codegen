@@ -4,7 +4,7 @@ import { oasMediaTypeData } from './mediaItem.ts'
 import { oasParameterLocation } from './parameterLocation.ts'
 import { oasExampleRefData, oasSchemaRefData } from './ref.ts'
 import { oasSchemaData } from './schemaValues.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasParameterData = z.object({
   schematicType: z.literal('parameter'),

@@ -3,7 +3,7 @@ import {
   oasDiscriminatorData
 } from './discriminator.ts'
 import { type OasSchemaRefData, oasSchemaRefData } from './ref.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasArrayData: z.ZodType<OasArrayData> = z.object({
   schematicType: z.literal('schema'),

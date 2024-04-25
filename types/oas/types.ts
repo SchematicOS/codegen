@@ -21,7 +21,7 @@ import {
 import { type OasRequestBodyData, oasRequestBodyData } from './requestBody.ts'
 import { type OasResponseData, oasResponseData } from './response.ts'
 import { type OasSchemaData, oasSchemaData } from './schemaValues.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 // TODO Next
 // 1. When parsing detect values that I am not handling

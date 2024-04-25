@@ -3,7 +3,7 @@ import { markdown } from './markdown.ts'
 import { oasMediaTypeData } from './mediaItem.ts'
 import { oasExampleRefData, oasSchemaRefData } from './ref.ts'
 import { oasSchemaData } from './schemaValues.ts'
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const oasHeaderData = z.object({
   schematicType: z.literal('header'),

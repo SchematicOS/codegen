@@ -1,3 +1,3 @@
-import { z } from 'npm:zod'
+import { z } from 'zod'
 
 export const markdown = z.string()
