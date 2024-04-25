@@ -1,6 +1,31 @@
 import { z } from 'npm:zod'
 
-export const prettierConfigType = z.object({
+export type PrettierConfigType = {
+  printWidth?: number
+  tabWidth?: number
+  useTabs?: boolean
+  semi?: boolean
+  singleQuote?: boolean
+  quoteProps?: 'as-needed' | 'consistent' | 'preserve'
+  jsxSingleQuote?: boolean
+  trailingComma?: 'none' | 'es5' | 'all'
+  bracketSameLine?: boolean
+  bracketSpacing?: boolean
+  jsxBracketSameLine?: boolean
+  arrowParens?: 'avoid' | 'always'
+  rangeStart?: number
+  rangeEnd?: number
+  requirePragma?: boolean
+  insertPragma?: boolean
+  proseWrap?: 'always' | 'never' | 'preserve'
+  htmlWhitespaceSensitivity?: 'css' | 'strict' | 'ignore'
+  vueIndentScriptAndStyle?: boolean
+  endOfLine?: 'auto' | 'lf' | 'crlf' | 'cr'
+  embeddedLanguageFormatting?: 'auto' | 'off'
+  singleAttributePerLine?: boolean
+}
+
+export const prettierConfigType: z.ZodType<PrettierConfigType> = z.object({
   printWidth: z.number().optional(),
   tabWidth: z.number().optional(),
   useTabs: z.boolean().optional(),
@@ -45,5 +70,3 @@ export const prettierConfigType = z.object({
     .optional(),
   singleAttributePerLine: z.boolean().optional()
 })
-
-export type PrettierConfigType = z.infer<typeof prettierConfigType>
