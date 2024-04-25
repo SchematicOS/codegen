@@ -1,13 +1,15 @@
 import { type Method, method } from 'types/schematic/method.ts'
 import { z } from 'zod'
 
-export const selectableType = z.object({ selected: z.boolean().optional() })
+export const selectableType: z.ZodType<SelectableType> = z.object({
+  selected: z.boolean()
+})
 
 export type SelectableType = {
   selected: boolean
 }
 
-export const renamableType = z.object({
+export const renamableType: z.ZodType<RenamableType> = z.object({
   renameTo: z.string().optional()
 })
 
@@ -15,7 +17,7 @@ export type RenamableType = {
   renameTo?: string
 }
 
-export const importableType = z.object({
+export const importableType: z.ZodType<ImportableType> = z.object({
   importFrom: z.string().optional(),
   exportPath: z.string().optional()
 })
@@ -25,7 +27,7 @@ export type ImportableType = {
   exportPath?: string
 }
 
-export const modelSettingsType = z.object({
+export const modelSettingsType: z.ZodType<ModelSettingsType> = z.object({
   selected: z.boolean(),
   renameTo: z.string().optional(),
   importFrom: z.string().optional(),
@@ -45,11 +47,13 @@ export type ModelSettingsKeyType =
   | 'importFrom'
   | 'exportPath'
 
-export const operationSettingsType = z.object({
-  selected: z.boolean(),
-  importFrom: z.string().optional(),
-  exportPath: z.string().optional()
-})
+export const operationSettingsType: z.ZodType<OperationSettingsType> = z.object(
+  {
+    selected: z.boolean(),
+    importFrom: z.string().optional(),
+    exportPath: z.string().optional()
+  }
+)
 
 export type OperationSettingsType = {
   selected: boolean
@@ -59,27 +63,30 @@ export type OperationSettingsType = {
 
 export type OperationSettingsKeyType = 'selected' | 'importFrom' | 'exportPath'
 
-export const componentsSettingsType = z.object({
-  schemas: z.record(modelSettingsType).optional()
-})
+export const componentsSettingsType: z.ZodType<ComponentsSettingsType> =
+  z.object({
+    schemas: z.record(modelSettingsType).optional()
+  })
 
 export type ComponentsSettingsType = {
   schemas?: Record<string, ModelSettingsType>
 }
 
-export const transformerComponentsSettingsType = z.object({
-  models: z.record(modelSettingsType).optional()
-})
+export const transformerComponentsSettingsType: z.ZodType<TransformerComponentsSettingsType> =
+  z.object({
+    models: z.record(modelSettingsType).optional()
+  })
 
 export type TransformerComponentsSettingsType = {
   models?: Record<string, ModelSettingsType>
 }
 
-export const transformerSettingsType = z.object({
-  root: z.record(z.string()).optional(),
-  operations: z.record(z.record(method, operationSettingsType)).optional(),
-  components: transformerComponentsSettingsType.optional()
-})
+export const transformerSettingsType: z.ZodType<TransformerSettingsType> =
+  z.object({
+    root: z.record(z.string()).optional(),
+    operations: z.record(z.record(method, operationSettingsType)).optional(),
+    components: transformerComponentsSettingsType.optional()
+  })
 
 export type TransformerSettingsType = {
   root?: Record<string, string>
@@ -87,7 +94,7 @@ export type TransformerSettingsType = {
   components?: TransformerComponentsSettingsType
 }
 
-export const settingsType = z.object({
+export const settingsType: z.ZodType<SettingsType> = z.object({
   schemaHash: z.string().optional(),
   exportPath: z.string().optional(),
   transformers: z.record(transformerSettingsType).optional(),

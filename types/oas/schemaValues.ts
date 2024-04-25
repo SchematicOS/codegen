@@ -30,7 +30,7 @@ export type OasArrayData = {
   default?: unknown[]
 }
 
-export const oasBooleanData = z.object({
+export const oasBooleanData: z.ZodType<OasBooleanData> = z.object({
   schematicType: z.literal('schema'),
   title: z.string().optional(),
   description: z.string().optional(),
@@ -46,7 +46,7 @@ export type OasBooleanData = {
   type: 'boolean'
 }
 
-export const oasNullData = z.object({
+export const oasNullData: z.ZodType<OasNullData> = z.object({
   schematicType: z.literal('schema'),
   title: z.string().optional(),
   description: z.string().optional(),
@@ -62,7 +62,7 @@ export type OasNullData = {
   type: 'null'
 }
 
-export const oasUnknownData = z.object({
+export const oasUnknownData: z.ZodType<OasUnknownData> = z.object({
   schematicType: z.literal('schema'),
   title: z.string().optional(),
   description: z.string().optional(),
@@ -78,7 +78,7 @@ export type OasUnknownData = {
   type: 'unknown'
 }
 
-export const oasIntegerData = z.object({
+export const oasIntegerData: z.ZodType<OasIntegerData> = z.object({
   schematicType: z.literal('schema'),
   title: z.string().optional(),
   description: z.string().optional(),
@@ -100,7 +100,7 @@ export type OasIntegerData = {
   type: 'integer'
 }
 
-export const oasNumberData = z.object({
+export const oasNumberData: z.ZodType<OasNumberData> = z.object({
   schematicType: z.literal('schema'),
   title: z.string().optional(),
   description: z.string().optional(),
@@ -122,7 +122,7 @@ export type OasNumberData = {
   type: 'number'
 }
 
-export const oasStringData = z.object({
+export const oasStringData: z.ZodType<OasStringData> = z.object({
   schematicType: z.literal('schema'),
   title: z.string().optional(),
   description: z.string().optional(),

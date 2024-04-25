@@ -1,12 +1,18 @@
 import { markdown } from './markdown.ts'
 import { z } from 'zod'
 
-export const oasExampleData = z.object({
+export type OasExampleData = {
+  schematicType: 'example'
+  summary?: string
+  description?: string
+  value?: unknown
+  // externalValue?: string
+}
+
+export const oasExampleData: z.ZodType<OasExampleData> = z.object({
   schematicType: z.literal('example'),
   summary: z.string().optional(),
   description: markdown.optional(),
-  value: z.any().optional()
+  value: z.unknown().optional()
   // externalValue: url.optional()
 })
-
-export type OasExampleData = z.infer<typeof oasExampleData>

@@ -1,12 +1,33 @@
-import { oasExampleData } from './example.ts'
+import { type OasExampleData, oasExampleData } from './example.ts'
 import { markdown } from './markdown.ts'
-import { oasMediaTypeData } from './mediaItem.ts'
-import { oasParameterLocation } from './parameterLocation.ts'
-import { oasExampleRefData, oasSchemaRefData } from './ref.ts'
-import { oasSchemaData } from './schemaValues.ts'
+import { type OasMediaTypeData, oasMediaTypeData } from './mediaItem.ts'
+import {
+  type OasParameterLocation,
+  oasParameterLocation
+} from './parameterLocation.ts'
+import {
+  type OasExampleRefData,
+  type OasSchemaRefData,
+  oasExampleRefData,
+  oasSchemaRefData
+} from './ref.ts'
+import { type OasSchemaData, oasSchemaData } from './schemaValues.ts'
 import { z } from 'zod'
 
-export const oasParameterData = z.object({
+export type OasParameterData = {
+  schematicType: 'parameter'
+  name: string
+  location: OasParameterLocation
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+  allowEmptyValue?: boolean
+  schema?: OasSchemaData | OasSchemaRefData
+  examples?: Record<string, OasExampleData | OasExampleRefData>
+  content?: Record<string, OasMediaTypeData>
+}
+
+export const oasParameterData: z.ZodType<OasParameterData> = z.object({
   schematicType: z.literal('parameter'),
   name: z.string(),
   location: oasParameterLocation,
@@ -23,5 +44,3 @@ export const oasParameterData = z.object({
   examples: z.record(z.union([oasExampleData, oasExampleRefData])).optional(),
   content: z.record(oasMediaTypeData).optional()
 })
-
-export type OasParameterData = z.infer<typeof oasParameterData>

@@ -21,7 +21,7 @@ export const methodValuesNoTrace = [
   'patch'
 ]
 
-export const method = z.enum([
+export const method: z.ZodType<Method> = z.enum([
   'get',
   'put',
   'post',
@@ -42,18 +42,6 @@ export type Method =
   | 'patch'
   | 'trace'
 
-export const methodNoTrace = z.enum([
-  'get',
-  'put',
-  'post',
-  'delete',
-  'options',
-  'head',
-  'patch'
-])
+type Methods = Method[]
 
-export type MethodNoTrace = z.infer<typeof methodNoTrace>
-
-export const methods = z.array(method)
-
-export type Methods = z.infer<typeof methods>
+export const methods: z.ZodType<Methods> = z.array(method)

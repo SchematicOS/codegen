@@ -1,12 +1,17 @@
 import { markdown } from './markdown.ts'
-import { oasMediaTypeData } from './mediaItem.ts'
+import { type OasMediaTypeData, oasMediaTypeData } from './mediaItem.ts'
 import { z } from 'zod'
 
-export const oasRequestBodyData = z.object({
+export type OasRequestBodyData = {
+  schematicType: 'requestBody'
+  description?: string
+  content: Record<string, OasMediaTypeData>
+  required?: boolean
+}
+
+export const oasRequestBodyData: z.ZodType<OasRequestBodyData> = z.object({
   schematicType: z.literal('requestBody'),
   description: markdown.optional(),
   content: z.record(oasMediaTypeData),
   required: z.boolean().optional()
 })
-
-export type OasRequestBodyData = z.infer<typeof oasRequestBodyData>

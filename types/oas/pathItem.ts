@@ -1,9 +1,18 @@
 import { markdown } from './markdown.ts'
-import { oasParameterData } from './parameter.ts'
-import { oasParameterRefData } from './ref.ts'
+import { type OasParameterData, oasParameterData } from './parameter.ts'
+import { type OasParameterRefData, oasParameterRefData } from './ref.ts'
 import { z } from 'zod'
 
-export const oasPathItemData = z.object({
+export type OasPathItemData = {
+  schematicType: 'pathItem'
+  $ref?: string
+  summary?: string
+  description?: string
+  // servers?: OasServerData[]
+  parameters?: (OasParameterData | OasParameterRefData)[]
+}
+
+export const oasPathItemData: z.ZodType<OasPathItemData> = z.object({
   schematicType: z.literal('pathItem'),
   $ref: z.string().optional(),
   summary: z.string().optional(),
@@ -13,5 +22,3 @@ export const oasPathItemData = z.object({
     .array(z.union([oasParameterData, oasParameterRefData]))
     .optional()
 })
-
-export type OasPathItemData = z.infer<typeof oasPathItemData>

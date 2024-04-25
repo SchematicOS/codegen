@@ -1,9 +1,23 @@
-import { oasExampleData } from './example.ts'
-import { oasExampleRefData, oasSchemaRefData } from './ref.ts'
-import { oasSchemaData } from './schemaValues.ts'
+import { type OasExampleData, oasExampleData } from './example.ts'
+import {
+  type OasExampleRefData,
+  type OasSchemaRefData,
+  oasExampleRefData,
+  oasSchemaRefData
+} from './ref.ts'
+import { type OasSchemaData, oasSchemaData } from './schemaValues.ts'
 import { z } from 'zod'
 
-export const oasMediaTypeData = z.object({
+export type OasMediaTypeData = {
+  schematicType: 'mediaType'
+  mediaType: string
+  schema?: OasSchemaData | OasSchemaRefData
+  // example?: unknown
+  examples?: Record<string, OasExampleData | OasExampleRefData>
+  // encoding?: Record<string, OasEncodingData>
+}
+
+export const oasMediaTypeData: z.ZodType<OasMediaTypeData> = z.object({
   schematicType: z.literal('mediaType'),
   mediaType: z.string(),
   schema: z.union([oasSchemaData, oasSchemaRefData]).optional(),
@@ -11,5 +25,3 @@ export const oasMediaTypeData = z.object({
   examples: z.record(z.union([oasExampleData, oasExampleRefData])).optional()
   // encoding: z.lazy(() => z.record(encoding).optional())
 })
-
-export type OasMediaTypeData = z.infer<typeof oasMediaTypeData>

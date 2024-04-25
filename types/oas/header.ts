@@ -1,11 +1,27 @@
-import { oasExampleData } from './example.ts'
+import { type OasExampleData, oasExampleData } from './example.ts'
 import { markdown } from './markdown.ts'
-import { oasMediaTypeData } from './mediaItem.ts'
-import { oasExampleRefData, oasSchemaRefData } from './ref.ts'
-import { oasSchemaData } from './schemaValues.ts'
+import { type OasMediaTypeData, oasMediaTypeData } from './mediaItem.ts'
+import {
+  type OasExampleRefData,
+  type OasSchemaRefData,
+  oasExampleRefData,
+  oasSchemaRefData
+} from './ref.ts'
+import { type OasSchemaData, oasSchemaData } from './schemaValues.ts'
 import { z } from 'zod'
 
-export const oasHeaderData = z.object({
+export type OasHeaderData = {
+  schematicType: 'header'
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+  allowEmptyValue?: boolean
+  schema?: OasSchemaData | OasSchemaRefData
+  examples?: Record<string, OasExampleData | OasExampleRefData>
+  content?: Record<string, OasMediaTypeData>
+}
+
+export const oasHeaderData: z.ZodType<OasHeaderData> = z.object({
   schematicType: z.literal('header'),
   description: markdown.optional(),
   required: z.boolean().optional(),
@@ -20,7 +36,5 @@ export const oasHeaderData = z.object({
   examples: z.record(z.union([oasExampleData, oasExampleRefData])).optional(),
   content: z.record(oasMediaTypeData).optional()
 })
-
-export type OasHeaderData = z.infer<typeof oasHeaderData>
 
 // export type OasHeaders = Record<string, OasHeader | OasHeaderRef>

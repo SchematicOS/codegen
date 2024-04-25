@@ -1,13 +1,14 @@
 import { type OasExampleData, oasExampleData } from './example.ts'
 import { type OasHeaderData, oasHeaderData } from './header.ts'
 import { markdown } from './markdown.ts'
-import { oasOperationData } from './operation.ts'
+import { type OasOperationData, oasOperationData } from './operation.ts'
 import { type OasParameterData, oasParameterData } from './parameter.ts'
 import type {
   OasExampleRefData,
   OasHeaderRefData,
   OasParameterRefData,
   OasRequestBodyRefData,
+  OasResponseRefData,
   OasSchemaRefData
 } from './ref.ts'
 import {
@@ -84,14 +85,14 @@ export const oasInfoData: z.ZodType<OasInfoData> = z.object({
 export type OasComponentsData = {
   schematicType: 'components'
   schemas?: Record<string, OasSchemaData | OasSchemaRefData>
-  responses?: Record<string, OasResponseData | OasResponseData>
+  responses?: Record<string, OasResponseData | OasResponseRefData>
   parameters?: Record<string, OasParameterData | OasParameterRefData>
   examples?: Record<string, OasExampleData | OasExampleRefData>
   requestBodies?: Record<string, OasRequestBodyData | OasRequestBodyRefData>
   headers?: Record<string, OasHeaderData | OasHeaderRefData>
 }
 
-export const oasComponentsData = z.object({
+export const oasComponentsData: z.ZodType<OasComponentsData> = z.object({
   schematicType: z.literal('components'),
   schemas: z.record(z.union([oasSchemaData, oasSchemaRefData])).optional(),
   responses: z
@@ -111,16 +112,35 @@ export const oasComponentsData = z.object({
   // pathItems: z.record(z.union([oasPathItemData, oasPathItemRefData])).optional()
 })
 
-export const oasTagData = z.object({
+export type OasTagData = {
+  schematicType: 'tag'
+  name: string
+  description?: string
+  // externalDocs?: OasExternalDocsData
+}
+
+export const oasTagData: z.ZodType<OasTagData> = z.object({
   schematicType: z.literal('tag'),
   name: z.string(),
   description: markdown.optional()
   // externalDocs: externalDocs.optional()
 })
 
-export type OasTagData = z.infer<typeof oasTagData>
+export type OasDocumentData = {
+  schematicType: 'openapi'
+  openapi: string
+  info: OasInfoData
+  jsonSchemaDialect?: string
+  // servers?: OasServerData[]
+  operations: OasOperationData[]
+  // webhooks?: Record<string, OasPathItemData | OasPathItemRefData>
+  components?: OasComponentsData
+  // security: never
+  tags?: OasTagData[]
+  // externalDocs?: OasExternalDocsData
+}
 
-export const OasDocumentData = z.object({
+export const oasDocumentData: z.ZodType<OasDocumentData> = z.object({
   schematicType: z.literal('openapi'),
   openapi: openapi,
   info: oasInfoData,
@@ -132,13 +152,6 @@ export const OasDocumentData = z.object({
   // security: z.never(),
   tags: z.array(oasTagData).optional()
   // externalDocs: externalDocs.optional()
-})
-
-export type OasDocumentData = z.infer<typeof OasDocumentData>
-
-export const notImplemented = z.object({
-  schematicType: z.literal('notImplemented'),
-  message: z.string().optional()
 })
 
 // Unused definitions below
