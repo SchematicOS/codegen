@@ -15,7 +15,9 @@ type MainArgs = {
 }
 
 const toImportSource = (module: string) => {
-  return module.startsWith('jsr:') ? module : join(Deno.cwd(), module)
+  return module.startsWith('jsr:')
+    ? module
+    : `file://${join(Deno.cwd(), module)}`
 }
 
 const main = async ({ project, transformers, typeSystem }: MainArgs) => {
