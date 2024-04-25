@@ -1,8 +1,15 @@
-import { oasExampleData } from './example.ts'
-import { oasHeaderData } from './header.ts'
+import { type OasExampleData, oasExampleData } from './example.ts'
+import { type OasHeaderData, oasHeaderData } from './header.ts'
 import { markdown } from './markdown.ts'
 import { oasOperationData } from './operation.ts'
-import { oasParameterData } from './parameter.ts'
+import { type OasParameterData, oasParameterData } from './parameter.ts'
+import type {
+  OasExampleRefData,
+  OasHeaderRefData,
+  OasParameterRefData,
+  OasRequestBodyRefData,
+  OasSchemaRefData
+} from './ref.ts'
 import {
   oasExampleRefData,
   oasHeaderRefData,
@@ -11,9 +18,9 @@ import {
   oasResponseRefData,
   oasSchemaRefData
 } from './ref.ts'
-import { oasRequestBodyData } from './requestBody.ts'
-import { oasResponseData } from './response.ts'
-import { oasSchemaData } from './schemaValues.ts'
+import { type OasRequestBodyData, oasRequestBodyData } from './requestBody.ts'
+import { type OasResponseData, oasResponseData } from './response.ts'
+import { type OasSchemaData, oasSchemaData } from './schemaValues.ts'
 import { z } from 'npm:zod'
 
 // TODO Next
@@ -26,25 +33,45 @@ import { z } from 'npm:zod'
 
 const openapi = z.string()
 
-export const oasContactData = z.object({
+export type OasContactData = {
+  schematicType: 'contact'
+  name?: string
+  url?: string
+  email?: string
+}
+
+export const oasContactData: z.ZodType<OasContactData> = z.object({
   schematicType: z.literal('contact'),
   name: z.string().optional(),
   url: z.string().optional(),
   email: z.string().email().optional()
 })
 
-export type OasContactData = z.infer<typeof oasContactData>
+export type OasLicenseData = {
+  schematicType: 'license'
+  name: string
+  url?: string
+  identifier?: string
+}
 
-export const oasLicenseData = z.object({
+export const oasLicenseData: z.ZodType<OasLicenseData> = z.object({
   schematicType: z.literal('license'),
   name: z.string(),
   url: z.string().optional(),
   identifier: z.string().optional()
 })
 
-export type OasLicenseData = z.infer<typeof oasLicenseData>
+export type OasInfoData = {
+  schematicType: 'info'
+  title: string
+  description?: string
+  termsOfService?: string
+  contact?: OasContactData
+  license?: OasLicenseData
+  version: string
+}
 
-export const oasInfoData = z.object({
+export const oasInfoData: z.ZodType<OasInfoData> = z.object({
   schematicType: z.literal('info'),
   title: z.string(),
   description: markdown.optional(),
@@ -54,7 +81,15 @@ export const oasInfoData = z.object({
   version: z.string()
 })
 
-export type OasInfoData = z.infer<typeof oasInfoData>
+export type OasComponentsData = {
+  schematicType: 'components'
+  schemas?: Record<string, OasSchemaData | OasSchemaRefData>
+  responses?: Record<string, OasResponseData | OasResponseData>
+  parameters?: Record<string, OasParameterData | OasParameterRefData>
+  examples?: Record<string, OasExampleData | OasExampleRefData>
+  requestBodies?: Record<string, OasRequestBodyData | OasRequestBodyRefData>
+  headers?: Record<string, OasHeaderData | OasHeaderRefData>
+}
 
 export const oasComponentsData = z.object({
   schematicType: z.literal('components'),
@@ -75,8 +110,6 @@ export const oasComponentsData = z.object({
   // callbacks: z.never(),
   // pathItems: z.record(z.union([oasPathItemData, oasPathItemRefData])).optional()
 })
-
-export type OasComponentsData = z.infer<typeof oasComponentsData>
 
 export const oasTagData = z.object({
   schematicType: z.literal('tag'),
@@ -108,118 +141,118 @@ export const notImplemented = z.object({
   message: z.string().optional()
 })
 
-// Unused stuff below
+// Unused definitions below
 
-const flows = z.object({
-  implicit: z
-    .object({
-      authorizationUrl: z.string(),
-      refreshUrl: z.string().optional(),
-      scopes: z.record(z.string())
-    })
-    .optional(),
-  password: z
-    .object({
-      tokenUrl: z.string(),
-      refreshUrl: z.string().optional(),
-      scopes: z.record(z.string())
-    })
-    .optional(),
-  clientCredentials: z
-    .object({
-      tokenUrl: z.string(),
-      refreshUrl: z.string().optional(),
-      scopes: z.record(z.string())
-    })
-    .optional(),
-  authorizationCode: z
-    .object({
-      authorizationUrl: z.string(),
-      tokenUrl: z.string(),
-      refreshUrl: z.string().optional(),
-      scopes: z.record(z.string())
-    })
-    .optional()
-})
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const securityScheme = z
-  .object({
-    description: markdown.optional()
-  })
-  .and(
-    z.discriminatedUnion('type', [
-      z.object({
-        type: z.literal('apiKey'),
-        name: z.string().optional(),
-        in: z.enum(['query', 'header', 'cookie']).optional()
-      }),
-      z.object({
-        type: z.literal('http'),
-        scheme: z.string(),
-        bearerFormat: z.string().optional()
-      }),
-      z.object({
-        type: z.literal('oauth2'),
-        flows: flows
-      }),
-      z.object({
-        type: z.literal('openIdConnect'),
-        openIdConnectUrl: z.string()
-      }),
-      z.object({
-        type: z.literal('mutualTLS')
-      })
-    ])
-  )
+// const flows = z.object({
+//   implicit: z
+//     .object({
+//       authorizationUrl: z.string(),
+//       refreshUrl: z.string().optional(),
+//       scopes: z.record(z.string())
+//     })
+//     .optional(),
+//   password: z
+//     .object({
+//       tokenUrl: z.string(),
+//       refreshUrl: z.string().optional(),
+//       scopes: z.record(z.string())
+//     })
+//     .optional(),
+//   clientCredentials: z
+//     .object({
+//       tokenUrl: z.string(),
+//       refreshUrl: z.string().optional(),
+//       scopes: z.record(z.string())
+//     })
+//     .optional(),
+//   authorizationCode: z
+//     .object({
+//       authorizationUrl: z.string(),
+//       tokenUrl: z.string(),
+//       refreshUrl: z.string().optional(),
+//       scopes: z.record(z.string())
+//     })
+//     .optional()
+// })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const externalDocs = z.object({
-  url: z.string(),
-  description: markdown.optional()
-})
+// const securityScheme = z
+//   .object({
+//     description: markdown.optional()
+//   })
+//   .and(
+//     z.discriminatedUnion('type', [
+//       z.object({
+//         type: z.literal('apiKey'),
+//         name: z.string().optional(),
+//         in: z.enum(['query', 'header', 'cookie']).optional()
+//       }),
+//       z.object({
+//         type: z.literal('http'),
+//         scheme: z.string(),
+//         bearerFormat: z.string().optional()
+//       }),
+//       z.object({
+//         type: z.literal('oauth2'),
+//         flows: flows
+//       }),
+//       z.object({
+//         type: z.literal('openIdConnect'),
+//         openIdConnectUrl: z.string()
+//       }),
+//       z.object({
+//         type: z.literal('mutualTLS')
+//       })
+//     ])
+//   )
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const xml = z.object({
-  name: z.string().optional(),
-  namespace: z.string().optional(),
-  prefix: z.string().optional(),
-  attribute: z.boolean().optional(),
-  wrapped: z.boolean().optional()
-})
-
-const serverVariable = z.object({
-  default: z.string(),
-  description: markdown.optional(),
-  enum: z.array(z.string()).nonempty().optional()
-})
+// const externalDocs = z.object({
+//   url: z.string(),
+//   description: markdown.optional()
+// })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const server = z.object({
-  url: z.string(),
-  description: markdown.optional(),
-  variables: z.record(serverVariable).optional()
-})
+// const xml = z.object({
+//   name: z.string().optional(),
+//   namespace: z.string().optional(),
+//   prefix: z.string().optional(),
+//   attribute: z.boolean().optional(),
+//   wrapped: z.boolean().optional()
+// })
+
+// const serverVariable = z.object({
+//   default: z.string(),
+//   description: markdown.optional(),
+//   enum: z.array(z.string()).nonempty().optional()
+// })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const link = z.object({
-  operationRef: z.string().optional(),
-  operationId: z.string().optional(),
-  parameters: z
-    .record(z.union([oasParameterData, oasParameterRefData]))
-    .optional(),
-  requestBody: z.union([z.any(), oasRequestBodyRefData]).optional(),
-  description: markdown.optional()
-  // server: server.optional()
-})
+// const server = z.object({
+//   url: z.string(),
+//   description: markdown.optional(),
+//   variables: z.record(serverVariable).optional()
+// })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const encoding = z.object({
-  contentType: z.string().optional(),
-  headers: z.lazy(() =>
-    z.record(z.union([oasHeaderData, oasHeaderRefData])).optional()
-  )
-  // style: z.string().optional(),
-  // explode: z.boolean().optional(),
-  // allowReserved: z.boolean().optional()
-})
+// const link = z.object({
+//   operationRef: z.string().optional(),
+//   operationId: z.string().optional(),
+//   parameters: z
+//     .record(z.union([oasParameterData, oasParameterRefData]))
+//     .optional(),
+//   requestBody: z.union([z.any(), oasRequestBodyRefData]).optional(),
+//   description: markdown.optional()
+//   // server: server.optional()
+// })
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// const encoding = z.object({
+//   contentType: z.string().optional(),
+//   headers: z.lazy(() =>
+//     z.record(z.union([oasHeaderData, oasHeaderRefData])).optional()
+//   )
+//   // style: z.string().optional(),
+//   // explode: z.boolean().optional(),
+//   // allowReserved: z.boolean().optional()
+// })

@@ -13,7 +13,7 @@ export const oasArrayData: z.ZodType<OasArrayData> = z.object({
   items: z.lazy(() => z.union([oasSchemaData, oasSchemaRefData])),
   title: z.string().optional(),
   description: z.string().optional(),
-  default: z.array(z.any()).optional()
+  default: z.array(z.unknown()).optional()
 
   // Add soon
   // maxItems: z.number().optional(),
@@ -27,7 +27,7 @@ export type OasArrayData = {
   items: OasSchemaData | OasSchemaRefData
   title?: string
   description?: string
-  default?: any[]
+  default?: unknown[]
 }
 
 export const oasBooleanData = z.object({

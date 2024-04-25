@@ -1,7 +1,15 @@
 import { markdown } from './markdown.ts'
 import { z } from 'npm:zod'
 
-export const oasSchemaRefData = z.object({
+export type OasSchemaRefData = {
+  schematicType: 'ref'
+  refType: 'schema'
+  $ref: string
+  summary?: string
+  description?: string
+}
+
+export const oasSchemaRefData: z.ZodType<OasSchemaRefData> = z.object({
   schematicType: z.literal('ref'),
   refType: z.enum(['schema']),
   $ref: z.string(),
@@ -9,9 +17,15 @@ export const oasSchemaRefData = z.object({
   description: markdown.optional()
 })
 
-export type OasSchemaRefData = z.infer<typeof oasSchemaRefData>
+export type OasResponseRefData = {
+  schematicType: 'ref'
+  refType: 'response'
+  $ref: string
+  summary?: string
+  description?: string
+}
 
-export const oasResponseRefData = z.object({
+export const oasResponseRefData: z.ZodType<OasResponseRefData> = z.object({
   schematicType: z.literal('ref'),
   refType: z.enum(['response']),
   $ref: z.string(),
@@ -19,9 +33,15 @@ export const oasResponseRefData = z.object({
   description: markdown.optional()
 })
 
-export type OasResponseRefData = z.infer<typeof oasResponseRefData>
+export type OasParameterRefData = {
+  schematicType: 'ref'
+  refType: 'parameter'
+  $ref: string
+  summary?: string
+  description?: string
+}
 
-export const oasParameterRefData = z.object({
+export const oasParameterRefData: z.ZodType<OasParameterRefData> = z.object({
   schematicType: z.literal('ref'),
   refType: z.enum(['parameter']),
   $ref: z.string(),
@@ -29,9 +49,15 @@ export const oasParameterRefData = z.object({
   description: markdown.optional()
 })
 
-export type OasParameterRefData = z.infer<typeof oasParameterRefData>
+export type OasExampleRefData = {
+  schematicType: 'ref'
+  refType: 'example'
+  $ref: string
+  summary?: string
+  description?: string
+}
 
-export const oasExampleRefData = z.object({
+export const oasExampleRefData: z.ZodType<OasExampleRefData> = z.object({
   schematicType: z.literal('ref'),
   refType: z.enum(['example']),
   $ref: z.string(),
@@ -39,27 +65,38 @@ export const oasExampleRefData = z.object({
   description: markdown.optional()
 })
 
-export type OasExampleRefData = z.infer<typeof oasExampleRefData>
+export type OasRequestBodyRefData = {
+  schematicType: 'ref'
+  refType: 'requestBody'
+  $ref: string
+  summary?: string
+  description?: string
+}
 
-export const oasRequestBodyRefData = z.object({
-  schematicType: z.literal('ref'),
-  refType: z.enum(['requestBody']),
-  $ref: z.string(),
-  summary: z.string().optional(),
-  description: markdown.optional()
-})
+export const oasRequestBodyRefData: z.ZodType<OasRequestBodyRefData> = z.object(
+  {
+    schematicType: z.literal('ref'),
+    refType: z.enum(['requestBody']),
+    $ref: z.string(),
+    summary: z.string().optional(),
+    description: markdown.optional()
+  }
+)
+export type OasHeaderRefData = {
+  schematicType: 'ref'
+  refType: 'header'
+  $ref: string
+  summary?: string
+  description?: string
+}
 
-export type OasRequestBodyRefData = z.infer<typeof oasRequestBodyRefData>
-
-export const oasHeaderRefData = z.object({
+export const oasHeaderRefData: z.ZodType<OasHeaderRefData> = z.object({
   schematicType: z.literal('ref'),
   refType: z.enum(['header']),
   $ref: z.string(),
   summary: z.string().optional(),
   description: markdown.optional()
 })
-
-export type OasHeaderRefData = z.infer<typeof oasHeaderRefData>
 
 // export const oasPathItemRefData = z.object({
 //   schematicType: z.literal('ref'),
@@ -69,9 +106,16 @@ export type OasHeaderRefData = z.infer<typeof oasHeaderRefData>
 //   description: markdown.optional()
 // })
 
-// export type OasPathItemRef = z.infer<typeof oasPathItemRefData>
+export type OasRefData =
+  | OasSchemaRefData
+  | OasResponseRefData
+  | OasParameterRefData
+  | OasExampleRefData
+  | OasRequestBodyRefData
+  | OasHeaderRefData
+// OasPathItemRefData
 
-export const oasRefData = z.union([
+export const oasRefData: z.ZodType<OasRefData> = z.union([
   oasSchemaRefData,
   oasResponseRefData,
   oasParameterRefData,
@@ -80,5 +124,3 @@ export const oasRefData = z.union([
   oasHeaderRefData
   // oasPathItemRefData
 ])
-
-export type OasRefData = z.infer<typeof oasRefData>
