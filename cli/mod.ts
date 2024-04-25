@@ -5,7 +5,6 @@ import type { TypeSystem, Transformer } from 'generate/types.ts'
 import { deno } from './denoJsonImport.ts'
 import { resolve, join } from 'path'
 import { promptCloneTransformer, promptNewSchema } from './lib/prompt.ts'
-import { toImportSource } from './lib/util.ts'
 import type { PrettierConfigType } from 'types/schematic/prettierConfig.ts'
 import type { SettingsType } from 'types/schematic/settings.ts'
 
@@ -13,6 +12,10 @@ type MainArgs = {
   project: string
   transformers: string[]
   typeSystem: string
+}
+
+const toImportSource = (module: string) => {
+  return module.startsWith('jsr:') ? module : join(Deno.cwd(), module)
 }
 
 const main = async ({ project, transformers, typeSystem }: MainArgs) => {
@@ -42,9 +45,12 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
     transformers.map(async transformer => {
       const transformerSource = toImportSource(transformer)
 
-      const module = await import(transformerSource)
+      const { default: transform } = await import(transformerSource)
 
-      return module.default
+      return {
+        id: transformer,
+        transform
+      }
     })
   )
 
