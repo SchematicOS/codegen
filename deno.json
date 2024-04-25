@@ -68,6 +68,7 @@
       "transformers/**/*",
       "core/**/*",
       "languages/**/*",
+      "types/**/*",
       "typeSystems/**/*"
     ]
   }
