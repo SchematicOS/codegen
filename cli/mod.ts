@@ -37,22 +37,28 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
 
   const prettier = readFile<PrettierConfigType>(prettierPath)
 
-  const typeSystemSource = toImportSource(typeSystem)
-
-  const ts: { default: TypeSystem } = await import(typeSystemSource)
+  console.log('META URL', import.meta.url)
 
   const t: Transformer[] = await Promise.all(
     transformers.map(async transformer => {
       const transformerSource = toImportSource(transformer)
 
-      const { default: transform } = await import(transformerSource)
+      console.log('IMPORTING TRANSFORMER', transformerSource)
+
+      const imported = await import(transformerSource)
+
+      console.log('IMPORTED TRANSFORMER', imported)
 
       return {
         id: transformer,
-        transform
+        transform: imported.default
       }
     })
   )
+
+  const typeSystemSource = toImportSource(typeSystem)
+
+  const ts: { default: TypeSystem } = await import(typeSystemSource)
 
   run({
     schema: schemaContent,
