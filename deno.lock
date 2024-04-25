@@ -8,6 +8,7 @@
       "jsr:@cliffy/keycode@1.0.0-rc.4": "jsr:@cliffy/keycode@1.0.0-rc.4",
       "jsr:@cliffy/prompt@1.0.0-rc.4": "jsr:@cliffy/prompt@1.0.0-rc.4",
       "jsr:@cliffy/table@1.0.0-rc.4": "jsr:@cliffy/table@1.0.0-rc.4",
+      "jsr:@schematicos/codegen@0.0.6": "jsr:@schematicos/codegen@0.0.6",
       "jsr:@schematicos/generate@0.0.14": "jsr:@schematicos/generate@0.0.14",
       "jsr:@schematicos/generate@0.0.2": "jsr:@schematicos/generate@0.0.2",
       "jsr:@schematicos/mui-joy-forms": "jsr:@schematicos/mui-joy-forms@0.0.3",
@@ -79,6 +80,13 @@
         "integrity": "990e4e0b3910e6c9cf7a5b4318b8f5e121cf681494c94fd113febb9b4d4c0741",
         "dependencies": [
           "jsr:@std/console@0.221"
+        ]
+      },
+      "@schematicos/codegen@0.0.6": {
+        "integrity": "1f89438df85e6a2fa791b8762bb82d7a39612cb86bf5f41044444951ef438a8a",
+        "dependencies": [
+          "jsr:@std/path@0.222.1",
+          "npm:lodash-es@4.17.21"
         ]
       },
       "@schematicos/generate@0.0.14": {

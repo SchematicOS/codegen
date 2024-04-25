@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .envrc
 .DS_Store
+
+.schematic/**/*
+!.schematic/*/schema.json
