@@ -51,6 +51,7 @@
     "tanstack-query/": "./transformers/tanstack-query/",
     "tiny-invariant": "npm:tiny-invariant@1.3.3",
     "ts-pattern": "npm:ts-pattern@5.1.1",
+    "types/": "./types/",
     "typescript/": "./languages/typescript/",
     "zod/": "./typeSystems/zod/"
   },

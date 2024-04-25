@@ -1,5 +1,5 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import { Stringable } from '@schematicos/types'
+import { Stringable } from 'types'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { OasOperation } from 'parse/elements/Operation.ts'
 import { keyValues } from 'typescript/helpers/keyValues.ts'

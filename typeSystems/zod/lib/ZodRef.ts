@@ -1,6 +1,6 @@
 import { Identifier } from 'generate/elements/Identifier.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 

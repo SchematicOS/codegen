@@ -3,7 +3,7 @@ import { toRefName } from 'generate/helpers/ref.ts'
 import { Import } from './Import.ts'
 import { normalize } from 'path'
 import type { ModelSettings } from 'generate/settings/ModelSettings.ts'
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 import type { EntityType } from 'typescript/lib/EntityType.ts'
 
 type IdentifierArgs = {

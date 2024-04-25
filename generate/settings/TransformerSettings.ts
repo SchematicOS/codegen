@@ -1,4 +1,4 @@
-import type { TransformerSettingsType, Method } from '@schematicos/types'
+import type { TransformerSettingsType, Method } from 'types'
 import { OperationSettings } from './OperationSettings.ts'
 import { join } from 'path'
 import { defaultFileName } from 'typescript/defaults.ts'

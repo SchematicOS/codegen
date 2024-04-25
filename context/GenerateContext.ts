@@ -1,5 +1,5 @@
 import type { TypeSystem } from 'generate/types.ts'
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 import { Import, type ImportNameArg } from 'generate/elements/Import.ts'
 import { normalize } from 'path'
 import type { Settings } from 'generate/settings/Settings.ts'

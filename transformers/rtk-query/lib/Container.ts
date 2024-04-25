@@ -1,7 +1,7 @@
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { TransformerSettings } from 'generate/settings/TransformerSettings.ts'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 
 type RtkQueryContainerProps = {
   context: CoreContext

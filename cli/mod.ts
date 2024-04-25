@@ -1,12 +1,13 @@
 import { Command } from '@cliffy/command'
 import { run } from './lib/run.ts'
 import { readFile } from './lib/file.ts'
-import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 import type { TypeSystem, Transformer } from 'generate/types.ts'
 import { deno } from './denoJsonImport.ts'
 import { resolve, join } from 'path'
 import { promptCloneTransformer, promptNewSchema } from './lib/prompt.ts'
 import { toImportSource } from './lib/util.ts'
+import type { PrettierConfigType } from 'types/schematic/prettierConfig.ts'
+import type { SettingsType } from 'types/schematic/settings.ts'
 
 type MainArgs = {
   project: string

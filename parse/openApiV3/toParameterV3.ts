@@ -1,6 +1,6 @@
 import type { CoreContext } from 'context/CoreContext.ts'
 import { isRef } from 'parse/util/isRef.ts'
-import type { OasParameterLocation } from '@schematicos/types'
+import type { OasParameterLocation } from 'types'
 import type { OpenAPIV3 } from 'openapi-types'
 import { toExamplesV3 } from './toExamplesV3.ts'
 import { toRefV31 } from './toRefV31.ts'

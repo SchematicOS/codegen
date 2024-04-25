@@ -7,7 +7,7 @@ import type {
 } from 'context/GenerateContext.ts'
 import type { ReportArgs, Reporter } from 'context/Reporter.ts'
 import { match } from 'ts-pattern'
-import type { PrettierConfigType, Stringable } from '@schematicos/types'
+import type { PrettierConfigType, Stringable } from 'types'
 import type { TypeSystem } from 'generate/types.ts'
 import type { OasDocument } from 'parse/elements/Document.ts'
 import type { Settings } from 'generate/settings/Settings.ts'

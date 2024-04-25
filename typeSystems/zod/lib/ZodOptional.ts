@@ -1,4 +1,4 @@
-import { Stringable } from '@schematicos/types'
+import { Stringable } from 'types'
 
 type ZodOptionalArgs = {
   required: boolean | undefined

@@ -1,5 +1,5 @@
 import { OasBase } from './OasBase.ts'
-import type { OasParameterLocation } from '@schematicos/types'
+import type { OasParameterLocation } from 'types'
 import type { Trail } from 'context/Trail.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import type { OasMediaType } from './MediaType.ts'

@@ -1,5 +1,5 @@
 import { OasBase } from './OasBase.ts'
-import type { OasContactData, OasLicenseData } from '@schematicos/types'
+import type { OasContactData, OasLicenseData } from 'types'
 import type { Trail } from 'context/Trail.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 

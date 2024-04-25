@@ -1,5 +1,6 @@
 import { parse } from 'parse/mod.ts'
-import type { SettingsType, PrettierConfigType } from '@schematicos/types'
+import type { SettingsType } from 'types/schematic/settings.ts'
+import type { PrettierConfigType } from 'types/schematic/prettierConfig.ts'
 import { writeFile } from './file.ts'
 import { join } from 'path'
 import type { OasDocument } from 'parse/elements/Document.ts'

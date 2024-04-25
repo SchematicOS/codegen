@@ -1,4 +1,4 @@
-import type { OasStringData, Stringable } from '@schematicos/types'
+import type { OasStringData, Stringable } from 'types'
 import { match, P } from 'ts-pattern'
 
 type ZodStringArgs = {

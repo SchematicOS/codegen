@@ -1,6 +1,6 @@
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
-import type { OasDiscriminatorData, Stringable } from '@schematicos/types'
+import type { OasDiscriminatorData, Stringable } from 'types'
 import type { OasSchema } from 'parse/elements/schema/types.ts'
 import type { OasRef } from 'parse/elements/Ref.ts'
 

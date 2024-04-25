@@ -1,4 +1,4 @@
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 import { match } from 'ts-pattern'
 
 export class EntityType implements Stringable {

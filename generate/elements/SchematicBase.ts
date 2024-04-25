@@ -1,6 +1,6 @@
 import type { RegisterArgs } from 'context/GenerateContext.ts'
 import { EMPTY } from 'generate/constants.ts'
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 import type { CoreContext } from 'context/CoreContext.ts'
 
 type SchematicBaseArgs = {

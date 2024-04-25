@@ -1,4 +1,4 @@
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 
 type ConstructorArgs = {
   module: string

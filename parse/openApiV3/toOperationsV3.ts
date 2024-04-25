@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types'
-import type { Method } from '@schematicos/types'
+import type { Method } from 'types/schematic/method.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
 import { toRequestBodyV3 } from './toRequestBodiesV3.ts'
 import { toResponsesV3 } from './toResponseV3.ts'

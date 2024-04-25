@@ -1,4 +1,4 @@
-import type { Stringable } from '@schematicos/types'
+import type { Stringable } from 'types'
 import { SchematicBase } from 'generate/elements/SchematicBase.ts'
 import { EMPTY } from 'generate/constants.ts'
 import type { CoreContext } from 'context/CoreContext.ts'
