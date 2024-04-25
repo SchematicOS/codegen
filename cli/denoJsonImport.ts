@@ -1,0 +1,1 @@
+export{ default as deno } from "../deno.json" with { type: "json" };

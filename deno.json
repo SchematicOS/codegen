@@ -1,6 +1,6 @@
 {
   "name": "@schematicos/codegen",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "tasks": {
     "types": "deno check ./cli/**/*.ts",
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net cli/mod.ts generate",
@@ -26,7 +26,8 @@
     "./typescript/toOperationResponse.ts": "./languages/typescript/helpers/toOperationResponse.ts",
     "./typescript/toParamsObject.ts": "./languages/typescript/helpers/toParamsObject.ts",
     "./typescript/toPathTemplate.ts": "./languages/typescript/helpers/toPathTemplate.ts",
-    "./typescript/withDescription.ts": "./languages/typescript/helpers/withDescription.ts"
+    "./typescript/withDescription.ts": "./languages/typescript/helpers/withDescription.ts",
+    "./zod": "./typeSystems/zod/mod.ts"
   },
   "imports": {
     "@babel/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",

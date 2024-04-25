@@ -6,6 +6,7 @@ import type { PrettierConfigType, SettingsType } from '@schematicos/types'
 import type { TypeSystem, Transformer } from 'generate/types.ts'
 import { Confirm, Input } from '@cliffy/prompt'
 import { ensureFile } from 'fs'
+import { deno } from './denoJsonImport.ts'
 
 type MainArgs = {
   project: string
@@ -60,11 +61,7 @@ const downloadPackage = async (name: string) => {
   const res = await fetch(`https://jsr.io/${name}/meta.json`)
   const data = await res.json()
 
-  console.log('DATA', data)
-
   const url2 = `https://jsr.io/${name}/${data.latest}_meta.json`
-
-  console.log('URL2', url2)
 
   const res2 = await fetch(url2)
   const data2 = await res2.json()
@@ -79,8 +76,84 @@ const downloadPackage = async (name: string) => {
   return await Promise.all(files)
 }
 
+type AddSchemaArgs = {
+  url: string
+  name: string
+}
+
+const downloadAndCreateSchema = async ({ url, name }: AddSchemaArgs) => {
+  const fileName = new URL(url).pathname.split('/').pop()
+
+  const fileType = fileName?.endsWith('.json')
+    ? 'json'
+    : fileName?.endsWith('.yaml') || fileName?.endsWith('.yml')
+    ? 'yaml'
+    : undefined
+
+  if (!fileType) {
+    throw new Error(`File type is not JSON or YAML: ${fileName}`)
+  }
+
+  const projectPath = join('./.schematic', name)
+
+  Deno.mkdirSync(projectPath, { recursive: true })
+
+  const res = await fetch(url)
+
+  const schema = await res.text()
+
+  Deno.writeTextFileSync(join(projectPath, `schema.${fileType}`), schema)
+}
+
+const promptNewSchema = async () => {
+  const newSchema = await Confirm.prompt({ message: 'Add new schema?' })
+
+  if (newSchema) {
+    const url = await Input.prompt({
+      message: 'Enter the URL of the schema',
+      suggestions: ['https://petstore3.swagger.io/api/v3/openapi.json']
+    })
+
+    const name = await Input.prompt({
+      message: 'Enter the name of the schema',
+      suggestions: ['petstore']
+    })
+
+    return () => downloadAndCreateSchema({ url, name })
+  }
+
+  return () => {}
+}
+
+const downloadAndCreatePackage = async (transformer: string) => {
+  const entries = await downloadPackage(transformer)
+
+  const [_a, transformerName] = transformer.split('/')
+
+  entries.forEach(async ([path, content]) => {
+    const joinedPath = join('./_transformers', transformerName, path)
+    await ensureFile(joinedPath)
+    Deno.writeTextFileSync(joinedPath, content)
+  })
+}
+
+const promptCloneTransformer = async () => {
+  const cloneTransformer = await Confirm.prompt({
+    message: 'Clone existing transformer for editing?'
+  })
+
+  if (cloneTransformer) {
+    const transformer = await Input.prompt({
+      message: 'Enter the name of the transformer to clone',
+      suggestions: ['@schematicos/rtk-query']
+    })
+
+    return () => downloadAndCreatePackage(transformer)
+  }
+}
+
 await new Command()
-  .version('0.0.1')
+  .version(`${deno.version}`)
   .command('generate', 'Generate code from OpenAPI schema')
   .option(
     '-p --project [project:string]',
@@ -110,61 +183,8 @@ await new Command()
   })
   .command('init', 'Initialize a new project in current directory')
   .action(async _options => {
-    const newSchema = await Confirm.prompt({ message: 'Add new schema?' })
+    const actions = [await promptNewSchema(), await promptCloneTransformer()]
 
-    if (newSchema) {
-      const url = await Input.prompt({
-        message: 'Enter the URL of the schema',
-        suggestions: ['https://petstore3.swagger.io/api/v3/openapi.json']
-      })
-
-      const name = await Input.prompt({
-        message: 'Enter the name of the schema',
-        suggestions: ['petstore']
-      })
-
-      const fileName = new URL(url).pathname.split('/').pop()
-
-      const fileType = fileName?.endsWith('.json')
-        ? 'json'
-        : fileName?.endsWith('.yaml') || fileName?.endsWith('.yml')
-        ? 'yaml'
-        : undefined
-
-      if (!fileType) {
-        throw new Error(`File type is not JSON or YAML: ${fileName}`)
-      }
-
-      const projectPath = join('./.schematic', name)
-
-      Deno.mkdirSync(projectPath, { recursive: true })
-
-      const res = await fetch(url)
-
-      const schema = await res.text()
-
-      Deno.writeTextFileSync(join(projectPath, `schema.${fileType}`), schema)
-    }
-
-    const cloneTransformer = await Confirm.prompt({
-      message: 'Clone existing transformer for editing?'
-    })
-
-    if (cloneTransformer) {
-      const transformer = await Input.prompt({
-        message: 'Enter the name of the transformer to clone',
-        suggestions: ['@schematicos/rtk-query']
-      })
-
-      const entries = await downloadPackage(transformer)
-
-      const [_a, transformerName] = transformer.split('/')
-
-      entries.forEach(async ([path, content]) => {
-        const joinedPath = join('./transformers', transformerName, path)
-        await ensureFile(joinedPath)
-        Deno.writeTextFileSync(joinedPath, content)
-      })
-    }
+    actions.forEach(async action => await action?.())
   })
   .parse(Deno.args)
