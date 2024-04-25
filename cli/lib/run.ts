@@ -17,7 +17,7 @@ import { generate } from 'generate/mod.ts'
 type RunArgs = {
   schema: string
   project: string
-  settings: SettingsType
+  settings?: SettingsType
   prettier?: PrettierConfigType
   transformers: Transformer[]
   typeSystem: TypeSystem
@@ -26,7 +26,7 @@ type RunArgs = {
 export const run = async ({
   schema,
   project,
-  settings,
+  settings = {},
   prettier,
   transformers,
   typeSystem

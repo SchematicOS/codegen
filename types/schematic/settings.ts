@@ -88,8 +88,6 @@ export type TransformerSettingsType = {
 }
 
 export const settingsType = z.object({
-  transformerModules: z.array(z.string()),
-  typeSystemModule: z.string(),
   schemaHash: z.string().optional(),
   exportPath: z.string().optional(),
   transformers: z.record(transformerSettingsType).optional(),
@@ -97,8 +95,6 @@ export const settingsType = z.object({
 })
 
 export type SettingsType = {
-  transformerModules: string[]
-  typeSystemModule: string
   schemaHash?: string
   exportPath?: string
   transformers?: Record<string, TransformerSettingsType>

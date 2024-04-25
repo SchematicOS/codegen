@@ -30,10 +30,6 @@ const main = async ({ project, transformers, typeSystem }: MainArgs) => {
 
   const settings = readFile<SettingsType>(settingsPath)
 
-  if (!settings) {
-    return console.error(`Could not read schema from "${settingsPath}"`)
-  }
-
   const prettierPath = resolve(config, 'prettier.json')
 
   const prettier = readFile<PrettierConfigType>(prettierPath)
