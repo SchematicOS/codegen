@@ -1,6 +1,6 @@
 {
   "name": "@schematicos/codegen",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "tasks": {
     "types": "deno check ./cli/**/*.ts",
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net cli/mod.ts generate",
