@@ -152,14 +152,6 @@ for await (const entry of walk(cwd)) {
     relativeImports.push('../' + match[1])
   }
 
-  // Find all absolute imports.
-  const absoluteImportRegex =
-    /https:\/\/deno\.land\/std@\$STD_VERSION\/([^"'\s]+)/g
-  const absoluteImports = []
-  for (const match of text.matchAll(absoluteImportRegex)) {
-    absoluteImports.push('https://deno.land/std@$STD_VERSION/' + match[1])
-  }
-
   const replacedImports: [string, string][] = []
 
   for (const specifier of relativeImports) {
@@ -167,6 +159,7 @@ for await (const entry of walk(cwd)) {
     const path = fromFileUrl(targetUrl)
     const target = relative(cwd, path).replaceAll('\\', '/')
     const pkg = target.split('/')[0]
+
     if (pkg === currentPkg) {
       let newSpecifier = relative(dirname(entry.path), target).replaceAll(
         '\\',
@@ -175,28 +168,18 @@ for await (const entry of walk(cwd)) {
       if (!newSpecifier.startsWith('.')) {
         newSpecifier = './' + newSpecifier
       }
+
       replacedImports.push([specifier, newSpecifier])
     } else {
       const newSpecifier =
-        '@std/' +
+        'jsr:@schematicos/' +
         fixPackagePath(target)
           .replace(/(\.d)?\.ts$/, '')
           .replace(/\/mod$/, '')
-      replacedImports.push([specifier, newSpecifier])
+      const chunks = newSpecifier.split('/')
+      chunks[1] += '@' + VERSION
+      replacedImports.push([specifier, chunks.join('/')])
     }
-  }
-
-  for (const specifier of absoluteImports) {
-    const target = specifier.replace(
-      /^https:\/\/deno\.land\/std@\$STD_VERSION\//,
-      ''
-    )
-    const newSpecifier =
-      '@std/' +
-      fixPackagePath(target)
-        .replace(/(\.d)?\.ts$/, '')
-        .replace(/\/mod$/, '')
-    replacedImports.push([specifier, newSpecifier])
   }
 
   // Replace all imports.
@@ -251,6 +234,6 @@ function fixPackagePath(path: string) {
 // Generate `deno.json` file.
 const denoJson = JSON.parse(await Deno.readTextFile('deno.json'))
 denoJson.workspaces = orderedPackages
-  .filter(pkg => pkg.endsWith('deno.json'))
+  .filter(pkg => !pkg.endsWith('deno.json'))
   .map(pkg => `./${pkg}`)
 await Deno.writeTextFile('deno.json', JSON.stringify(denoJson, null, 2) + '\n')
