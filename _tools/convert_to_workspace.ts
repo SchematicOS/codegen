@@ -219,7 +219,7 @@ for (const pkg of packages) {
     exports = Object.fromEntries(exportsList)
   }
   const denoJson = {
-    name: `@std/${fixPackageName(pkg)}`,
+    name: `@schmaticos/${fixPackageName(pkg)}`,
     version: VERSION,
     exports
   }
@@ -250,5 +250,7 @@ function fixPackagePath(path: string) {
 
 // Generate `deno.json` file.
 const denoJson = JSON.parse(await Deno.readTextFile('deno.json'))
-denoJson.workspaces = orderedPackages.map(pkg => `./${pkg}`)
+denoJson.workspaces = orderedPackages
+  .filter(pkg => pkg.endsWith('deno.json'))
+  .map(pkg => `./${pkg}`)
 await Deno.writeTextFile('deno.json', JSON.stringify(denoJson, null, 2) + '\n')
