@@ -7,7 +7,7 @@ import { VERSION } from '../version.ts'
 
 const cwd = await Deno.realPath('.')
 
-await Deno.remove('./version.ts')
+// await Deno.remove('./version.ts')
 
 // let fileServer = await Deno.readTextFile('http/file_server.ts')
 // fileServer = fileServer.replace(
@@ -58,17 +58,22 @@ const pkgDeps = new Map<string, Set<string>>(
   packages.map(pkg => [pkg, new Set()])
 )
 
-console.log('graph.modules', graph.modules)
-
 for (const { specifier, dependencies } of graph.modules) {
   if (!specifier.startsWith('file://') || specifier.endsWith('temp_graph.ts')) {
     continue
   }
+
   const from = relative(cwd, fromFileUrl(specifier)).replaceAll('\\', '/')
   const fromPkg = from.split('/')[0]!
   for (const dep of dependencies ?? []) {
     if (dep.code) {
-      console.log('dep.code.specifier', dep.code.specifier)
+      if (
+        !dep.code.specifier.startsWith('file://') ||
+        dep.code.specifier.endsWith('temp_graph.ts')
+      ) {
+        continue
+      }
+
       const to = relative(cwd, fromFileUrl(dep.code.specifier)).replaceAll(
         '\\',
         '/'
@@ -93,14 +98,22 @@ for (const { specifier, dependencies } of graph.modules) {
 
 const orderedPackages: string[] = []
 const seen = new Set<string>()
+
 function visit(pkg: string) {
   if (seen.has(pkg)) return
   seen.add(pkg)
-  for (const dep of pkgDeps.get(pkg)!) {
-    visit(dep)
+
+  const d = pkgDeps.get(pkg)
+
+  if (d) {
+    for (const dep of d) {
+      visit(dep)
+    }
   }
+
   orderedPackages.push(pkg)
 }
+
 for (const pkg of packages) {
   visit(pkg)
 }
