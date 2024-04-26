@@ -1,8 +1,8 @@
 // Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
 import { discoverExportsByPackage, discoverPackages } from './packages.ts'
-import { walk } from 'fs/walk'
-import { dirname, fromFileUrl, join, relative, toFileUrl } from 'path'
+import { walk } from '@std/fs/walk'
+import { dirname, fromFileUrl, join, relative, toFileUrl } from '@std/path'
 import { VERSION } from '../version.ts'
 
 const cwd = await Deno.realPath('.')

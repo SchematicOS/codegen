@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import { existsSync } from '@std/fs'
 
 export const readFile = <ConfigType>(path: string): ConfigType | undefined => {
   if (!path) {

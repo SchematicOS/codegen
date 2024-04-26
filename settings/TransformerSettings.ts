@@ -1,6 +1,6 @@
 import type { TransformerSettingsType } from '../schematicTypes/settings.ts'
 import { OperationSettings } from './OperationSettings.ts'
-import { join } from 'path'
+import { join } from '@std/path'
 import { defaultFileName } from '../typescript/defaults.ts'
 import type { Method } from '../schematicTypes/method.ts'
 

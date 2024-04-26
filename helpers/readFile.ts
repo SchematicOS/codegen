@@ -1,8 +1,10 @@
-import { resolve } from 'path'
-import { existsSync } from 'fs'
+import { resolve } from '@std/path'
+import { existsSync } from '@std/fs'
 
-
-export const readFile = <ConfigType>(directory: string, filename?: string): ConfigType | undefined  => {
+export const readFile = <ConfigType>(
+  directory: string,
+  filename?: string
+): ConfigType | undefined => {
   if (!filename) {
     return
   }
@@ -14,8 +16,8 @@ export const readFile = <ConfigType>(directory: string, filename?: string): Conf
   }
 
   try {
-    const decoder = new TextDecoder("utf-8");
-    
+    const decoder = new TextDecoder('utf-8')
+
     const data = Deno.readFileSync(resolvedPath)
     const decoded = decoder.decode(data)
 

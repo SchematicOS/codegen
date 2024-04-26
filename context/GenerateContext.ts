@@ -1,7 +1,7 @@
 import type { TypeSystem } from '../generate/types.ts'
 import type { Stringable } from '../schematicTypes/stringable.ts'
 import { Import, type ImportNameArg } from '../dsl/Import.ts'
-import { normalize } from 'path'
+import { normalize } from '@std/path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from '../dsl/Definition.ts'
 import type { OasDocument } from '../oasElements/Document.ts'

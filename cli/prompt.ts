@@ -1,6 +1,6 @@
 import { Confirm, Input } from '@cliffy/prompt'
-import { ensureFile } from 'fs'
-import { join } from 'path'
+import { ensureFile } from '@std/fs'
+import { join } from '@std/path'
 
 const downloadPackage = async (name: string) => {
   const res = await fetch(`https://jsr.io/${name}/meta.json`)

@@ -1,7 +1,7 @@
 import type { CoreContext } from '../context/CoreContext.ts'
 import { toRefName } from '../helpers/ref.ts'
 import { Import } from './Import.ts'
-import { normalize } from 'path'
+import { normalize } from '@std/path'
 import type { ModelSettings } from '../settings/ModelSettings.ts'
 import type { Stringable } from '../schematicTypes/stringable.ts'
 import type { EntityType } from '../typescript/EntityType.ts'

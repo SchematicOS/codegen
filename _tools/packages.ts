@@ -1,7 +1,7 @@
 // Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
-import { walk } from 'fs/walk'
-import { relative } from 'path'
+import { walk } from '@std/fs/walk'
+import { relative } from '@std/path'
 
 export async function discoverPackages() {
   const packages = []

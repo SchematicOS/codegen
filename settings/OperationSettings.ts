@@ -1,5 +1,5 @@
 import type { OperationSettingsType } from '../schematicTypes/settings.ts'
-import { join } from 'path'
+import { join } from '@std/path'
 import { defaultFileName } from '../typescript/defaults.ts'
 
 type OperationSettingsArgs = {
