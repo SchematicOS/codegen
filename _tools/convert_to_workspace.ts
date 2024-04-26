@@ -9,28 +9,28 @@ const cwd = await Deno.realPath('.')
 
 await Deno.remove('./version.ts')
 
-let fileServer = await Deno.readTextFile('http/file_server.ts')
-fileServer = fileServer.replace(
-  `import { VERSION } from "../version.ts";`,
-  `import denoConfig from "./deno.json" with { type: "json" };`
-)
-fileServer = fileServer.replaceAll('${VERSION}', '${denoConfig.version}')
-fileServer = fileServer.replace(
-  'https://deno.land/std/http/file_server.ts',
-  'jsr:@std/http@${denoConfig.version}/file_server'
-)
-await Deno.writeTextFile('http/file_server.ts', fileServer)
+// let fileServer = await Deno.readTextFile('http/file_server.ts')
+// fileServer = fileServer.replace(
+//   `import { VERSION } from "../version.ts";`,
+//   `import denoConfig from "./deno.json" with { type: "json" };`
+// )
+// fileServer = fileServer.replaceAll('${VERSION}', '${denoConfig.version}')
+// fileServer = fileServer.replace(
+//   'https://deno.land/std/http/file_server.ts',
+//   'jsr:@std/http@${denoConfig.version}/file_server'
+// )
+// await Deno.writeTextFile('http/file_server.ts', fileServer)
 
-let fileServerTest = await Deno.readTextFile('http/file_server_test.ts')
-fileServerTest = fileServerTest.replace(
-  `import { VERSION } from "../version.ts";`,
-  `import denoConfig from "./deno.json" with { type: "json" };`
-)
-fileServerTest = fileServerTest.replaceAll(
-  '${VERSION}',
-  '${denoConfig.version}'
-)
-await Deno.writeTextFile('http/file_server_test.ts', fileServerTest)
+// let fileServerTest = await Deno.readTextFile('http/file_server_test.ts')
+// fileServerTest = fileServerTest.replace(
+//   `import { VERSION } from "../version.ts";`,
+//   `import denoConfig from "./deno.json" with { type: "json" };`
+// )
+// fileServerTest = fileServerTest.replaceAll(
+//   '${VERSION}',
+//   '${denoConfig.version}'
+// )
+// await Deno.writeTextFile('http/file_server_test.ts', fileServerTest)
 
 const packages = await discoverPackages()
 const exportsByPackage = await discoverExportsByPackage(packages)
@@ -57,6 +57,9 @@ const graph = JSON.parse(new TextDecoder().decode(out.stdout))
 const pkgDeps = new Map<string, Set<string>>(
   packages.map(pkg => [pkg, new Set()])
 )
+
+console.log('graph.modules', graph.modules)
+
 for (const { specifier, dependencies } of graph.modules) {
   if (!specifier.startsWith('file://') || specifier.endsWith('temp_graph.ts')) {
     continue
@@ -65,6 +68,7 @@ for (const { specifier, dependencies } of graph.modules) {
   const fromPkg = from.split('/')[0]!
   for (const dep of dependencies ?? []) {
     if (dep.code) {
+      console.log('dep.code.specifier', dep.code.specifier)
       const to = relative(cwd, fromFileUrl(dep.code.specifier)).replaceAll(
         '\\',
         '/'
