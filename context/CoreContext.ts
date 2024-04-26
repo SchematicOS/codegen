@@ -1,18 +1,18 @@
-import type { ParseContext } from 'context/ParseContext.ts'
-import { GenerateContext } from 'context/GenerateContext.ts'
+import type { ParseContext } from '../context/ParseContext.ts'
+import { GenerateContext } from '../context/GenerateContext.ts'
 import type {
   ToTypeSystemArgs,
   FileContents,
   RegisterArgs
-} from 'context/GenerateContext.ts'
-import type { ReportArgs, Reporter } from 'context/Reporter.ts'
+} from '../context/GenerateContext.ts'
+import type { ReportArgs, Reporter } from '../context/Reporter.ts'
 import { match } from 'ts-pattern'
-import type { PrettierConfigType } from 'types/schematic/prettierConfig.ts'
-import type { Stringable } from 'types/schematic/stringable.ts'
-import type { TypeSystem } from 'generate/types.ts'
-import type { OasDocument } from 'parse/elements/Document.ts'
-import type { Settings } from 'generate/settings/Settings.ts'
-import { RenderContext } from 'context/RenderContext.ts'
+import type { PrettierConfigType } from '../schematicTypes/prettierConfig.ts'
+import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { TypeSystem } from '../generate/types.ts'
+import type { OasDocument } from '../oasElements/Document.ts'
+import type { Settings } from '../settings/Settings.ts'
+import { RenderContext } from '../context/RenderContext.ts'
 
 type SharedContext =
   | {

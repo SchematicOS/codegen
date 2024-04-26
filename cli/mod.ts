@@ -1,12 +1,12 @@
 import { Command } from '@cliffy/command'
-import { run } from './lib/run.ts'
-import { readFile } from './lib/file.ts'
-import type { TypeSystem, Transformer } from 'generate/types.ts'
+import { run } from './run.ts'
+import { readFile } from './file.ts'
+import type { TypeSystem, Transformer } from '../generate/types.ts'
 import { deno } from './denoJsonImport.ts'
 import { resolve, join } from 'path'
-import { promptCloneTransformer, promptNewSchema } from './lib/prompt.ts'
-import type { PrettierConfigType } from 'types/schematic/prettierConfig.ts'
-import type { SettingsType } from 'types/schematic/settings.ts'
+import { promptCloneTransformer, promptNewSchema } from './prompt.ts'
+import type { PrettierConfigType } from '../schematicTypes/prettierConfig.ts'
+import type { SettingsType } from '../schematicTypes/settings.ts'
 
 type MainArgs = {
   project: string

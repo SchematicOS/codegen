@@ -1,8 +1,8 @@
 import type { Transformer } from './types.ts'
-import { Identifier } from './elements/Identifier.ts'
-import { Definition } from './elements/Definition.ts'
-import type { OasDocument } from 'parse/elements/Document.ts'
-import type { CoreContext } from 'context/CoreContext.ts'
+import { Identifier } from '../dsl/Identifier.ts'
+import { Definition } from '../dsl/Definition.ts'
+import type { OasDocument } from '../oasElements/Document.ts'
+import type { CoreContext } from '../context/CoreContext.ts'
 
 type GenerateArgs = {
   schemaModel: OasDocument
