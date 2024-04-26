@@ -1,10 +1,10 @@
 import { SchematicBase } from '../dsl/SchematicBase.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 import isEmpty from 'lodash-es/isEmpty.js'
-import type { OasRef } from '../oasElements/Ref.ts'
-import type { OasSchema } from '../oasSchema/types.ts'
-import type { OasObject } from '../oasSchema/Object.ts'
+import type { OasRef } from '../oas-elements/Ref.ts'
+import type { OasSchema } from '../oas-schema/types.ts'
+import type { OasObject } from '../oas-schema/Object.ts'
 import { handleKey } from '../typescript/identifiers.ts'
 
 type ZodObjectProps = {

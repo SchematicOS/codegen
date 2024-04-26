@@ -14,9 +14,9 @@ import type {
 } from 'npm:@redocly/openapi-core@1.11.0'
 import { match } from 'ts-pattern'
 import type { OpenAPIV3 } from 'openapi-types'
-import { toDocumentV3 } from '../openApiV3/parse.ts'
+import { toDocumentV3 } from '../openapi-v3/parse.ts'
 import { Trail } from '../context/Trail.ts'
-import type { OasDocument } from '../oasElements/Document.ts'
+import type { OasDocument } from '../oas-elements/Document.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 
 export const parse = async (

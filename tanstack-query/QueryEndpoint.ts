@@ -1,12 +1,12 @@
 import { SchematicBase } from '../dsl/SchematicBase.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { OperationSettings } from '../settings/OperationSettings.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
-import type { OasOperation } from '../oasElements/Operation.ts'
-import { OasVoid } from '../oasSchema/Void.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
+import type { OasOperation } from '../oas-elements/Operation.ts'
+import { OasVoid } from '../oas-schema/Void.ts'
 import { toEndpointName } from '../helpers/naming.ts'
 import { toPathTemplate } from '../typescript/toPathTemplate.ts'
-import type { OasParameter } from '../oasElements/Parameter.ts'
+import type { OasParameter } from '../oas-elements/Parameter.ts'
 import { capitalize } from '../helpers/strings.ts'
 
 export type QueryEndpointArgs = {

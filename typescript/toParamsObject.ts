@@ -1,4 +1,4 @@
-import type { OasParameter } from '../oasElements/Parameter.ts'
+import type { OasParameter } from '../oas-elements/Parameter.ts'
 import { withDescription } from './withDescription.ts'
 import { handleKey, handlePropertyName } from './identifiers.ts'
 import { EMPTY } from '../generate/constants.ts'

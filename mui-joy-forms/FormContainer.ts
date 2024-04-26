@@ -3,11 +3,11 @@ import type { CoreContext } from '../context/CoreContext.ts'
 import { SchematicBase } from '../dsl/SchematicBase.ts'
 import { capitalize } from '../helpers/strings.ts'
 import type { OperationSettings } from '../settings/OperationSettings.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 import camelCase from 'lodash-es/camelCase.js'
 import { match } from 'ts-pattern'
-import type { OasOperation } from '../oasElements/Operation.ts'
-import type { OasObject } from '../oasSchema/Object.ts'
+import type { OasOperation } from '../oas-elements/Operation.ts'
+import type { OasObject } from '../oas-schema/Object.ts'
 
 type FormContainerArgs = {
   context: CoreContext

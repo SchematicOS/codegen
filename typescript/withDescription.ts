@@ -1,4 +1,4 @@
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 
 export const withDescription = (
   value: Stringable,

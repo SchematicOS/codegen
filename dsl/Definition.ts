@@ -1,10 +1,10 @@
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { Identifier } from './Identifier.ts'
 import { SchematicBase } from './SchematicBase.ts'
-import type { OasRef } from '../oasElements/Ref.ts'
-import type { OasSchema } from '../oasSchema/types.ts'
-import type { OasVoid } from '../oasSchema/Void.ts'
+import type { OasRef } from '../oas-elements/Ref.ts'
+import type { OasSchema } from '../oas-schema/types.ts'
+import type { OasVoid } from '../oas-schema/Void.ts'
 import { withDescription } from '../typescript/withDescription.ts'
 
 type ConstructorArgs = {

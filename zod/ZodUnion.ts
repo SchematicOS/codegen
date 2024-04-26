@@ -1,9 +1,9 @@
 import { SchematicBase } from '../dsl/SchematicBase.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
-import type { OasDiscriminatorData } from '../oasTypes/discriminator.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
-import type { OasSchema } from '../oasSchema/types.ts'
-import type { OasRef } from '../oasElements/Ref.ts'
+import type { OasDiscriminatorData } from '../oas-types/discriminator.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
+import type { OasSchema } from '../oas-schema/types.ts'
+import type { OasRef } from '../oas-elements/Ref.ts'
 
 type ZodUnionArgs = {
   context: CoreContext

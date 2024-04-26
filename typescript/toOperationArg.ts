@@ -2,13 +2,13 @@ import type { CoreContext } from '../context/CoreContext.ts'
 import { Definition } from '../dsl/Definition.ts'
 import { Identifier } from '../dsl/Identifier.ts'
 import { ModelSettings } from '../settings/ModelSettings.ts'
-import type { OasOperation } from '../oasElements/Operation.ts'
-import { OasObject } from '../oasSchema/Object.ts'
-import { OasVoid } from '../oasSchema/Void.ts'
+import type { OasOperation } from '../oas-elements/Operation.ts'
+import { OasObject } from '../oas-schema/Object.ts'
+import { OasVoid } from '../oas-schema/Void.ts'
 import { toArgsName } from '../helpers/naming.ts'
 import isEmpty from 'lodash-es/isEmpty.js'
-import type { OasSchema } from '../oasSchema/types.ts'
-import type { OasRef } from '../oasElements/Ref.ts'
+import type { OasSchema } from '../oas-schema/types.ts'
+import type { OasRef } from '../oas-elements/Ref.ts'
 
 type ToOperationArgArgs = {
   context: CoreContext

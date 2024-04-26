@@ -3,7 +3,7 @@ import { toRefName } from '../helpers/ref.ts'
 import { Import } from './Import.ts'
 import { normalize } from '@std/path'
 import type { ModelSettings } from '../settings/ModelSettings.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 import type { EntityType } from '../typescript/EntityType.ts'
 
 type IdentifierArgs = {

@@ -2,8 +2,8 @@ import type { CoreContext } from '../context/CoreContext.ts'
 import { Definition } from '../dsl/Definition.ts'
 import { Identifier } from '../dsl/Identifier.ts'
 import { ModelSettings } from '../settings/ModelSettings.ts'
-import type { OasOperation } from '../oasElements/Operation.ts'
-import { OasVoid } from '../oasSchema/Void.ts'
+import type { OasOperation } from '../oas-elements/Operation.ts'
+import { OasVoid } from '../oas-schema/Void.ts'
 import { toResponseName } from '../helpers/naming.ts'
 
 type ToOperationResponseArgs = {

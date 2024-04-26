@@ -1,5 +1,5 @@
-import type { Stringable } from '../schematicTypes/stringable.ts'
-import type { PrettierConfigType } from '../schematicTypes/prettierConfig.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
+import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
 import { Import } from '../dsl/Import.ts'
 import type { ReportArgs } from './Reporter.ts'
 import type { Reporter } from './Reporter.ts'

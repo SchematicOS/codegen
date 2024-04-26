@@ -7,10 +7,10 @@ import type {
 } from '../context/GenerateContext.ts'
 import type { ReportArgs, Reporter } from '../context/Reporter.ts'
 import { match } from 'ts-pattern'
-import type { PrettierConfigType } from '../schematicTypes/prettierConfig.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 import type { TypeSystem } from '../generate/types.ts'
-import type { OasDocument } from '../oasElements/Document.ts'
+import type { OasDocument } from '../oas-elements/Document.ts'
 import type { Settings } from '../settings/Settings.ts'
 import { RenderContext } from '../context/RenderContext.ts'
 

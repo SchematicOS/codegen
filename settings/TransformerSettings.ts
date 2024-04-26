@@ -1,8 +1,8 @@
-import type { TransformerSettingsType } from '../schematicTypes/settings.ts'
+import type { TransformerSettingsType } from '../schematic-types/settings.ts'
 import { OperationSettings } from './OperationSettings.ts'
 import { join } from '@std/path'
 import { defaultFileName } from '../typescript/defaults.ts'
-import type { Method } from '../schematicTypes/method.ts'
+import type { Method } from '../schematic-types/method.ts'
 
 type ConstructorArgs = {
   settings?: TransformerSettingsType

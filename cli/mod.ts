@@ -5,8 +5,8 @@ import type { TypeSystem, Transformer } from '../generate/types.ts'
 import { deno } from './denoJsonImport.ts'
 import { resolve, join } from '@std/path'
 import { promptCloneTransformer, promptNewSchema } from './prompt.ts'
-import type { PrettierConfigType } from '../schematicTypes/prettierConfig.ts'
-import type { SettingsType } from '../schematicTypes/settings.ts'
+import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
+import type { SettingsType } from '../schematic-types/settings.ts'
 
 type MainArgs = {
   project: string

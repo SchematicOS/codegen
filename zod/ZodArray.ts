@@ -1,7 +1,7 @@
 import type { CoreContext } from '../context/CoreContext.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
-import type { OasRef } from '../oasElements/Ref.ts'
-import type { OasSchema } from '../oasSchema/types.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
+import type { OasRef } from '../oas-elements/Ref.ts'
+import type { OasSchema } from '../oas-schema/types.ts'
 
 type ZodArrayArgs = {
   context: CoreContext

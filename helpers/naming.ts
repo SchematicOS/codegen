@@ -1,5 +1,5 @@
 import camelCase from 'lodash-es/camelCase.js'
-import type { OasOperation } from '../oasElements/Operation.ts'
+import type { OasOperation } from '../oas-elements/Operation.ts'
 
 export const toEndpointType = (
   operation: OasOperation

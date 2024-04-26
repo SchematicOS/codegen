@@ -1,8 +1,8 @@
 import { Identifier } from '../dsl/Identifier.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
-import type { Stringable } from '../schematicTypes/stringable.ts'
+import type { Stringable } from '../schematic-types/stringable.ts'
 import { SchematicBase } from '../dsl/SchematicBase.ts'
-import type { OasRef } from '../oasElements/Ref.ts'
+import type { OasRef } from '../oas-elements/Ref.ts'
 
 type ZodRefProps = {
   context: CoreContext
