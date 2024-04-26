@@ -20,7 +20,8 @@
     "./RequestBody.ts": "./oas-elements/RequestBody.ts",
     "./SchematicBase.ts": "./dsl/SchematicBase.ts",
     "./TransformerSettings.ts": "./settings/TransformerSettings.ts",
-    "./types": "./types/mod.ts",
+    "./oas-types": "./oas-types/mod.ts",
+    "./schematic-types": "./schematic-types/mod.ts",
     "./typescript/keyValues.ts": "./typescript/keyValues.ts",
     "./typescript/toInferredType.ts": "./typescript/toInferredType.ts",
     "./typescript/toOperationArg.ts": "./typescript/toOperationArg.ts",
@@ -47,19 +48,26 @@
   },
   "publish": {
     "include": [
-      "deno.json",
-      "deno.lock",
-      "LICENSE",
-      "README.md",
       "cli/**/*",
       "context/**/*",
+      "deno.json",
+      "deno.lock",
+      "dsl/**/*",
       "generate/**/*",
-      "parse/**/*",
-      "transformers/**/*",
-      "core/**/*",
+      "helpers/**/*",
       "languages/**/*",
-      "types/**/*",
-      "typeSystems/**/*"
+      "LICENSE",
+      "oas-elements/**/*",
+      "oas-schema/**/*",
+      "oas-types/**/*",
+      "openapi-v3/**/*",
+      "parse/**/*",
+      "README.md",
+      "schematic-types/**/*",
+      "settings/**/*",
+      "transformers/**/*",
+      "typescript/**/*",
+      "zod/**/*"
     ]
   }
 }
