@@ -13,10 +13,11 @@ import { Settings } from '../settings/Settings.ts'
 import { Trail } from '../context/Trail.ts'
 import type { Transformer, TypeSystem } from '../generate/types.ts'
 import { generate } from '../generate/mod.ts'
+import { ensureFileSync } from '@std/fs'
 
 type RunArgs = {
   schema: string
-  project: string
+  schemaName: string
   settings?: SettingsType
   prettier?: PrettierConfigType
   transformers: Transformer[]
@@ -25,7 +26,7 @@ type RunArgs = {
 
 export const run = async ({
   schema,
-  project,
+  schemaName,
   settings = {},
   prettier,
   transformers,
@@ -79,7 +80,9 @@ export const run = async ({
   const artifactsMap = await context.render()
 
   Object.entries(artifactsMap).forEach(([filePath, content]) => {
-    const resolvedPath = join('./.schematic', project, 'output', filePath)
+    const resolvedPath = join(schemaName, filePath)
+
+    ensureFileSync(resolvedPath)
 
     writeFile({
       content,
@@ -93,11 +96,11 @@ export const run = async ({
 
   writeFile({
     content: logs,
-    resolvedPath: join('./.schematic', project, 'logs', 'logs.txt')
+    resolvedPath: join('./.schematic', schemaName, 'logs', 'logs.txt')
   })
 
   writeFile({
     content: operations,
-    resolvedPath: join('./.schematic', project, 'logs', 'operations.txt')
+    resolvedPath: join('./.schematic', schemaName, 'logs', 'operations.txt')
   })
 }
