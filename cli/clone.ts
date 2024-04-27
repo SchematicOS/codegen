@@ -1,6 +1,6 @@
 import { Command } from '@cliffy/command'
 import { ensureFile } from '@std/fs'
-import { downloadPackage } from './prompt.ts'
+import { downloadPackage } from './downloads.ts'
 import { join } from '@std/path'
 
 export const downloadAndCreatePackage = async (plugin: string) => {
@@ -34,6 +34,8 @@ export const toCloneCommand = () => {
         throw new Error('Only JSR registry plugins are supported')
       }
 
-      downloadAndCreatePackage(plugin)
+      const name = plugin.replace('jsr:', '')
+
+      downloadAndCreatePackage(name)
     })
 }

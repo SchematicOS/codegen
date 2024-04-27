@@ -1,5 +1,5 @@
 import { Command } from '@cliffy/command'
-import { downloadAndCreateSchema } from './prompt.ts'
+import { downloadAndCreateSchema } from './downloads.ts'
 
 export const toAddCommand = () => {
   return new Command()

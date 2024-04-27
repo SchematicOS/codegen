@@ -1,5 +1,5 @@
 import { Command } from '@cliffy/command'
-import { downloadAndCreateSchema } from './prompt.ts'
+import { downloadAndCreateSchema } from './downloads.ts'
 import { ensureDirSync } from '@std/fs'
 import { join } from '@std/path'
 
