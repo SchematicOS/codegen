@@ -10,10 +10,12 @@ export const downloadPackage = async (name: string) => {
   const versionMeta = await versionMetaRes.json()
 
   const files = Object.keys(versionMeta.manifest).map(async key => {
-    const res3 = await fetch(`https://jsr.io/${name}/${rootMeta.latest}/${key}`)
-    const data3 = await res3.text()
+    const fileRes = await fetch(
+      `https://jsr.io/${name}/${rootMeta.latest}/${key}`
+    )
+    const file = await fileRes.text()
 
-    return [key, data3] as [string, string]
+    return [key, file] as [string, string]
   })
 
   return await Promise.all(files)
