@@ -77,7 +77,7 @@ export const toGenerateCommand = () => {
       { required: true }
     )
     .option('-s --typeSystem [module:string]', 'Type system to use', {
-      default: '@schematicos/codegen/zod'
+      default: 'jsr:@schematicos/codegen/zod'
     })
     .example(
       'Generate MUI forms with RTK Query api client using Zod types',
