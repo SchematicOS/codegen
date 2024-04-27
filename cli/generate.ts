@@ -66,7 +66,7 @@ const main = async ({ schemaName, transformers, typeSystem }: MainArgs) => {
 
 export const toGenerateCommand = () => {
   return new Command()
-    .command('generate', 'Generate code from OpenAPI schema')
+    .description('Generate code from OpenAPI schema')
     .option('-n --name [schemaName:string]', 'Project name of source schema', {
       required: true,
       default: 'petstore'

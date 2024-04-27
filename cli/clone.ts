@@ -21,8 +21,7 @@ export const downloadAndCreatePackage = async (plugin: string) => {
 
 export const toCloneCommand = () => {
   return new Command()
-    .command(
-      'clone',
+    .description(
       'Clone a transformer or type-system from JSR registry for editing'
     )
     .example(
