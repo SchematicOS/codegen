@@ -204,7 +204,7 @@ const unpackImportContent = (
     return {
       importNames: importContent.importNames,
       options: {
-        external: importContent.external === true ? true : false
+        external: importContent.external ?? false
       }
     }
   }

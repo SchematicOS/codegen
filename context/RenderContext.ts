@@ -37,6 +37,7 @@ export class RenderContext {
       // create list of external import modules
       Array.from(file.imports.entries()).forEach(
         ([importModule, { options }]) => {
+          console.log('external', options.external)
           if (typeof options.external === 'string') {
             externalModules[options.external] = true
           }
