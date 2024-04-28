@@ -33,7 +33,7 @@ const main = async ({ schemaName, transformers, typeSystem }: MainArgs) => {
 
   const settings = readFile<SettingsType>(settingsPath)
 
-  const prettierPath = resolve(config, 'prettier.json')
+  const prettierPath = resolve('./.schematic', 'prettier.json')
 
   const prettier = readFile<PrettierConfigType>(prettierPath)
 
