@@ -58,11 +58,11 @@ export class RenderContext {
   }: RenderOptions): Promise<Record<string, string>> {
     const artifactsMap = this.collate()
 
-    const includePackageJson = packageJson
-      ? { ...artifactsMap, 'package.json': this.toPackageJson() }
-      : artifactsMap
+    const formatted = await this.format(artifactsMap)
 
-    return await this.format(includePackageJson)
+    return packageJson
+      ? { ...formatted, 'package.json': this.toPackageJson() }
+      : formatted
   }
 
   private collate(): Record<string, string> {
