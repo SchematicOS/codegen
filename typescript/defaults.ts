@@ -1,1 +1,1 @@
-export const defaultFileName = 'index.tsx'
+export const defaultFileName = 'index.ts'
