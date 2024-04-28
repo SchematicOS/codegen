@@ -3,17 +3,17 @@ import type { Stringable } from './Stringable.ts'
 type ConstructorArgs = {
   module: string
   importNames: ImportName[]
-  external: boolean
+  external: boolean | string
 }
 
-type ImportOptions = {
-  external?: boolean
+export type ImportOptions = {
+  external?: boolean | string
 }
 
 export class Import implements Stringable {
   module: string
   importNames: ImportName[]
-  external: boolean
+  external: boolean | string
 
   private constructor({
     module,

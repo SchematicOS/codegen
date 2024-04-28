@@ -1,10 +1,7 @@
+import type { ImportOptions } from '../dsl/Import.ts'
 import type { Stringable } from '../dsl/Stringable.ts'
 
 export type PhaseType = 'parse' | 'group' | 'render'
-
-type ImportOptions = {
-  external: boolean
-}
 
 type ImportContent = {
   importNames: Set<string>

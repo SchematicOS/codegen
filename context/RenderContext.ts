@@ -37,7 +37,11 @@ export class RenderContext {
       // create list of external import modules
       Array.from(file.imports.entries()).forEach(
         ([importModule, { options }]) => {
-          if (options.external) {
+          if (typeof options.external === 'string') {
+            externalModules[options.external] = true
+          }
+
+          if (options.external === true) {
             externalModules[importModule] = true
           }
         }
