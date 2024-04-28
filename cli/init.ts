@@ -7,8 +7,6 @@ const DEFAULT_SCHEMA_URL = 'https://petstore3.swagger.io/api/v3/openapi.json'
 const DEFAULT_NAME = 'petstore'
 
 export const toInitCommand = () => {
-  console.log('toInitCommand')
-
   return new Command()
     .description('Initialize a new project in current directory')
     .option('-d, --default', 'Initialise with default schema')

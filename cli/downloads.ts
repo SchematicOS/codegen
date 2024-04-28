@@ -3,11 +3,7 @@ import { join } from '@std/path'
 export const downloadPackage = async (name: string) => {
   const rootMetaRes = await fetch(`https://jsr.io/${name}/meta.json`)
 
-  console.log(rootMetaRes)
-
   const rootMeta = await rootMetaRes.json()
-
-  console.log(rootMeta)
 
   const versionMetaUrl = `https://jsr.io/${name}/${rootMeta.latest}_meta.json`
 
