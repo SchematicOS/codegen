@@ -23,6 +23,7 @@ type RunArgs = {
   prettier?: PrettierConfigType
   transformers: Transformer[]
   typeSystem: TypeSystem
+  packageJson: boolean
 }
 
 export const run = async ({
@@ -31,7 +32,8 @@ export const run = async ({
   settings = {},
   prettier,
   transformers,
-  typeSystem
+  typeSystem,
+  packageJson
 }: RunArgs) => {
   const trail = Trail.create()
 
@@ -78,7 +80,7 @@ export const run = async ({
     prettier
   })
 
-  const artifactsMap = await context.render()
+  const artifactsMap = await context.render({ packageJson })
 
   Object.entries(artifactsMap).forEach(([filePath, content]) => {
     const resolvedPath = join(schemaName, filePath)

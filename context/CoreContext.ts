@@ -2,7 +2,6 @@ import type { ParseContext } from '../context/ParseContext.ts'
 import { GenerateContext } from '../context/GenerateContext.ts'
 import type {
   ToTypeSystemArgs,
-  FileContents,
   RegisterArgs
 } from '../context/GenerateContext.ts'
 import type { ReportArgs, Reporter } from '../context/Reporter.ts'
@@ -13,6 +12,7 @@ import type { TypeSystem } from '../schematic-types/plugins.ts'
 import type { OasDocument } from '../oas-elements/Document.ts'
 import type { Settings } from '../settings/Settings.ts'
 import { RenderContext } from '../context/RenderContext.ts'
+import type { FileContents, RenderOptions } from './types.ts'
 
 type SharedContext =
   | {
@@ -124,7 +124,7 @@ export class CoreContext {
       .exhaustive()
   }
 
-  async render(): Promise<Record<string, string>> {
+  async render(options: RenderOptions): Promise<Record<string, string>> {
     return await match(this.phase)
       .with({ type: 'group' }, () => {
         throw new Error('Cannot render in parse phase')
@@ -132,7 +132,7 @@ export class CoreContext {
       .with({ type: 'parse' }, () => {
         throw new Error('Cannot render in parse phase')
       })
-      .with({ type: 'render' }, ({ context }) => context.render())
+      .with({ type: 'render' }, ({ context }) => context.render(options))
       .exhaustive()
   }
 

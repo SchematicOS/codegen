@@ -1,7 +1,4 @@
-import type {
-  TransformerArgs,
-  Transformer
-} from '../schematic-types/plugins.ts'
+import type { TransformerArgs } from '../schematic-types/plugins.ts'
 import { QueryEndpoint } from './QueryEndpoint.ts'
 import { match } from 'ts-pattern'
 
@@ -46,9 +43,4 @@ export const transform = ({
     })
 }
 
-const transformer: Transformer = {
-  id: '@schematicos/tanstack-query',
-  transform
-}
-
-export default transformer
+export default transform

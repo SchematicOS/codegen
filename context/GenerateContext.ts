@@ -12,12 +12,7 @@ import type { OasRef } from '../oas-elements/Ref.ts'
 import type { OasVoid } from '../oas-schema/Void.ts'
 import type { CoreContext } from './CoreContext.ts'
 import { Identifier } from '../dsl/Identifier.ts'
-
-export type FileContents = {
-  imports: Map<string, Set<string>>
-  definitions: Map<string, Stringable>
-  content: Stringable[]
-}
+import type { FileContents } from './types.ts'
 
 type ConstructorArgs = {
   schemaModel: OasDocument
@@ -26,8 +21,13 @@ type ConstructorArgs = {
   reporter: Reporter
 }
 
+export type ImportWithOptions = {
+  importNames: ImportNameArg | ImportNameArg[]
+  external?: boolean
+}
+
 export type RegisterArgs = {
-  imports?: Record<string, ImportNameArg | ImportNameArg[]>
+  imports?: Record<string, ImportNameArg | ImportNameArg[] | ImportWithOptions>
   definitions?: Definition[]
   content?: Stringable
   destinationPath: string
@@ -83,18 +83,20 @@ export class GenerateContext {
   }: RegisterArgs) {
     const currentFile = this.getFile(destinationPath)
 
-    Object.entries(imports).forEach(([importModule, importNames]) => {
+    Object.entries(imports).forEach(([importModule, importContent]) => {
       const module = currentFile.imports.get(importModule)
 
-      const importItem = Import.create(importModule, importNames)
+      const { importNames, options } = unpackImportContent(importContent)
+
+      const importItem = Import.create(importModule, importNames, options)
 
       if (!module) {
-        currentFile.imports.set(
-          importModule,
-          new Set(importItem.importNames.map(n => `${n}`))
-        )
+        currentFile.imports.set(importModule, {
+          importNames: new Set(importItem.importNames.map(n => `${n}`)),
+          options
+        })
       } else {
-        importItem.importNames.forEach(n => module.add(`${n}`))
+        importItem.importNames.forEach(n => module.importNames.add(`${n}`))
       }
     })
 
@@ -185,4 +187,27 @@ export class GenerateContext {
 
     return rest
   }
+}
+
+const unpackImportContent = (
+  importContent: ImportNameArg | ImportNameArg[] | ImportWithOptions
+) => {
+  if (typeof importContent === 'string') {
+    return { importNames: [importContent], options: { external: false } }
+  }
+
+  if (importContent instanceof Array) {
+    return { importNames: importContent, options: { external: false } }
+  }
+
+  if ('importNames' in importContent) {
+    return {
+      importNames: importContent.importNames,
+      options: {
+        external: importContent.external === true ? true : false
+      }
+    }
+  }
+
+  throw new Error('Invalid import content')
 }

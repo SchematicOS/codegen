@@ -1,7 +1,4 @@
-import type {
-  TransformerArgs,
-  Transformer
-} from '../schematic-types/plugins.ts'
+import type { TransformerArgs } from '../schematic-types/plugins.ts'
 import { Endpoint } from './Endpoint.ts'
 
 export const transform = ({
@@ -41,9 +38,4 @@ export const transform = ({
     })
 }
 
-const transformer: Transformer = {
-  id: '@schematicos/supabase-client',
-  transform
-}
-
-export default transformer
+export default transform

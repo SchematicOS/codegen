@@ -27,3 +27,4 @@ dist-ssr
 
 .schematic/**/*
 !.schematic/*/schema.json
+/petstore/**/*

@@ -10,6 +10,7 @@ type MainArgs = {
   schemaName: string
   transformers: string[]
   typeSystem: string
+  packageJson: boolean
 }
 
 const toImportSource = (module: string) => {
@@ -18,7 +19,12 @@ const toImportSource = (module: string) => {
     : `file://${join(Deno.cwd(), module)}`
 }
 
-const main = async ({ schemaName, transformers, typeSystem }: MainArgs) => {
+const main = async ({
+  schemaName,
+  transformers,
+  typeSystem,
+  packageJson
+}: MainArgs) => {
   const schemaPath = resolve('./.schematic', schemaName, 'schema.json')
 
   const schemaContent = readFile<string>(schemaPath)
@@ -60,16 +66,18 @@ const main = async ({ schemaName, transformers, typeSystem }: MainArgs) => {
     settings,
     prettier,
     transformers: t,
-    typeSystem: ts.default
+    typeSystem: ts.default,
+    packageJson
   })
 }
+
+const defaultSchemaName = 'petstore'
 
 export const toGenerateCommand = () => {
   return new Command()
     .description('Generate code from OpenAPI schema')
     .option('-n --name [schemaName:string]', 'Project name of source schema', {
-      required: true,
-      default: 'petstore'
+      default: defaultSchemaName
     })
     .option(
       '-t --transformers <modules...:string>',
@@ -79,19 +87,27 @@ export const toGenerateCommand = () => {
     .option('-s --typeSystem [module:string]', 'Type system to use', {
       default: 'jsr:@schematicos/codegen/zod'
     })
+    .option('-j --packageJson', 'Create package.json for external dependencies')
     .example(
       'Generate MUI forms with RTK Query api client using Zod types',
       'generate -t jsr:@schematicos/codegen/rtk-query jsr:@schematicos/codegen/mui-joy-forms -s jsr:@schematicos/codegen/zod'
     )
-    .action(({ name: schemaName, transformers, typeSystem }) => {
-      if (
-        typeof schemaName === 'string' &&
-        Array.isArray(transformers) &&
-        typeof typeSystem === 'string'
-      ) {
-        console.log({ schemaName, transformers, typeSystem })
+    .action(
+      ({ name: schemaName, transformers, typeSystem, packageJson = false }) => {
+        if (
+          typeof schemaName === 'string' &&
+          Array.isArray(transformers) &&
+          typeof typeSystem === 'string'
+        ) {
+          console.log({ schemaName, transformers, typeSystem })
 
-        main({ schemaName, transformers, typeSystem })
+          main({
+            schemaName,
+            transformers,
+            typeSystem,
+            packageJson: schemaName === defaultSchemaName || packageJson
+          })
+        }
       }
-    })
+    )
 }

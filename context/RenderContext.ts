@@ -7,12 +7,7 @@ import { format } from 'prettier/standalone'
 import typescript from 'prettier/plugins/typescript'
 import estree from 'prettier/plugins/estree'
 import invariant from 'tiny-invariant'
-
-type FileContents = {
-  imports: Map<string, Set<string>>
-  definitions: Map<string, Stringable>
-  content: Stringable[]
-}
+import type { FileContents, RenderOptions } from './types.ts'
 
 type ConstructorArgs = {
   files: Map<string, FileContents>
@@ -35,17 +30,47 @@ export class RenderContext {
     return new RenderContext(args)
   }
 
-  async render(): Promise<Record<string, string>> {
+  toPackageJson(): string {
+    const externalModules: Record<string, boolean> = {}
+
+    Array.from(this.files.values()).forEach(file => {
+      // create list of external import modules
+      Array.from(file.imports.entries()).forEach(
+        ([importModule, { options }]) => {
+          if (options.external) {
+            externalModules[importModule] = true
+          }
+        }
+      )
+    })
+
+    const dependencyEntries: [string, string][] = Object.keys(
+      externalModules
+    ).map(module => [module, '*'])
+
+    const packageJson = { dependencies: Object.fromEntries(dependencyEntries) }
+
+    return JSON.stringify(packageJson, null, 2)
+  }
+
+  async render({
+    packageJson
+  }: RenderOptions): Promise<Record<string, string>> {
     const artifactsMap = this.collate()
-    return await this.format(artifactsMap)
+
+    const includePackageJson = packageJson
+      ? { ...artifactsMap, 'package.json': this.toPackageJson() }
+      : artifactsMap
+
+    return await this.format(includePackageJson)
   }
 
   private collate(): Record<string, string> {
     const fileEntries = Array.from(this.files.entries()).map(
       ([destination, file]): [string, string] => {
         const imports = Array.from(file.imports.entries()).map(
-          ([module, importNamesSet]) => {
-            return Import.create(module, Array.from(importNamesSet))
+          ([module, importContent]) => {
+            return Import.create(module, Array.from(importContent.importNames))
           }
         )
 

@@ -3,20 +3,32 @@ import type { Stringable } from './Stringable.ts'
 type ConstructorArgs = {
   module: string
   importNames: ImportName[]
+  external: boolean
+}
+
+type ImportOptions = {
+  external?: boolean
 }
 
 export class Import implements Stringable {
   module: string
   importNames: ImportName[]
+  external: boolean
 
-  private constructor({ module, importNames }: ConstructorArgs) {
+  private constructor({
+    module,
+    importNames,
+    external = false
+  }: ConstructorArgs) {
     this.module = module
     this.importNames = importNames
+    this.external = external
   }
 
   static create(
     module: string,
-    importNamesArg: ImportNameArg | ImportNameArg[]
+    importNamesArg: ImportNameArg | ImportNameArg[],
+    { external = false }: ImportOptions = {}
   ): Import {
     const importNames = Array.isArray(importNamesArg)
       ? importNamesArg.map(importName => ImportName.create(importName))
@@ -24,7 +36,8 @@ export class Import implements Stringable {
 
     return new Import({
       module,
-      importNames
+      importNames,
+      external
     })
   }
 
