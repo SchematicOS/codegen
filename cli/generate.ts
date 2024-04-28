@@ -1,7 +1,7 @@
 import { Command } from '@cliffy/command'
 import { run } from './run.ts'
 import { readFile } from './file.ts'
-import type { TypeSystem, Transformer } from '../generate/types.ts'
+import type { TypeSystem, Transformer } from '../schematic-types/plugins.ts'
 import { resolve, join } from '@std/path'
 import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
 import type { SettingsType } from '../schematic-types/settings.ts'

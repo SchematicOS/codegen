@@ -1,4 +1,7 @@
-import type { TransformerArgs, Transformer } from '../generate/types.ts'
+import type {
+  TransformerArgs,
+  Transformer
+} from '../schematic-types/plugins.ts'
 import { QueryEndpoint } from './QueryEndpoint.ts'
 import { match } from 'ts-pattern'
 

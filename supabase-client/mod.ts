@@ -1,4 +1,7 @@
-import type { TransformerArgs, Transformer } from '../generate/types.ts'
+import type {
+  TransformerArgs,
+  Transformer
+} from '../schematic-types/plugins.ts'
 import { Endpoint } from './Endpoint.ts'
 
 export const transform = ({

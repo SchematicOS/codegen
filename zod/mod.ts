@@ -1,4 +1,4 @@
-import type { TypeSystem } from '../generate/types.ts'
+import type { TypeSystem } from '../schematic-types/plugins.ts'
 import { decapitalize } from '../helpers/strings.ts'
 import { Zod } from './Zod.ts'
 import { EntityType } from '../typescript/EntityType.ts'

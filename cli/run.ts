@@ -11,9 +11,10 @@ import { ParseContext } from '../context/ParseContext.ts'
 import { CoreContext } from '../context/CoreContext.ts'
 import { Settings } from '../settings/Settings.ts'
 import { Trail } from '../context/Trail.ts'
-import type { Transformer, TypeSystem } from '../generate/types.ts'
-import { generate } from '../generate/mod.ts'
+import type { Transformer, TypeSystem } from '../schematic-types/plugins.ts'
 import { ensureFileSync } from '@std/fs'
+import { Identifier } from '../dsl/Identifier.ts'
+import { Definition } from '../dsl/Definition.ts'
 
 type RunArgs = {
   schema: string
@@ -103,4 +104,47 @@ export const run = async ({
     content: operations,
     resolvedPath: join('./.schematic', schemaName, 'logs', 'operations.txt')
   })
+}
+
+type GenerateArgs = {
+  schemaModel: OasDocument
+  transformers: Transformer[]
+  context: CoreContext
+}
+
+export const generate = ({
+  schemaModel,
+  transformers,
+  context
+}: GenerateArgs) => {
+  transformers.forEach(({ id, transform }) => {
+    console.log(id)
+
+    const transformerSettings = context.settings.getTransformerSettings(id)
+    transform({ context, transformerSettings })
+
+    console.log('')
+  })
+
+  Object.entries(schemaModel.components?.schemas ?? {})
+    .map(([$ref, value]) => {
+      const identifier = Identifier.from$Ref({ $ref, context })
+
+      return { value, identifier }
+    })
+    .filter(({ identifier }) => identifier.modelSettings.isSelected())
+    .forEach(({ value, identifier }) => {
+      const definition = Definition.fromValue({
+        context,
+        value,
+        identifier,
+        description: value.description,
+        destinationPath: identifier.modelSettings.getExportPath()
+      })
+
+      context.register({
+        definitions: [definition],
+        destinationPath: definition.destinationPath
+      })
+    })
 }

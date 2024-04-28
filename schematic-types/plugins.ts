@@ -2,15 +2,9 @@ import type { EntityType } from '../typescript/EntityType.ts'
 import type { OasSchema } from '../oas-schema/types.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { TransformerSettings } from '../settings/TransformerSettings.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from './stringable.ts'
 import type { OasRef } from '../oas-elements/Ref.ts'
-import type { OasResponse } from '../oas-elements/Response.ts'
-import type { OasParameter } from '../oas-elements/Parameter.ts'
-import type { OasExample } from '../oas-elements/Example.ts'
-import type { OasRequestBody } from '../oas-elements/RequestBody.ts'
-import type { OasHeader } from '../oas-elements/Header.ts'
 import type { OasVoid } from '../oas-schema/Void.ts'
-import type { OasRefData } from '../oas-types/ref.ts'
 
 export type TypeSystemArgs = {
   context: CoreContext
@@ -55,16 +49,3 @@ export type Transformer = {
   id: string
   transform: TransformerFn
 }
-
-export type OasComponentType =
-  | OasSchema
-  | OasResponse
-  | OasParameter
-  | OasExample
-  | OasRequestBody
-  | OasHeader
-
-export type RefToResolved<T extends OasRefData> = Extract<
-  OasComponentType,
-  { schematicType: T['refType'] }
->

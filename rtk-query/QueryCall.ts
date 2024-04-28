@@ -1,6 +1,6 @@
 import type { Stringable } from '../schematic-types/stringable.ts'
 import { SchematicBase } from '../dsl/SchematicBase.ts'
-import { EMPTY } from '../generate/constants.ts'
+import { EMPTY } from '../dsl/constants.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { OasOperation } from '../oas-elements/Operation.ts'
 import type { OasParameter } from '../oas-elements/Parameter.ts'

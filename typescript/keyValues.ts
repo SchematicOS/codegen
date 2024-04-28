@@ -1,4 +1,4 @@
-import { EMPTY } from '../generate/constants.ts'
+import { EMPTY } from '../dsl/constants.ts'
 import type { Stringable } from '../schematic-types/stringable.ts'
 
 // Filter out properties with falsy or EMPTY values and return as joined string

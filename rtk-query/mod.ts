@@ -1,4 +1,7 @@
-import type { TransformerArgs, Transformer } from '../generate/types.ts'
+import type {
+  TransformerArgs,
+  Transformer
+} from '../schematic-types/plugins.ts'
 import { RtkEndpoint } from './Endpoint.ts'
 import { RtkQueryContainer } from './Container.ts'
 import { withDescription } from '../typescript/withDescription.ts'

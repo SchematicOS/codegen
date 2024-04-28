@@ -1,7 +1,7 @@
 import type { OasParameter } from '../oas-elements/Parameter.ts'
 import { withDescription } from './withDescription.ts'
 import { handleKey, handlePropertyName } from './identifiers.ts'
-import { EMPTY } from '../generate/constants.ts'
+import { EMPTY } from '../dsl/constants.ts'
 
 export const toParamsObject = (
   parameters: OasParameter[] | undefined,

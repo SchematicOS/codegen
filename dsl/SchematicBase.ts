@@ -1,5 +1,5 @@
 import type { RegisterArgs } from '../context/GenerateContext.ts'
-import { EMPTY } from '../generate/constants.ts'
+import { EMPTY } from './constants.ts'
 import type { Stringable } from '../schematic-types/stringable.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 

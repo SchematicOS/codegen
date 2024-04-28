@@ -2,9 +2,14 @@ import { OasBase } from './OasBase.ts'
 import type { OasRefData } from '../oas-types/ref.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { Trail } from '../context/Trail.ts'
-import type { OasComponentType } from '../generate/types.ts'
 import { toRefName } from '../helpers/ref.ts'
 import { match } from 'ts-pattern'
+import type { OasSchema } from '../oas-schema/types.ts'
+import type { OasResponse } from '../oas-elements/Response.ts'
+import type { OasParameter } from '../oas-elements/Parameter.ts'
+import type { OasExample } from '../oas-elements/Example.ts'
+import type { OasRequestBody } from '../oas-elements/RequestBody.ts'
+import type { OasHeader } from '../oas-elements/Header.ts'
 
 const MAX_LOOKUPS = 10
 
@@ -113,6 +118,14 @@ export class OasRef<T extends OasRefData['refType']> extends OasBase {
     return this.fields.description
   }
 }
+
+export type OasComponentType =
+  | OasSchema
+  | OasResponse
+  | OasParameter
+  | OasExample
+  | OasRequestBody
+  | OasHeader
 
 export type ResolvedRef<T extends OasRefData['refType']> = Extract<
   OasComponentType,
