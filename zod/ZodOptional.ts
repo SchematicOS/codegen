@@ -1,4 +1,4 @@
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 
 type ZodOptionalArgs = {
   required: boolean | undefined

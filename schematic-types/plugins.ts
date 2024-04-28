@@ -2,7 +2,7 @@ import type { EntityType } from '../typescript/EntityType.ts'
 import type { OasSchema } from '../oas-schema/types.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { TransformerSettings } from '../settings/TransformerSettings.ts'
-import type { Stringable } from './stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import type { OasRef } from '../oas-elements/Ref.ts'
 import type { OasVoid } from '../oas-schema/Void.ts'
 

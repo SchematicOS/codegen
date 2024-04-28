@@ -1,7 +1,7 @@
 import { ZodString } from './ZodString.ts'
 import { ZodArray } from './ZodArray.ts'
 import { match } from 'ts-pattern'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import { ZodRef } from './ZodRef.ts'
 import { ZodObject } from './ZodObject.ts'
 import { ZodUnion } from './ZodUnion.ts'

@@ -1,7 +1,7 @@
 import type { CoreContext } from '../context/CoreContext.ts'
 import type { OperationSettings } from '../settings/OperationSettings.ts'
 import { SchematicBase } from '../dsl/SchematicBase.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 
 type FormFieldArgs = {
   context: CoreContext

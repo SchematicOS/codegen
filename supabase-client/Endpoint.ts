@@ -1,5 +1,5 @@
 import { SchematicBase } from '../dsl/SchematicBase.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import type { OasOperation } from '../oas-elements/Operation.ts'
 import type { OperationSettings } from '../settings/OperationSettings.ts'
 import type { CoreContext } from '../context/CoreContext.ts'

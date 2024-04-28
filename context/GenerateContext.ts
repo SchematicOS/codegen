@@ -1,5 +1,5 @@
 import type { TypeSystem } from '../schematic-types/plugins.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import { Import, type ImportNameArg } from '../dsl/Import.ts'
 import { normalize } from '@std/path'
 import type { Settings } from '../settings/Settings.ts'

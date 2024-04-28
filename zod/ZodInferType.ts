@@ -1,5 +1,5 @@
 import { SchematicBase } from '../dsl/SchematicBase.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
 
 type ZodInferTypeArgs = {

@@ -8,7 +8,7 @@ import type {
 import type { ReportArgs, Reporter } from '../context/Reporter.ts'
 import { match } from 'ts-pattern'
 import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import type { TypeSystem } from '../schematic-types/plugins.ts'
 import type { OasDocument } from '../oas-elements/Document.ts'
 import type { Settings } from '../settings/Settings.ts'

@@ -1,6 +1,6 @@
 import { SchematicBase } from '../dsl/SchematicBase.ts'
 import type { CoreContext } from '../context/CoreContext.ts'
-import type { Stringable } from '../schematic-types/stringable.ts'
+import type { Stringable } from '../dsl/Stringable.ts'
 import type { OasRef } from '../oas-elements/Ref.ts'
 import type { OasSchema } from '../oas-schema/types.ts'
 
