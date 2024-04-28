@@ -1,6 +1,7 @@
 import type { TypeSystem } from '../schematic-types/plugins.ts'
 import type { Stringable } from '../dsl/Stringable.ts'
-import { Import, type ImportNameArg } from '../dsl/Import.ts'
+import type { ImportOptions, ImportNameArg } from '../dsl/Import.ts'
+import { Import } from '../dsl/Import.ts'
 import { normalize } from '@std/path'
 import type { Settings } from '../settings/Settings.ts'
 import { Definition } from '../dsl/Definition.ts'
@@ -23,8 +24,7 @@ type ConstructorArgs = {
 
 export type ImportWithOptions = {
   importNames: ImportNameArg | ImportNameArg[]
-  external?: boolean
-}
+} & ImportOptions
 
 export type RegisterArgs = {
   imports?: Record<string, ImportNameArg | ImportNameArg[] | ImportWithOptions>
