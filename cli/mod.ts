@@ -49,12 +49,12 @@ const getOptions = async () => {
 }
 
 const promptwise = async () => {
-  const action = await Select.prompt({
+  const action = await Select.prompt<string>({
     message: 'Welcome to smktc! What would you like to do?',
     options: await getOptions()
   })
 
-  await match(action as unknown as string)
+  await match(action)
     .with('init', async () => await toInitPrompt())
     .with('generate', async () => await toGeneratePrompt())
     .with('clone', async () => await toClonePrompt())
@@ -63,8 +63,6 @@ const promptwise = async () => {
     .otherwise(matched => {
       throw new Error(`Invalid action: ${matched}`)
     })
-
-  console.log('Done')
 
   setTimeout(promptwise, 0)
 }

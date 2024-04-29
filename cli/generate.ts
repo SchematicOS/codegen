@@ -7,6 +7,7 @@ import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
 import type { SettingsType } from '../schematic-types/settings.ts'
 import { List, Select, Toggle } from '@cliffy/prompt'
 import { PLUGINS } from './constants.ts'
+import invariant from 'tiny-invariant'
 
 type MainArgs = {
   schemaName: string
@@ -62,7 +63,7 @@ const main = async ({
 
   const ts: { default: TypeSystem } = await import(typeSystemSource)
 
-  run({
+  await run({
     schema: schemaContent,
     schemaName,
     settings,
@@ -101,8 +102,6 @@ export const toGenerateCommand = () => {
           Array.isArray(transformers) &&
           typeof typeSystem === 'string'
         ) {
-          console.log({ schemaName, transformers, typeSystem })
-
           main({
             schemaName,
             transformers,
@@ -119,26 +118,32 @@ const getTransformers = async () => {
 
   const pluginNames = await getDirectoryNames(pluginContents)
 
-  return await List.prompt({
+  const transformers = await List.prompt({
     message: 'Select transformers to use',
     info: true,
     list: true,
+    minTags: 1,
     suggestions: PLUGINS.concat(pluginNames ?? []).sort()
   })
+
+  return transformers
 }
 
 const getSchemaName = async () => {
   const projectContents = await getDirectoryContents('./.schematic')
   const projectNames = await getDirectoryNames(projectContents)
 
-  if (!projectNames?.length) {
-    return await Promise.resolve()
-  }
+  invariant(projectNames?.length, 'No projects found')
 
-  const { name: schemaName } = await Select.prompt({
+  const schemaName = await Select.prompt<string>({
     message: 'Welcome to smktc! What would you like to do?',
     options: projectNames.map(name => ({ name, value: name }))
   })
+
+  invariant(
+    typeof schemaName === 'string',
+    `Invalid schema name '${schemaName}'`
+  )
 
   return schemaName
 }
@@ -152,11 +157,7 @@ export const toGeneratePrompt = async () => {
   const transformers = await getTransformers()
   const packageJson = await createPackageJson()
 
-  if (!schemaName || !transformers?.length) {
-    return
-  }
-
-  main({
+  await main({
     schemaName,
     transformers,
     typeSystem: 'jsr:@schematicos/codegen/zod',
