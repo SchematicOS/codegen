@@ -27,7 +27,14 @@ type AddSchemaArgs = {
   name: string
 }
 
-export const downloadAndCreateSchema = async ({ url, name }: AddSchemaArgs) => {
+type AddSchemaOptions = {
+  logSuccess?: boolean
+}
+
+export const downloadAndCreateSchema = async (
+  { url, name }: AddSchemaArgs,
+  { logSuccess }: AddSchemaOptions = {}
+) => {
   const fileName = new URL(url).pathname.split('/').pop()
 
   const fileType = fileName?.endsWith('.json')
@@ -48,5 +55,11 @@ export const downloadAndCreateSchema = async ({ url, name }: AddSchemaArgs) => {
 
   const schema = await res.text()
 
-  Deno.writeTextFileSync(join(projectPath, `schema.${fileType}`), schema)
+  const destination = join(projectPath, `schema.${fileType}`)
+
+  Deno.writeTextFileSync(destination, schema)
+
+  if (logSuccess) {
+    console.log(`Schema created at ${destination}`)
+  }
 }

@@ -26,15 +26,22 @@ type RunArgs = {
   packageJson: boolean
 }
 
-export const run = async ({
-  schema,
-  schemaName,
-  settings = {},
-  prettier,
-  transformers,
-  typeSystem,
-  packageJson
-}: RunArgs) => {
+type RunOptions = {
+  logSuccess?: boolean
+}
+
+export const run = async (
+  {
+    schema,
+    schemaName,
+    settings = {},
+    prettier,
+    transformers,
+    typeSystem,
+    packageJson
+  }: RunArgs,
+  { logSuccess }: RunOptions = {}
+) => {
   const trail = Trail.create()
 
   const logStore = new LogStore()
@@ -106,6 +113,10 @@ export const run = async ({
     content: operations,
     resolvedPath: join('./.schematic', schemaName, 'logs', 'operations.txt')
   })
+
+  if (logSuccess) {
+    console.log(`Generated code in ./${schemaName}`)
+  }
 }
 
 type GenerateArgs = {

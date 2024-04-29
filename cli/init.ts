@@ -6,20 +6,39 @@ import { writeFile } from './file.ts'
 import { DEFAULT_NAME, DEFAULT_SCHEMA_URL } from './constants.ts'
 import { Toggle } from '@cliffy/prompt'
 
-export const createProjectFolder = () => {
+type CreateProjectFolderOptions = {
+  logSuccess?: boolean
+}
+
+export const createProjectFolder = ({
+  logSuccess
+}: CreateProjectFolderOptions) => {
   ensureDirSync(join(Deno.cwd(), '.schematic'))
 
   writeFile({
     content: prettierConfig,
     resolvedPath: join(Deno.cwd(), '.schematic', 'prettier.json')
   })
+
+  if (logSuccess) {
+    console.log('Created new project folder')
+  }
 }
 
-export const initialiseDemoSchema = async () => {
-  await downloadAndCreateSchema({
-    url: DEFAULT_SCHEMA_URL,
-    name: DEFAULT_NAME
-  })
+type InitialiseDemoSchemaOptions = {
+  logSuccess?: boolean
+}
+
+export const initialiseDemoSchema = async (
+  options: InitialiseDemoSchemaOptions
+) => {
+  await downloadAndCreateSchema(
+    {
+      url: DEFAULT_SCHEMA_URL,
+      name: DEFAULT_NAME
+    },
+    options
+  )
 }
 
 export const toInitCommand = () => {
@@ -27,7 +46,7 @@ export const toInitCommand = () => {
     .description('Initialize a new project in current directory')
     .option('-d, --demo', `Include demo 'petstore' schema`)
     .action(({ demo: includeDemo = false }) => {
-      init({ includeDemo })
+      init({ includeDemo }, { logSuccess: false })
     })
 }
 
@@ -35,18 +54,22 @@ type InitArgs = {
   includeDemo: boolean
 }
 
-export const init = async ({ includeDemo }: InitArgs) => {
-  createProjectFolder()
+type InitOptions = {
+  logSuccess?: boolean
+}
+
+export const init = async ({ includeDemo }: InitArgs, options: InitOptions) => {
+  createProjectFolder(options)
 
   if (includeDemo) {
-    await initialiseDemoSchema()
+    await initialiseDemoSchema(options)
   }
 }
 
 export const toInitPrompt = async () => {
   const includeDemo = await Toggle.prompt(`Include demo 'petstore' schema?`)
 
-  await init({ includeDemo })
+  await init({ includeDemo }, { logSuccess: true })
 }
 
 const prettierConfig = `{

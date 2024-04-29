@@ -14,6 +14,12 @@ import { List, Select, Toggle } from '@cliffy/prompt'
 import { PLUGINS } from './constants.ts'
 import invariant from 'tiny-invariant'
 
+const toImportSource = (module: string) => {
+  return module.startsWith('jsr:')
+    ? module
+    : `file://${join(Deno.cwd(), module)}`
+}
+
 type MainArgs = {
   schemaName: string
   transformers: string[]
@@ -21,18 +27,14 @@ type MainArgs = {
   packageJson: boolean
 }
 
-const toImportSource = (module: string) => {
-  return module.startsWith('jsr:')
-    ? module
-    : `file://${join(Deno.cwd(), module)}`
+type MainOptions = {
+  logSuccess?: boolean
 }
 
-const main = async ({
-  schemaName,
-  transformers,
-  typeSystem,
-  packageJson
-}: MainArgs) => {
+const main = async (
+  { schemaName, transformers, typeSystem, packageJson }: MainArgs,
+  options: MainOptions
+) => {
   const schemaPath = resolve('./.schematic', schemaName, 'schema.json')
 
   const schemaContent = readFile<string>(schemaPath)
@@ -68,15 +70,18 @@ const main = async ({
 
   const ts: { default: TypeSystem } = await import(typeSystemSource)
 
-  await run({
-    schema: schemaContent,
-    schemaName,
-    settings,
-    prettier,
-    transformers: t,
-    typeSystem: ts.default,
-    packageJson
-  })
+  await run(
+    {
+      schema: schemaContent,
+      schemaName,
+      settings,
+      prettier,
+      transformers: t,
+      typeSystem: ts.default,
+      packageJson
+    },
+    options
+  )
 }
 
 const defaultSchemaName = 'petstore'
@@ -107,12 +112,17 @@ export const toGenerateCommand = () => {
           Array.isArray(transformers) &&
           typeof typeSystem === 'string'
         ) {
-          main({
-            schemaName,
-            transformers,
-            typeSystem,
-            packageJson: schemaName === defaultSchemaName || packageJson
-          })
+          main(
+            {
+              schemaName,
+              transformers,
+              typeSystem,
+              packageJson: schemaName === defaultSchemaName || packageJson
+            },
+            {
+              logSuccess: false
+            }
+          )
         }
       }
     )
@@ -162,10 +172,15 @@ export const toGeneratePrompt = async () => {
   const transformers = await getTransformers()
   const packageJson = await createPackageJson()
 
-  await main({
-    schemaName,
-    transformers,
-    typeSystem: 'jsr:@schematicos/codegen/zod',
-    packageJson
-  })
+  await main(
+    {
+      schemaName,
+      transformers,
+      typeSystem: 'jsr:@schematicos/codegen/zod',
+      packageJson
+    },
+    {
+      logSuccess: true
+    }
+  )
 }

@@ -5,7 +5,14 @@ import { join } from '@std/path'
 import { Input } from '@cliffy/prompt'
 import { PLUGINS } from './constants.ts'
 
-export const downloadAndCreatePackage = async (plugin: string) => {
+type DownloadAndCreatePackageOptions = {
+  logSuccess?: boolean
+}
+
+export const downloadAndCreatePackage = async (
+  plugin: string,
+  { logSuccess }: DownloadAndCreatePackageOptions = {}
+) => {
   const entries = await downloadPackage(plugin)
 
   const pluginName = plugin.split('/').at(1)
@@ -14,11 +21,17 @@ export const downloadAndCreatePackage = async (plugin: string) => {
     throw new Error(`Invalid plugin name ${plugin}`)
   }
 
+  const pluginPath = join('./plugins', pluginName)
+
   entries.forEach(async ([path, content]) => {
-    const joinedPath = join('./plugins', pluginName, path)
+    const joinedPath = join(pluginPath, path)
     await ensureFile(joinedPath)
     Deno.writeTextFileSync(joinedPath, content)
   })
+
+  if (logSuccess) {
+    console.log(`Cloned plugin to ${pluginName}`)
+  }
 }
 
 export const toCloneCommand = () => {
@@ -31,7 +44,7 @@ export const toCloneCommand = () => {
       'clone jsr:@schematicos/rtk-query'
     )
     .arguments('<plugin:string>')
-    .action((_options, plugin) => clone(plugin))
+    .action((_options, plugin) => clone(plugin, { logSuccess: false }))
 }
 
 export const toClonePrompt = async () => {
@@ -41,15 +54,19 @@ export const toClonePrompt = async () => {
     suggestions: PLUGINS
   })
 
-  await clone(plugin)
+  await clone(plugin, { logSuccess: true })
 }
 
-const clone = async (plugin: string) => {
+type CloneOptions = {
+  logSuccess: boolean
+}
+
+const clone = async (plugin: string, options: CloneOptions) => {
   if (!plugin.startsWith('jsr:')) {
     throw new Error('Only JSR registry plugins are supported')
   }
 
   const name = plugin.replace('jsr:', '')
 
-  await downloadAndCreatePackage(name)
+  await downloadAndCreatePackage(name, options)
 }

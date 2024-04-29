@@ -1,12 +1,13 @@
 {
   "name": "@schematicos/codegen",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "tasks": {
     "types": "deno check ./**/*.ts",
     "generate": "deno run --allow-read --allow-write --allow-env --allow-net cli/mod.ts generate",
     "init": "deno run --allow-read --allow-write --allow-env --allow-net cli/mod.ts init"
   },
   "exports": {
+    ".": "./cli/mod.ts",
     "./cli": "./cli/mod.ts",
     "./CoreContext.ts": "./context/CoreContext.ts",
     "./dsl": "./dsl/mod.ts",
