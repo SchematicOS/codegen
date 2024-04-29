@@ -17,7 +17,7 @@ import invariant from 'tiny-invariant'
 const toImportSource = (module: string) => {
   return module.startsWith('jsr:')
     ? module
-    : `file://${join(Deno.cwd(), module)}`
+    : `file://${join(Deno.cwd(), module, 'mod.ts')}`
 }
 
 type MainArgs = {
@@ -133,12 +133,14 @@ const getTransformers = async () => {
 
   const pluginNames = await getDirectoryNames(pluginContents)
 
+  const pluginPaths = pluginNames?.map(name => join('./plugins', name)) ?? []
+
   const transformers = await List.prompt({
     message: 'Select transformers to use',
     info: true,
     list: true,
     minTags: 1,
-    suggestions: PLUGINS.concat(pluginNames ?? []).sort()
+    suggestions: PLUGINS.concat(pluginPaths).sort()
   })
 
   return transformers
