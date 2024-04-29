@@ -6,6 +6,7 @@ import { resolve, join } from '@std/path'
 import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
 import type { SettingsType } from '../schematic-types/settings.ts'
 import { List, Select, Toggle } from '@cliffy/prompt'
+import { PLUGINS } from './constants.ts'
 
 type MainArgs = {
   schemaName: string
@@ -118,18 +119,11 @@ const getTransformers = async () => {
 
   const pluginNames = await getDirectoryNames(pluginContents)
 
-  const hardCodedPlugins = [
-    'jsr:@schematicos/mui-joy-forms',
-    'jsr:@schematicos/rtk-query',
-    'jsr:@schematicos/supabase-client',
-    'jsr:@schematicos/tanstack-query'
-  ]
-
   return await List.prompt({
     message: 'Select transformers to use',
     info: true,
     list: true,
-    suggestions: hardCodedPlugins.concat(pluginNames ?? []).sort()
+    suggestions: PLUGINS.concat(pluginNames ?? []).sort()
   })
 }
 
@@ -153,7 +147,7 @@ export const createPackageJson = async () => {
   return await Toggle.prompt('Create package.json for external dependencies?')
 }
 
-export const handleGenerate = async () => {
+export const toGeneratePrompt = async () => {
   const schemaName = await getSchemaName()
   const transformers = await getTransformers()
   const packageJson = await createPackageJson()

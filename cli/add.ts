@@ -1,11 +1,28 @@
 import { Command } from '@cliffy/command'
 import { downloadAndCreateSchema } from './downloads.ts'
+import { Input } from '@cliffy/prompt'
 
 export const toAddCommand = () => {
   return new Command()
     .description('Add a new schema from url to project')
     .arguments('<name:string> <url:string>')
     .action((_options, name, url) => {
-      downloadAndCreateSchema({ name, url })
+      add(name, url)
     })
+}
+
+export const toAddPrompt = async () => {
+  const name = await Input.prompt({
+    message: 'Enter schema name'
+  })
+
+  const url = await Input.prompt({
+    message: 'Enter schema url'
+  })
+
+  await add(name, url)
+}
+
+const add = async (name: string, url: string) => {
+  await downloadAndCreateSchema({ name, url })
 }

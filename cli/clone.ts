@@ -2,6 +2,8 @@ import { Command } from '@cliffy/command'
 import { ensureFile } from '@std/fs'
 import { downloadPackage } from './downloads.ts'
 import { join } from '@std/path'
+import { Input } from '@cliffy/prompt'
+import { PLUGINS } from './constants.ts'
 
 export const downloadAndCreatePackage = async (plugin: string) => {
   const entries = await downloadPackage(plugin)
@@ -29,13 +31,24 @@ export const toCloneCommand = () => {
       'clone jsr:@schematicos/rtk-query'
     )
     .arguments('<plugin:string>')
-    .action((_options, plugin) => {
-      if (!plugin.startsWith('jsr:')) {
-        throw new Error('Only JSR registry plugins are supported')
-      }
+    .action((_options, plugin) => clone(plugin))
+}
 
-      const name = plugin.replace('jsr:', '')
+export const toClonePrompt = async () => {
+  const plugin: string = await Input.prompt({
+    message: 'Select plugin to clone',
+    suggestions: PLUGINS
+  })
 
-      downloadAndCreatePackage(name)
-    })
+  await clone(plugin)
+}
+
+const clone = async (plugin: string) => {
+  if (!plugin.startsWith('jsr:')) {
+    throw new Error('Only JSR registry plugins are supported')
+  }
+
+  const name = plugin.replace('jsr:', '')
+
+  await downloadAndCreatePackage(name)
 }

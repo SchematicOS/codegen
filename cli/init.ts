@@ -15,8 +15,8 @@ export const createProjectFolder = () => {
   })
 }
 
-export const initialiseDemoSchema = () => {
-  downloadAndCreateSchema({
+export const initialiseDemoSchema = async () => {
+  await downloadAndCreateSchema({
     url: DEFAULT_SCHEMA_URL,
     name: DEFAULT_NAME
   })
@@ -35,17 +35,18 @@ type InitArgs = {
   includeDemo: boolean
 }
 
-export const init = ({ includeDemo }: InitArgs) => {
+export const init = async ({ includeDemo }: InitArgs) => {
   createProjectFolder()
+
   if (includeDemo) {
-    initialiseDemoSchema()
+    await initialiseDemoSchema()
   }
 }
 
-export const handleInit = async () => {
+export const toInitPrompt = async () => {
   const includeDemo = await Toggle.prompt(`Include demo 'petstore' schema?`)
 
-  init({ includeDemo })
+  await init({ includeDemo })
 }
 
 const prettierConfig = `{
