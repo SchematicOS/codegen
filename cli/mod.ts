@@ -6,7 +6,7 @@ import { toClonePrompt, toCloneCommand } from './clone.ts'
 import { toAddPrompt, toAddCommand } from './add.ts'
 import { Select } from '@cliffy/prompt'
 import { match } from 'ts-pattern'
-import { getDirectoryContents, getDirectoryNames } from './file.ts'
+import { getDirectoryContents, getDirectoryNames, hasSchema } from './file.ts'
 
 const hasHome = async () => {
   const projectContents = await getDirectoryContents('./.schematic')
@@ -16,7 +16,7 @@ const hasHome = async () => {
 
 const hasProjects = async () => {
   const projectContents = await getDirectoryContents('./.schematic')
-  const projectNames = await getDirectoryNames(projectContents)
+  const projectNames = await getDirectoryNames(projectContents, hasSchema)
 
   return Boolean(projectNames?.length)
 }

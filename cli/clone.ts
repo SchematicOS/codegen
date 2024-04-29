@@ -37,6 +37,7 @@ export const toCloneCommand = () => {
 export const toClonePrompt = async () => {
   const plugin: string = await Input.prompt({
     message: 'Select plugin to clone',
+    list: true,
     suggestions: PLUGINS
   })
 

@@ -1,6 +1,11 @@
 import { Command } from '@cliffy/command'
 import { run } from './run.ts'
-import { getDirectoryContents, getDirectoryNames, readFile } from './file.ts'
+import {
+  getDirectoryContents,
+  getDirectoryNames,
+  hasSchema,
+  readFile
+} from './file.ts'
 import type { TypeSystem, Transformer } from '../schematic-types/plugins.ts'
 import { resolve, join } from '@std/path'
 import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
@@ -131,7 +136,7 @@ const getTransformers = async () => {
 
 const getSchemaName = async () => {
   const projectContents = await getDirectoryContents('./.schematic')
-  const projectNames = await getDirectoryNames(projectContents)
+  const projectNames = await getDirectoryNames(projectContents, hasSchema)
 
   invariant(projectNames?.length, 'No projects found')
 

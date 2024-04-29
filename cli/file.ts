@@ -98,7 +98,8 @@ export const getDirectoryContents = async (dirPath: string) => {
 }
 
 export const getDirectoryNames = async (
-  contents: AsyncIterable<Deno.DirEntry> | undefined
+  contents: AsyncIterable<Deno.DirEntry> | undefined,
+  checkFn?: (name: string) => Promise<boolean>
 ) => {
   if (!contents) {
     return
@@ -108,11 +109,15 @@ export const getDirectoryNames = async (
 
   for await (const item of contents) {
     if (item.isDirectory) {
-      const hasSchemaFile = await hasSchema(item.name)
+      if (checkFn) {
+        const checked = await checkFn(item.name)
 
-      if (hasSchemaFile) {
-        items.push(item.name)
+        if (!checked) {
+          continue
+        }
       }
+
+      items.push(item.name)
     }
   }
 
