@@ -89,8 +89,8 @@ export const hasSchema = async (schemaName: string) => {
 export const getDirectoryContents = async (dirPath: string) => {
   try {
     return await Deno.readDir(dirPath)
-  } catch (error) {
-    console.error(`Could not read contents of '${dirPath}' directory`, error)
+  } catch (_error) {
+    // console.error(`Could not read contents of '${dirPath}' directory`, error)
   }
 }
 
@@ -111,10 +111,6 @@ export const getDirectoryNames = async (
         items.push(item.name)
       }
     }
-  }
-
-  if (items.length === 0) {
-    console.error('No schemas found in .schematic directory')
   }
 
   return items
