@@ -1,4 +1,5 @@
 import { existsSync } from '@std/fs'
+import { join } from '@std/path'
 
 export const readFile = <ConfigType>(path: string): ConfigType | undefined => {
   if (!path) {
@@ -43,4 +44,78 @@ export const writeFile = ({ content, resolvedPath }: WriteFileArgs) => {
   } catch (error) {
     console.error(error)
   }
+}
+
+export const hasSchema = async (schemaName: string) => {
+  try {
+    const jsonFileInfo = await Deno.stat(
+      join('.schematic', schemaName, 'schema.json')
+    )
+
+    if (jsonFileInfo.isFile) {
+      return true
+    }
+  } catch (_error) {
+    // ignore
+  }
+
+  try {
+    const yamlFileInfo = await Deno.stat(
+      join('.schematic', schemaName, 'schema.yaml')
+    )
+
+    if (yamlFileInfo.isFile) {
+      return true
+    }
+  } catch (_error) {
+    // ignore
+  }
+
+  try {
+    const ymlFileInfo = await Deno.stat(
+      join('.schematic', schemaName, 'schema.yml')
+    )
+
+    if (ymlFileInfo.isFile) {
+      return true
+    }
+  } catch (_error) {
+    // ignore
+  }
+
+  return false
+}
+
+export const getDirectoryContents = async (dirPath: string) => {
+  try {
+    return await Deno.readDir(dirPath)
+  } catch (error) {
+    console.error(`Could not read contents of '${dirPath}' directory`, error)
+  }
+}
+
+export const getDirectoryNames = async (
+  contents: AsyncIterable<Deno.DirEntry> | undefined
+) => {
+  if (!contents) {
+    return
+  }
+
+  const items = []
+
+  for await (const item of contents) {
+    if (item.isDirectory) {
+      const hasSchemaFile = await hasSchema(item.name)
+
+      if (hasSchemaFile) {
+        items.push(item.name)
+      }
+    }
+  }
+
+  if (items.length === 0) {
+    console.error('No schemas found in .schematic directory')
+  }
+
+  return items
 }

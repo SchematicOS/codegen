@@ -1,10 +1,11 @@
 import { Command } from '@cliffy/command'
 import { run } from './run.ts'
-import { readFile } from './file.ts'
+import { getDirectoryContents, getDirectoryNames, readFile } from './file.ts'
 import type { TypeSystem, Transformer } from '../schematic-types/plugins.ts'
 import { resolve, join } from '@std/path'
 import type { PrettierConfigType } from '../schematic-types/prettierConfig.ts'
 import type { SettingsType } from '../schematic-types/settings.ts'
+import { List, Select, Toggle } from '@cliffy/prompt'
 
 type MainArgs = {
   schemaName: string
@@ -110,4 +111,61 @@ export const toGenerateCommand = () => {
         }
       }
     )
+}
+
+const getTransformers = async () => {
+  const pluginContents = await getDirectoryContents('./plugins')
+
+  const pluginNames = await getDirectoryNames(pluginContents)
+
+  const hardCodedPlugins = [
+    'jsr:@schematicos/mui-joy-forms',
+    'jsr:@schematicos/rtk-query',
+    'jsr:@schematicos/supabase-client',
+    'jsr:@schematicos/tanstack-query'
+  ]
+
+  return await List.prompt({
+    message: 'Select transformers to use',
+    info: true,
+    list: true,
+    suggestions: hardCodedPlugins.concat(pluginNames ?? []).sort()
+  })
+}
+
+const getSchemaName = async () => {
+  const projectContents = await getDirectoryContents('./.schematic')
+  const projectNames = await getDirectoryNames(projectContents)
+
+  if (!projectNames?.length) {
+    return await Promise.resolve()
+  }
+
+  const { name: schemaName } = await Select.prompt({
+    message: 'Welcome to smktc! What would you like to do?',
+    options: projectNames.map(name => ({ name, value: name }))
+  })
+
+  return schemaName
+}
+
+export const createPackageJson = async () => {
+  return await Toggle.prompt('Create package.json for external dependencies?')
+}
+
+export const handleGenerate = async () => {
+  const schemaName = await getSchemaName()
+  const transformers = await getTransformers()
+  const packageJson = await createPackageJson()
+
+  if (!schemaName || !transformers?.length) {
+    return
+  }
+
+  main({
+    schemaName,
+    transformers,
+    typeSystem: 'jsr:@schematicos/codegen/zod',
+    packageJson
+  })
 }
