@@ -88,7 +88,10 @@ export const hasSchema = async (schemaName: string) => {
 
 export const getDirectoryContents = async (dirPath: string) => {
   try {
-    return await Deno.readDir(dirPath)
+    if (existsSync(dirPath)) {
+      const dir = await Deno.readDir(dirPath)
+      return dir
+    }
   } catch (_error) {
     // console.error(`Could not read contents of '${dirPath}' directory`, error)
   }

@@ -49,12 +49,12 @@ const getOptions = async () => {
 }
 
 const promptwise = async () => {
-  const { value } = await Select.prompt({
+  const action = await Select.prompt({
     message: 'Welcome to smktc! What would you like to do?',
     options: await getOptions()
   })
 
-  await match(value)
+  await match(action as unknown as string)
     .with('init', async () => await toInitPrompt())
     .with('generate', async () => await toGeneratePrompt())
     .with('clone', async () => await toClonePrompt())
